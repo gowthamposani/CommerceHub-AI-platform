@@ -7,6 +7,7 @@ import {
   UserCheck,
   Users,
 } from "lucide-react";
+import { memo, useMemo } from "react";
 
 import type { DashboardSummary } from "../../types/admin";
 
@@ -26,51 +27,54 @@ function formatCurrency(value: number): string {
   }).format(value);
 }
 
-export function DashboardCards({ summary }: DashboardCardsProps) {
-  const cards = [
-    {
-      label: "Total Users",
-      value: formatNumber(summary.totalUsers),
-      helper: "All platform accounts",
-      icon: Users,
-    },
-    {
-      label: "Total Customers",
-      value: formatNumber(summary.totalCustomers),
-      helper: "Buyer ecosystem",
-      icon: UserCheck,
-    },
-    {
-      label: "Total Sellers",
-      value: formatNumber(summary.totalSellers),
-      helper: "Marketplace partners",
-      icon: Store,
-    },
-    {
-      label: "Total Products",
-      value: formatNumber(summary.totalProducts),
-      helper: "Catalog inventory",
-      icon: Package,
-    },
-    {
-      label: "Orders",
-      value: formatNumber(summary.totalOrders),
-      helper: "Commerce transactions",
-      icon: ShoppingCart,
-    },
-    {
-      label: "Revenue",
-      value: formatCurrency(summary.revenue),
-      helper: "Recognized revenue",
-      icon: DollarSign,
-    },
-    {
-      label: "Pending Requests",
-      value: formatNumber(summary.pendingSellerRequests),
-      helper: "Admin review queue",
-      icon: Clock3,
-    },
-  ];
+export const DashboardCards = memo(function DashboardCards({ summary }: DashboardCardsProps) {
+  const cards = useMemo(
+    () => [
+      {
+        label: "Total Users",
+        value: formatNumber(summary.totalUsers),
+        helper: "All platform accounts",
+        icon: Users,
+      },
+      {
+        label: "Total Customers",
+        value: formatNumber(summary.totalCustomers),
+        helper: "Buyer ecosystem",
+        icon: UserCheck,
+      },
+      {
+        label: "Total Sellers",
+        value: formatNumber(summary.totalSellers),
+        helper: "Marketplace partners",
+        icon: Store,
+      },
+      {
+        label: "Total Products",
+        value: formatNumber(summary.totalProducts),
+        helper: "Catalog inventory",
+        icon: Package,
+      },
+      {
+        label: "Orders",
+        value: formatNumber(summary.totalOrders),
+        helper: "Commerce transactions",
+        icon: ShoppingCart,
+      },
+      {
+        label: "Revenue",
+        value: formatCurrency(summary.revenue),
+        helper: "Recognized revenue",
+        icon: DollarSign,
+      },
+      {
+        label: "Pending Requests",
+        value: formatNumber(summary.pendingSellerRequests),
+        helper: "Admin review queue",
+        icon: Clock3,
+      },
+    ],
+    [summary],
+  );
 
   return (
     <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4" aria-label="Dashboard metrics">
@@ -101,4 +105,4 @@ export function DashboardCards({ summary }: DashboardCardsProps) {
       })}
     </section>
   );
-}
+});

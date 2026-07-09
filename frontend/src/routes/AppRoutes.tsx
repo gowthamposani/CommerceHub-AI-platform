@@ -1,15 +1,18 @@
+import { lazy, Suspense, type ReactNode } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 
 import { AdminErrorBoundary } from "../components/admin/AdminErrorBoundary";
+import { LoadingSkeleton } from "../components/admin/LoadingSkeleton";
 import { AdminLayout } from "../layouts/AdminLayout";
 import { AuthLayout } from "../layouts/AuthLayout";
 import { MainLayout } from "../layouts/MainLayout";
-import AIProductGenerator from "../pages/admin/AIProductGenerator";
-import Analytics from "../pages/admin/Analytics";
-import Dashboard from "../pages/admin/Dashboard";
-import Notifications from "../pages/admin/Notifications";
-import Settings from "../pages/admin/Settings";
-import Users from "../pages/admin/Users";
+
+const AIProductGenerator = lazy(() => import("../pages/admin/AIProductGenerator"));
+const Analytics = lazy(() => import("../pages/admin/Analytics"));
+const Dashboard = lazy(() => import("../pages/admin/Dashboard"));
+const Notifications = lazy(() => import("../pages/admin/Notifications"));
+const Settings = lazy(() => import("../pages/admin/Settings"));
+const Users = lazy(() => import("../pages/admin/Users"));
 
 type PlaceholderPageProps = {
   title: string;
@@ -47,6 +50,14 @@ function FrontendInitializedPage() {
   );
 }
 
+function AdminPageShell({ children }: { children: ReactNode }) {
+  return (
+    <AdminErrorBoundary>
+      <Suspense fallback={<LoadingSkeleton rows={6} />}>{children}</Suspense>
+    </AdminErrorBoundary>
+  );
+}
+
 export function AppRoutes() {
   return (
     <Routes>
@@ -70,41 +81,41 @@ export function AppRoutes() {
         <Route
           path="/admin/dashboard"
           element={
-            <AdminErrorBoundary>
+            <AdminPageShell>
               <Dashboard />
-            </AdminErrorBoundary>
+            </AdminPageShell>
           }
         />
         <Route
           path="/admin/users"
           element={
-            <AdminErrorBoundary>
+            <AdminPageShell>
               <Users />
-            </AdminErrorBoundary>
+            </AdminPageShell>
           }
         />
         <Route
           path="/admin/analytics"
           element={
-            <AdminErrorBoundary>
+            <AdminPageShell>
               <Analytics />
-            </AdminErrorBoundary>
+            </AdminPageShell>
           }
         />
         <Route
           path="/admin/notifications"
           element={
-            <AdminErrorBoundary>
+            <AdminPageShell>
               <Notifications />
-            </AdminErrorBoundary>
+            </AdminPageShell>
           }
         />
         <Route
           path="/admin/ai-tools"
           element={
-            <AdminErrorBoundary>
+            <AdminPageShell>
               <AIProductGenerator />
-            </AdminErrorBoundary>
+            </AdminPageShell>
           }
         />
         <Route
@@ -114,9 +125,9 @@ export function AppRoutes() {
         <Route
           path="/admin/settings"
           element={
-            <AdminErrorBoundary>
+            <AdminPageShell>
               <Settings />
-            </AdminErrorBoundary>
+            </AdminPageShell>
           }
         />
       </Route>

@@ -5,6 +5,7 @@ type LoadingSkeletonProps = {
 export function LoadingSkeleton({ rows = 5 }: LoadingSkeletonProps) {
   return (
     <div className="space-y-4" role="status" aria-label="Loading">
+      <span className="sr-only">Loading content</span>
       {Array.from({ length: rows }).map((_, index) => (
         <div
           key={index}

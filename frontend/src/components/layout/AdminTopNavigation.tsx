@@ -1,14 +1,30 @@
-import { Bell, Moon, Search, UserCircle } from "lucide-react";
+import { Bell, Menu, Moon, Search, UserCircle } from "lucide-react";
 
-export function AdminTopNavigation() {
+type AdminTopNavigationProps = {
+  onOpenSidebar?: () => void;
+};
+
+export function AdminTopNavigation({ onOpenSidebar }: AdminTopNavigationProps) {
   return (
     <header className="sticky top-0 z-30 border-b border-admin-border bg-white/90 backdrop-blur dark:border-slate-800 dark:bg-slate-950/90">
       <div className="flex flex-col gap-4 px-4 py-4 sm:px-6 lg:flex-row lg:items-center lg:justify-between lg:px-8">
-        <div>
-          <p className="text-sm font-medium text-admin-muted dark:text-slate-400">Admin Console</p>
-          <h1 className="mt-1 text-xl font-semibold text-admin-ink dark:text-white">
-            Enterprise Workspace
-          </h1>
+        <div className="flex items-center gap-3">
+          <button
+            className="inline-flex h-11 w-11 items-center justify-center rounded-admin border border-admin-border bg-white text-admin-muted transition hover:bg-admin-cream hover:text-admin-ink focus:outline-none focus:ring-2 focus:ring-admin-gold/30 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300 lg:hidden"
+            type="button"
+            aria-label="Open admin navigation"
+            onClick={onOpenSidebar}
+          >
+            <Menu className="h-5 w-5" aria-hidden="true" />
+          </button>
+          <div>
+            <p className="text-sm font-medium text-admin-muted dark:text-slate-400">
+              Admin Console
+            </p>
+            <h1 className="mt-1 text-xl font-semibold text-admin-ink dark:text-white">
+              Enterprise Workspace
+            </h1>
+          </div>
         </div>
 
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
@@ -24,14 +40,14 @@ export function AdminTopNavigation() {
 
           <div className="flex items-center gap-2">
             <button
-              className="inline-flex h-11 w-11 items-center justify-center rounded-admin border border-admin-border bg-white text-admin-muted transition hover:bg-admin-cream hover:text-admin-ink dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300"
+              className="inline-flex h-11 w-11 items-center justify-center rounded-admin border border-admin-border bg-white text-admin-muted transition hover:bg-admin-cream hover:text-admin-ink focus:outline-none focus:ring-2 focus:ring-admin-gold/30 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300"
               type="button"
               aria-label="Notifications"
             >
               <Bell className="h-4 w-4" aria-hidden="true" />
             </button>
             <button
-              className="inline-flex h-11 w-11 items-center justify-center rounded-admin border border-admin-border bg-white text-admin-muted transition hover:bg-admin-cream hover:text-admin-ink dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300"
+              className="inline-flex h-11 w-11 items-center justify-center rounded-admin border border-admin-border bg-white text-admin-muted transition hover:bg-admin-cream hover:text-admin-ink focus:outline-none focus:ring-2 focus:ring-admin-gold/30 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300"
               type="button"
               aria-label="Theme toggle"
             >

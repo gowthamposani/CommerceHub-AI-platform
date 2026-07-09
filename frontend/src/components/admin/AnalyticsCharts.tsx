@@ -12,7 +12,7 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import type { ReactNode } from "react";
+import { memo, useMemo, type ReactNode } from "react";
 
 import type {
   AnalyticsData,
@@ -86,17 +86,26 @@ function ChartCard({
   );
 }
 
-export function AnalyticsCharts({
+export const AnalyticsCharts = memo(function AnalyticsCharts({
   analytics,
   monthlyRevenue,
   ordersOverview,
   topCategories,
   recentActivity,
 }: DashboardChartsProps) {
-  const resolvedMonthlyRevenue = monthlyRevenue ?? analytics?.revenueSeries ?? [];
-  const resolvedOrdersOverview = ordersOverview ?? analytics?.ordersOverview ?? [];
-  const resolvedTopCategories = topCategories ?? analytics?.topCategories ?? [];
-  const resolvedRecentActivity = recentActivity ?? [];
+  const resolvedMonthlyRevenue = useMemo(
+    () => monthlyRevenue ?? analytics?.revenueSeries ?? [],
+    [analytics?.revenueSeries, monthlyRevenue],
+  );
+  const resolvedOrdersOverview = useMemo(
+    () => ordersOverview ?? analytics?.ordersOverview ?? [],
+    [analytics?.ordersOverview, ordersOverview],
+  );
+  const resolvedTopCategories = useMemo(
+    () => topCategories ?? analytics?.topCategories ?? [],
+    [analytics?.topCategories, topCategories],
+  );
+  const resolvedRecentActivity = useMemo(() => recentActivity ?? [], [recentActivity]);
 
   return (
     <section className="grid gap-6 xl:grid-cols-[1.35fr_0.65fr]">
@@ -234,4 +243,4 @@ export function AnalyticsCharts({
       ) : null}
     </section>
   );
-}
+});
