@@ -1,9 +1,10 @@
-"""Pydantic schemas for Admin dashboard and analytics contracts."""
+"""Pydantic schemas for Admin dashboard, analytics, and user management contracts."""
 
 from __future__ import annotations
 
 from datetime import datetime
 from decimal import Decimal
+from enum import StrEnum
 from typing import Annotated
 
 from pydantic import BaseModel, ConfigDict, Field, field_serializer
@@ -17,6 +18,22 @@ class AdminSchema(BaseModel):
         extra="forbid",
         str_strip_whitespace=True,
     )
+
+
+class AdminUserStatus(StrEnum):
+    """Supported placeholder user account statuses."""
+
+    ACTIVE = "ACTIVE"
+    INACTIVE = "INACTIVE"
+    BLOCKED = "BLOCKED"
+
+
+class AdminUserRole(StrEnum):
+    """Supported placeholder user roles."""
+
+    ADMIN = "ADMIN"
+    SELLER = "SELLER"
+    CUSTOMER = "CUSTOMER"
 
 
 class AdminDashboardRequest(AdminSchema):
@@ -142,4 +159,85 @@ class AdminAnalyticsResponse(AdminSchema):
     data: Annotated[
         AdminAnalyticsData,
         Field(description="Admin analytics metrics."),
+    ]
+
+
+class AdminUserData(AdminSchema):
+    """User data returned by Admin user management endpoints."""
+
+    id: Annotated[
+        int,
+        Field(gt=0, description="Unique user identifier."),
+    ]
+    full_name: Annotated[
+        str,
+        Field(description="User full name."),
+    ]
+    email: Annotated[
+        str,
+        Field(description="User email address."),
+    ]
+    role: Annotated[
+        AdminUserRole,
+        Field(description="Current user role."),
+    ]
+    status: Annotated[
+        AdminUserStatus,
+        Field(description="Current user account status."),
+    ]
+    created_at: Annotated[
+        datetime,
+        Field(description="UTC timestamp when the user was created."),
+    ]
+
+
+class AdminUsersResponse(AdminSchema):
+    """Standard API response envelope for Admin user collection retrieval."""
+
+    success: Annotated[
+        bool,
+        Field(description="Indicates whether the request completed successfully."),
+    ] = True
+    message: Annotated[
+        str,
+        Field(description="Human-readable response message."),
+    ] = "Users retrieved successfully"
+    data: Annotated[
+        list[AdminUserData],
+        Field(description="Users visible to administrators."),
+    ]
+
+
+class AdminUserResponse(AdminSchema):
+    """Standard API response envelope for Admin single-user operations."""
+
+    success: Annotated[
+        bool,
+        Field(description="Indicates whether the request completed successfully."),
+    ] = True
+    message: Annotated[
+        str,
+        Field(description="Human-readable response message."),
+    ]
+    data: Annotated[
+        AdminUserData,
+        Field(description="User data."),
+    ]
+
+
+class UpdateUserStatusRequest(AdminSchema):
+    """Request schema for updating a user account status."""
+
+    status: Annotated[
+        AdminUserStatus,
+        Field(description="New account status to apply."),
+    ]
+
+
+class UpdateUserRoleRequest(AdminSchema):
+    """Request schema for updating a user role."""
+
+    role: Annotated[
+        AdminUserRole,
+        Field(description="New role to apply."),
     ]

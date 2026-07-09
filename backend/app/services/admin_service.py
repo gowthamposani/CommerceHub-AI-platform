@@ -1,4 +1,4 @@
-"""Service layer for Admin dashboard and analytics operations."""
+"""Service layer for Admin dashboard, analytics, and user management operations."""
 
 from __future__ import annotations
 
@@ -10,6 +10,11 @@ from backend.app.schemas.admin_schema import (
     AdminAnalyticsResponse,
     AdminDashboardData,
     AdminDashboardResponse,
+    AdminUserData,
+    AdminUserResponse,
+    AdminUsersResponse,
+    UpdateUserRoleRequest,
+    UpdateUserStatusRequest,
 )
 
 
@@ -28,6 +33,26 @@ class AdminRepositoryProtocol(Protocol):
 
     def get_analytics_summary(self) -> AdminAnalyticsData:
         """Return analytics summary data."""
+
+    def get_users(self) -> list[AdminUserData]:
+        """Return users visible to administrators."""
+
+    def get_user_by_id(self, user_id: int) -> AdminUserData:
+        """Return a user by identifier."""
+
+    def update_user_status(
+        self,
+        user_id: int,
+        payload: UpdateUserStatusRequest,
+    ) -> AdminUserData:
+        """Update a user's status."""
+
+    def update_user_role(
+        self,
+        user_id: int,
+        payload: UpdateUserRoleRequest,
+    ) -> AdminUserData:
+        """Update a user's role."""
 
 
 class AdminService:
@@ -75,3 +100,93 @@ class AdminService:
                 extra={"feature": "admin_analytics"},
             )
             raise AdminServiceError("Unable to retrieve Admin analytics summary.") from exc
+
+    def get_users(self) -> AdminUsersResponse:
+        """Return users visible to administrators."""
+        try:
+            logger.info("Retrieving Admin users.", extra={"feature": "admin_users"})
+            users = self.repository.get_users()
+            return AdminUsersResponse(
+                success=True,
+                message="Users retrieved successfully",
+                data=users,
+            )
+        except Exception as exc:
+            logger.exception("Failed to retrieve Admin users.", extra={"feature": "admin_users"})
+            raise AdminServiceError("Unable to retrieve Admin users.") from exc
+
+    def get_user_by_id(self, user_id: int) -> AdminUserResponse:
+        """Return one user by identifier."""
+        try:
+            logger.info(
+                "Retrieving Admin user.",
+                extra={"feature": "admin_users", "user_id": user_id},
+            )
+            user = self.repository.get_user_by_id(user_id=user_id)
+            return AdminUserResponse(
+                success=True,
+                message="User retrieved successfully",
+                data=user,
+            )
+        except Exception as exc:
+            logger.exception(
+                "Failed to retrieve Admin user.",
+                extra={"feature": "admin_users", "user_id": user_id},
+            )
+            raise AdminServiceError("Unable to retrieve Admin user.") from exc
+
+    def update_user_status(
+        self,
+        user_id: int,
+        payload: UpdateUserStatusRequest,
+    ) -> AdminUserResponse:
+        """Update a user's status through the repository boundary."""
+        try:
+            logger.info(
+                "Updating Admin user status.",
+                extra={
+                    "feature": "admin_users",
+                    "user_id": user_id,
+                    "status": payload.status.value,
+                },
+            )
+            user = self.repository.update_user_status(user_id=user_id, status=payload.status)
+            return AdminUserResponse(
+                success=True,
+                message="User status updated successfully",
+                data=user,
+            )
+        except Exception as exc:
+            logger.exception(
+                "Failed to update Admin user status.",
+                extra={"feature": "admin_users", "user_id": user_id},
+            )
+            raise AdminServiceError("Unable to update Admin user status.") from exc
+
+    def update_user_role(
+        self,
+        user_id: int,
+        payload: UpdateUserRoleRequest,
+    ) -> AdminUserResponse:
+        """Update a user's role through the repository boundary."""
+        try:
+            logger.info(
+                "Updating Admin user role.",
+                extra={
+                    "feature": "admin_users",
+                    "user_id": user_id,
+                    "role": payload.role.value,
+                },
+            )
+            user = self.repository.update_user_role(user_id=user_id, role=payload.role)
+            return AdminUserResponse(
+                success=True,
+                message="User role updated successfully",
+                data=user,
+            )
+        except Exception as exc:
+            logger.exception(
+                "Failed to update Admin user role.",
+                extra={"feature": "admin_users", "user_id": user_id},
+            )
+            raise AdminServiceError("Unable to update Admin user role.") from exc
