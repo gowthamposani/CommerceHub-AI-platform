@@ -1,1 +1,9 @@
-# TODO: Root Docker Compose configuration.
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: docker/backend.Dockerfile
+    env_file:
+      - backend/.env.example
+    ports:
+      - "8000:8000"

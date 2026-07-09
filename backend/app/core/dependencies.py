@@ -1,3 +1,1 @@
-"""
-Application dependencies.
-"""
+"""Application dependencies."""

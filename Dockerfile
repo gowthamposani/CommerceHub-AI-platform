@@ -7,16 +7,8 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 
 WORKDIR /app
 
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends build-essential libpq-dev \
-    && rm -rf /var/lib/apt/lists/*
-
-RUN pip install \
-    fastapi==0.115.6 \
-    uvicorn[standard]==0.34.0 \
-    pydantic[email]==2.10.4 \
-    SQLAlchemy==2.0.36 \
-    psycopg2-binary==2.9.10
+COPY backend/requirements.txt ./backend/requirements.txt
+RUN pip install -r backend/requirements.txt
 
 COPY backend ./backend
 
