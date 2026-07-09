@@ -33,6 +33,7 @@ function mapProductDescriptionResponse(
   response: ProductDescriptionDataResponse,
 ): AIProductDescription {
   return {
+    title: response.title ?? response.seo_title,
     generatedDescription: response.description ?? response.generated_description ?? "",
     generatedKeywords: response.keywords ?? response.generated_keywords ?? [],
     seoTitle: response.seo_title,

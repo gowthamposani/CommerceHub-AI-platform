@@ -1,8 +1,18 @@
-import { Copy, Loader2, Plus, RotateCcw, Sparkles, Trash2 } from "lucide-react";
+import {
+  AlertTriangle,
+  Copy,
+  Loader2,
+  Plus,
+  RefreshCw,
+  RotateCcw,
+  Sparkles,
+  Trash2,
+} from "lucide-react";
 import { useMemo, useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 
 import { useAIGenerator } from "../../hooks/useAIGenerator";
+import { notifyToast } from "../../lib/api";
 import type { AIProductDescriptionRequest } from "../../types/ai";
 
 type GeneratorFormValues = {
@@ -49,7 +59,7 @@ function toPayload(values: GeneratorFormValues): AIProductDescriptionRequest {
 
 export default function AIProductGenerator() {
   const [copiedField, setCopiedField] = useState<string | null>(null);
-  const { data, loading, error, generate, clear } = useAIGenerator();
+  const { data, loading, error, generate, clear, refetch, canRetry } = useAIGenerator();
   const {
     control,
     register,
@@ -68,6 +78,7 @@ export default function AIProductGenerator() {
     }
 
     return [
+      data.title,
       data.seoTitle,
       data.metaDescription,
       data.generatedDescription,
@@ -77,7 +88,11 @@ export default function AIProductGenerator() {
   }, [data]);
 
   async function onSubmit(values: GeneratorFormValues) {
-    await generate(toPayload(values));
+    try {
+      await generate(toPayload(values));
+    } catch {
+      // Error state and toast are handled by the AI generator hook.
+    }
   }
 
   function handleReset() {
@@ -89,7 +104,20 @@ export default function AIProductGenerator() {
   async function handleCopy(label: string, value: string) {
     await navigator.clipboard.writeText(value);
     setCopiedField(label);
+    notifyToast({
+      title: "Copied",
+      message: "Generated content copied to clipboard.",
+      variant: "success",
+    });
     window.setTimeout(() => setCopiedField(null), 1400);
+  }
+
+  async function handleRetry() {
+    try {
+      await refetch();
+    } catch {
+      // Error state and toast are handled by the AI generator hook.
+    }
   }
 
   return (
@@ -222,9 +250,12 @@ export default function AIProductGenerator() {
               </div>
 
               {error ? (
-                <div className="mt-5 rounded-admin border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700 dark:border-rose-900 dark:bg-rose-950 dark:text-rose-200">
-                  {error}
-                </div>
+                <AIErrorPanel
+                  message={error}
+                  canRetry={canRetry}
+                  loading={loading}
+                  onRetry={handleRetry}
+                />
               ) : null}
 
               <div className="mt-6 flex flex-col gap-3 sm:flex-row">
@@ -281,6 +312,12 @@ export default function AIProductGenerator() {
               ) : data ? (
                 <div className="mt-6 space-y-6">
                   <OutputBlock
+                    title="Title"
+                    value={data.title}
+                    copied={copiedField === "title"}
+                    onCopy={() => handleCopy("title", data.title)}
+                  />
+                  <OutputBlock
                     title="Professional Description"
                     value={data.generatedDescription}
                     copied={copiedField === "description"}
@@ -293,7 +330,7 @@ export default function AIProductGenerator() {
                     onCopy={() => handleCopy("seo", data.seoTitle)}
                   />
                   <OutputBlock
-                    title="Meta Description"
+                    title="SEO Description"
                     value={data.metaDescription}
                     copied={copiedField === "meta"}
                     onCopy={() => handleCopy("meta", data.metaDescription)}
@@ -341,6 +378,45 @@ export default function AIProductGenerator() {
                 </div>
               )}
             </section>
+      </div>
+    </div>
+  );
+}
+
+type AIErrorPanelProps = {
+  message: string;
+  canRetry: boolean;
+  loading: boolean;
+  onRetry: () => void;
+};
+
+function AIErrorPanel({ message, canRetry, loading, onRetry }: AIErrorPanelProps) {
+  return (
+    <div
+      className="mt-5 rounded-admin border border-rose-200 bg-rose-50 p-4 text-sm text-rose-700 shadow-admin-soft dark:border-rose-900 dark:bg-rose-950 dark:text-rose-200"
+      role="alert"
+    >
+      <div className="flex items-start gap-3">
+        <AlertTriangle className="mt-0.5 h-5 w-5 shrink-0" aria-hidden="true" />
+        <div className="min-w-0 flex-1">
+          <p className="font-semibold">Unable to generate product content</p>
+          <p className="mt-1 leading-6">{message}</p>
+          {canRetry ? (
+            <button
+              className="mt-3 inline-flex h-9 items-center justify-center gap-2 rounded-admin border border-rose-200 bg-white px-3 text-sm font-medium text-rose-700 transition hover:bg-rose-100 focus:outline-none focus:ring-2 focus:ring-rose-300 disabled:cursor-not-allowed disabled:opacity-60 dark:border-rose-900 dark:bg-rose-950 dark:hover:bg-rose-900"
+              type="button"
+              disabled={loading}
+              onClick={onRetry}
+            >
+              {loading ? (
+                <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />
+              ) : (
+                <RefreshCw className="h-4 w-4" aria-hidden="true" />
+              )}
+              Retry
+            </button>
+          ) : null}
+        </div>
       </div>
     </div>
   );

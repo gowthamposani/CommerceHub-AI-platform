@@ -20,6 +20,7 @@ export type ProductDescriptionRequestPayload = {
 };
 
 export type AIProductDescription = {
+  title: string;
   generatedDescription: string;
   generatedKeywords: string[];
   seoTitle: string;

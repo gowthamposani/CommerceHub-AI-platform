@@ -1,6 +1,6 @@
 import { useCallback, useState } from "react";
 
-import { getApiErrorMessage, notifyApiFailure } from "../lib/api";
+import { getApiErrorMessage, notifyApiFailure, notifyToast } from "../lib/api";
 import { generateProductDescription } from "../services/ai.service";
 import type { AIProductDescription, AIProductDescriptionRequest } from "../types/ai";
 
@@ -18,6 +18,11 @@ export function useAIGenerator() {
       const description = await generateProductDescription(payload);
       setLastPayload(payload);
       setData(description);
+      notifyToast({
+        title: "AI content generated",
+        message: "The product description is ready to review.",
+        variant: "success",
+      });
       return description;
     } catch (requestError) {
       const message = getApiErrorMessage(requestError);
@@ -43,5 +48,5 @@ export function useAIGenerator() {
     await generate(lastPayload);
   }, [generate, lastPayload]);
 
-  return { data, loading, error, refetch, generate, clear };
+  return { data, loading, error, refetch, generate, clear, canRetry: Boolean(lastPayload) };
 }
