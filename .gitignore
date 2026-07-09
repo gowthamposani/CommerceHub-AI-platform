@@ -1,1 +1,30 @@
-# TODO: Ignore generated files.
+# Python
+__pycache__/
+*.py[cod]
+*.so
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Local environment files
+.env
+backend/.env
+frontend/.env
+
+# Node / Playwright artifacts
+frontend/node_modules/
+frontend/playwright-report/
+frontend/test-results/
+frontend/blob-report/
+frontend/.playwright/
+
+# OS/editor files
+.DS_Store
+Thumbs.db

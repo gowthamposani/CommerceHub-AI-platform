@@ -1,4 +1,16 @@
 {
   "name": "commercehub-ai-frontend",
-  "private": true
+  "private": true,
+  "scripts": {
+    "test:e2e": "playwright test",
+    "test:e2e:auth": "playwright test tests/e2e/auth",
+    "test:e2e:headed": "playwright test --headed",
+    "test:e2e:debug": "playwright test --debug",
+    "test:e2e:report": "playwright show-report"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.55.0",
+    "@types/node": "^22.0.0",
+    "typescript": "^5.8.0"
+  }
 }
