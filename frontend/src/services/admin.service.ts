@@ -21,6 +21,7 @@ import type {
 type NotificationTemplateResponse = NotificationTemplate & {
   template_id?: string | number;
   template_name?: string;
+  supported_channels?: string[];
 };
 
 type NotificationHistoryResponse = NotificationHistoryItem & {
@@ -159,7 +160,7 @@ function mapNotificationTemplate(response: NotificationTemplateResponse): Notifi
   return {
     id: String(response.id ?? response.template_id ?? response.name),
     name: response.name ?? response.template_name ?? "No data available",
-    channel: response.channel ?? "No data available",
+    channels: response.channels ?? response.supported_channels ?? [],
   };
 }
 
@@ -250,7 +251,11 @@ export async function getNotificationHistory(): Promise<NotificationHistoryItem[
 }
 
 export async function sendNotification(payload: SendNotificationRequest): Promise<void> {
-  await apiClient.post("/notifications/send", payload);
+  await apiClient.post("/notifications/send", {
+    channel: "IN_APP",
+    recipient: payload.recipient,
+    body: payload.message,
+  });
 }
 
 export const getDashboardData = getDashboard;

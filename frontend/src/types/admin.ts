@@ -183,7 +183,7 @@ export type AnalyticsData = {
 export type NotificationTemplate = {
   id: string;
   name: string;
-  channel: string;
+  channels: string[];
 };
 
 export type NotificationHistoryItem = {

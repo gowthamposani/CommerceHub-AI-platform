@@ -24,13 +24,13 @@ curl http://127.0.0.1:8000/health
 
 ## Docker Setup
 
-Create a local backend environment file from the safe template:
+The committed Docker Compose files use `backend/.env.example` so a fresh clone can start with safe placeholder values. For local overrides, create a private backend environment file from the template:
 
 ```bash
 cp backend/.env.example backend/.env
 ```
 
-Update `POSTGRES_PASSWORD` and the matching password segment in `DATABASE_URL` inside `backend/.env` before starting the stack.
+Update `POSTGRES_PASSWORD` and the matching password segment in `DATABASE_URL` inside `backend/.env` if you switch Compose to that local file.
 
 Start the backend development stack:
 
@@ -50,7 +50,7 @@ The backend container mounts `backend/` into the container and runs Uvicorn with
 
 ## CI
 
-Backend CI runs on pushes and pull requests targeting `develop` and `feature/*` branches.
+Backend and frontend CI run on pushes and pull requests targeting `develop` and `feature/**` branches.
 
 The backend workflow:
 
@@ -60,6 +60,14 @@ The backend workflow:
 - Compiles `backend/app`
 - Runs pytest for `backend/tests`
 - Uploads pytest JUnit results as a workflow artifact
+
+The frontend workflow:
+
+- Sets up Node.js 20
+- Installs frontend dependencies
+- Runs ESLint
+- Builds the React application
+- Uploads the frontend build artifact
 
 ## Testing
 
