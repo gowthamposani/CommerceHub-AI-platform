@@ -1,1 +1,57 @@
-# TODO: Backend CI workflow.
+name: Backend CI
+
+on:
+  push:
+    branches: ["feature/Product-Seller", "main"]
+  pull_request:
+
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_DB: commercehub_test
+          POSTGRES_USER: commercehub
+          POSTGRES_PASSWORD: commercehub
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U commercehub -d commercehub_test"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    env:
+      ENVIRONMENT: testing
+      DATABASE_URL: postgresql+asyncpg://commercehub:commercehub@localhost:5432/commercehub_test
+      REDIS_URL: redis://localhost:6379/0
+      CELERY_BROKER_URL: redis://localhost:6379/1
+      CELERY_RESULT_BACKEND: redis://localhost:6379/2
+      JWT_SECRET_KEY: ci-secret
+      LOG_FILE_ENABLED: "false"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: backend/requirements.txt
+      - run: pip install -r requirements.txt
+      - run: ruff check .
+      - run: black --check .
+      - run: isort --check-only .
+      - run: mypy app tests
+      - run: pytest
