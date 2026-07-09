@@ -1,4 +1,4 @@
-"""Pydantic schemas for Admin dashboard contracts."""
+"""Pydantic schemas for Admin dashboard and analytics contracts."""
 
 from __future__ import annotations
 
@@ -81,4 +81,65 @@ class AdminDashboardResponse(AdminSchema):
     data: Annotated[
         AdminDashboardData,
         Field(description="Admin dashboard metrics."),
+    ]
+
+
+class AdminAnalyticsData(AdminSchema):
+    """Analytics metrics returned inside the standard API response envelope."""
+
+    total_revenue: Annotated[
+        Decimal,
+        Field(ge=0, description="Total marketplace revenue."),
+    ]
+    today_orders: Annotated[
+        int,
+        Field(ge=0, description="Number of orders placed today."),
+    ]
+    monthly_orders: Annotated[
+        int,
+        Field(ge=0, description="Number of orders placed during the current month."),
+    ]
+    active_customers: Annotated[
+        int,
+        Field(ge=0, description="Number of active customer accounts."),
+    ]
+    active_sellers: Annotated[
+        int,
+        Field(ge=0, description="Number of active seller accounts."),
+    ]
+    best_selling_category: Annotated[
+        str,
+        Field(description="Best-selling category name for the reporting scope."),
+    ]
+    low_stock_products: Annotated[
+        int,
+        Field(ge=0, description="Number of products below the stock threshold."),
+    ]
+    generated_at: Annotated[
+        datetime,
+        Field(description="UTC timestamp when analytics were generated."),
+    ]
+
+    @field_serializer("total_revenue")
+    def serialize_total_revenue(self, total_revenue: Decimal) -> int | float:
+        """Serialize revenue as a JSON number for the API contract."""
+        if total_revenue == total_revenue.to_integral_value():
+            return int(total_revenue)
+        return float(total_revenue)
+
+
+class AdminAnalyticsResponse(AdminSchema):
+    """Standard API response envelope for the Admin analytics endpoint."""
+
+    success: Annotated[
+        bool,
+        Field(description="Indicates whether the request completed successfully."),
+    ] = True
+    message: Annotated[
+        str,
+        Field(description="Human-readable response message."),
+    ] = "Analytics retrieved successfully"
+    data: Annotated[
+        AdminAnalyticsData,
+        Field(description="Admin analytics metrics."),
     ]
