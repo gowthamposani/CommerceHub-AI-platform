@@ -10,12 +10,16 @@ class StructuredLogFormatter(logging.Formatter):
     """Formatter that supplies defaults for optional structured log fields."""
 
     default_fields = {
+        "client_ip": "-",
         "path": "-",
         "method": "-",
+        "url": "-",
+        "request_id": "-",
         "timestamp": "-",
         "exception_type": "-",
         "status_code": "-",
         "error_code": "-",
+        "processing_time_ms": "-",
     }
 
     def format(self, record: logging.LogRecord) -> str:
@@ -32,7 +36,9 @@ def configure_logging() -> None:
     handler.setFormatter(
         StructuredLogFormatter(
             "%(asctime)s %(levelname)s [%(name)s] %(message)s "
-            "path=%(path)s method=%(method)s timestamp=%(timestamp)s "
+            "request_id=%(request_id)s method=%(method)s url=%(url)s "
+            "path=%(path)s client_ip=%(client_ip)s timestamp=%(timestamp)s "
+            "processing_time_ms=%(processing_time_ms)s "
             "exception_type=%(exception_type)s status_code=%(status_code)s "
             "error_code=%(error_code)s"
         )
