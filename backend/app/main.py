@@ -3,6 +3,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from app.api.cart.router import router as cart_router
 from app.api.customer.router import router as customer_router
 from app.api.auth.router import router as auth_router
 from app.api.wishlist.router import router as wishlist_router
@@ -28,5 +29,6 @@ app.add_middleware(
 
 register_exception_handlers(app)
 app.include_router(auth_router, prefix=settings.api_v1_prefix)
+app.include_router(cart_router, prefix=settings.api_v1_prefix)
 app.include_router(customer_router, prefix=settings.api_v1_prefix)
 app.include_router(wishlist_router, prefix=settings.api_v1_prefix)

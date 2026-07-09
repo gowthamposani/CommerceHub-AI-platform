@@ -7,6 +7,7 @@ from sqlalchemy.orm import Session
 from app.core.config import get_settings
 from app.database.session import get_db
 from app.models.user import User
+from app.services.cart_service import CartService
 from app.services.auth_service import AuthenticationService
 from app.services.customer_service import CustomerService
 from app.services.wishlist_service import WishlistService
@@ -27,6 +28,12 @@ def get_customer_service(db: Session = Depends(get_db)) -> CustomerService:
     return CustomerService(db)
 
 
+def get_cart_service(db: Session = Depends(get_db)) -> CartService:
+    """Inject the cart service."""
+
+    return CartService(db)
+
+
 def get_wishlist_service(db: Session = Depends(get_db)) -> WishlistService:
     """Inject the wishlist service."""
 
@@ -44,6 +51,7 @@ def get_current_user(
 
 __all__ = [
     "get_auth_service",
+    "get_cart_service",
     "get_customer_service",
     "get_current_user",
     "get_wishlist_service",

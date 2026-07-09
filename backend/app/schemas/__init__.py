@@ -13,6 +13,7 @@ from app.schemas.auth import (
     TokenPairData,
     UserRead,
 )
+from app.schemas.cart import AddCartItemRequest, CartItemResponse, CartResponse, UpdateCartQuantityRequest
 from app.schemas.customer import (
     AddressCreateRequest,
     AddressResponse,
@@ -24,11 +25,14 @@ from app.schemas.customer import (
 from app.schemas.wishlist import AddWishlistItemRequest, WishlistResponse
 
 __all__ = [
+    "AddCartItemRequest",
     "AddressCreateRequest",
     "AddressResponse",
     "AddressUpdateRequest",
     "ApiResponse",
     "AuthSessionData",
+    "CartItemResponse",
+    "CartResponse",
     "AddWishlistItemRequest",
     "EmptyData",
     "CustomerProfileRequest",
@@ -40,6 +44,7 @@ __all__ = [
     "RegisterRequest",
     "RegistrationRole",
     "RoleRead",
+    "UpdateCartQuantityRequest",
     "TokenPairData",
     "UserRead",
     "WishlistResponse",

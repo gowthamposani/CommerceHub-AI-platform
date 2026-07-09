@@ -14,6 +14,7 @@ from app.database.base import Base
 from app.models.enums import UserStatus
 
 if TYPE_CHECKING:  # pragma: no cover - typing only
+    from app.models.cart import Cart
     from app.models.address import Address
     from app.models.refresh_token import RefreshToken
     from app.models.role import Role
@@ -72,6 +73,12 @@ class User(Base):
         lazy="selectin",
         order_by=lambda: (Address.is_default.desc(), Address.created_at.asc()),
     )
+    cart: Mapped[Optional["Cart"]] = relationship(
+        back_populates="customer",
+        uselist=False,
+        lazy="joined",
+        passive_deletes=True,
+    )
     wishlist_items: Mapped[list["Wishlist"]] = relationship(
         back_populates="customer",
         cascade="all, delete-orphan",
@@ -89,3 +96,4 @@ class User(Base):
 
 
 from app.models.address import Address  # noqa: E402
+from app.models.cart import Cart  # noqa: E402
