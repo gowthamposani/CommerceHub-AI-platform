@@ -58,7 +58,8 @@ function normalizeApiError(error: unknown): ApiError {
   const axiosError = error as AxiosError<{ error?: ApiErrorPayload } | ApiErrorPayload>;
   const status = axiosError.response?.status;
   const payload = axiosError.response?.data;
-  const nestedError = payload && "error" in payload ? payload.error : payload;
+  const nestedError =
+    payload && "error" in payload && payload.error ? payload.error : (payload as ApiErrorPayload);
   const message =
     nestedError?.message ??
     axiosError.message ??

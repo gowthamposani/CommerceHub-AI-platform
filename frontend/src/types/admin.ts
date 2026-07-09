@@ -1,16 +1,10 @@
 export type UserStatus = "ACTIVE" | "INACTIVE" | "BLOCKED";
 export type UserRole = "ADMIN" | "SELLER" | "CUSTOMER";
 
-export type DashboardSummary = {
-  totalUsers: number;
-  totalCustomers: number;
-  totalSellers: number;
-  totalProducts: number;
-  totalOrders: number;
-  pendingSellerRequests: number;
-  activeUsers: number;
-  revenue: string;
-  queue: Array<{ label: string; count: number }>;
+export type ApiEnvelope<T> = {
+  success: boolean;
+  message: string;
+  data: T;
 };
 
 export type DashboardSummaryResponse = {
@@ -20,9 +14,81 @@ export type DashboardSummaryResponse = {
   total_products: number;
   total_orders: number;
   pending_seller_requests: number;
-  active_users: number;
   revenue: string | number;
   generated_at: string;
+  active_users?: number;
+};
+
+export type RevenuePoint = {
+  month: string;
+  revenue: number;
+};
+
+export type OrdersPoint = {
+  label: string;
+  orders: number;
+};
+
+export type CategoryPerformance = {
+  name: string;
+  value: number;
+};
+
+export type RecentActivity = {
+  id: string;
+  title: string;
+  description: string;
+  timestamp: string;
+  tone: "success" | "warning" | "info";
+};
+
+export type NotificationItem = {
+  id: string;
+  title: string;
+  message: string;
+  severity: "critical" | "warning" | "info";
+  createdAt: string;
+};
+
+export type RecentOrder = {
+  id: string;
+  customer: string;
+  seller: string;
+  amount: number;
+  status: "Paid" | "Processing" | "Review";
+};
+
+export type SystemStatusItem = {
+  label: string;
+  value: string;
+  state: "healthy" | "degraded" | "attention";
+};
+
+export type QuickAction = {
+  id: string;
+  label: string;
+  description: string;
+  href: string;
+};
+
+export type DashboardSummary = {
+  dataSource: "api" | "mock";
+  totalUsers: number;
+  totalCustomers: number;
+  totalSellers: number;
+  totalProducts: number;
+  totalOrders: number;
+  pendingSellerRequests: number;
+  revenue: number;
+  generatedAt: string;
+  monthlyRevenue: RevenuePoint[];
+  ordersOverview: OrdersPoint[];
+  topCategories: CategoryPerformance[];
+  recentActivity: RecentActivity[];
+  latestNotifications: NotificationItem[];
+  recentOrders: RecentOrder[];
+  quickActions: QuickAction[];
+  systemStatus: SystemStatusItem[];
 };
 
 export type AdminUser = {

@@ -1,1 +1,5 @@
-// TODO: Frontend application shell.
+import { AppRoutes } from "./routes/AppRoutes";
+
+export default function App() {
+  return <AppRoutes />;
+}

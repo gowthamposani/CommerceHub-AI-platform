@@ -1,9 +1,19 @@
-"""Shared backend test fixtures."""
+"""Shared backend pytest configuration."""
 
 from __future__ import annotations
 
 import httpx
 import pytest
+
+from backend.tests.fixtures import api_client, app_instance, dependency_overrides, mock_db_session
+
+
+__all__ = [
+    "api_client",
+    "app_instance",
+    "dependency_overrides",
+    "mock_db_session",
+]
 
 
 @pytest.fixture(autouse=True, scope="session")

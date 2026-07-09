@@ -60,3 +60,21 @@ The backend workflow:
 - Compiles `backend/app`
 - Runs pytest for `backend/tests`
 - Uploads pytest JUnit results as a workflow artifact
+
+## Testing
+
+Backend tests use pytest with strict marker/config validation and coverage enabled.
+
+Run the backend test suite:
+
+```bash
+pytest
+```
+
+Test suites are organized under:
+
+- `backend/tests/unit`
+- `backend/tests/integration`
+- `backend/tests/api`
+
+Shared fixtures live in `backend/tests/fixtures.py` and are loaded through `backend/tests/conftest.py`.
