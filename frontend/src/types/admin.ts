@@ -189,6 +189,7 @@ export type NotificationTemplate = {
 export type NotificationHistoryItem = {
   id: string;
   title: string;
+  recipient?: string;
   channel: string;
   status: string;
   createdAt: string;

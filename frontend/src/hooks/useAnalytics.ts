@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 
-import { getApiErrorMessage } from "../lib/api";
+import { getApiErrorMessage, notifyApiFailure } from "../lib/api";
 import { getAnalytics } from "../services/admin.service";
 import type { AnalyticsData } from "../types/admin";
 
@@ -18,6 +18,7 @@ export function useAnalytics() {
       setData(analytics);
     } catch (requestError) {
       setError(getApiErrorMessage(requestError));
+      notifyApiFailure(requestError, "Analytics unavailable");
     } finally {
       setLoading(false);
     }

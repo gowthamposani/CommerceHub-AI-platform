@@ -1,6 +1,6 @@
 import { useCallback, useState } from "react";
 
-import { getApiErrorMessage } from "../lib/api";
+import { getApiErrorMessage, notifyApiFailure } from "../lib/api";
 import { generateProductDescription } from "../services/ai.service";
 import type { AIProductDescription, AIProductDescriptionRequest } from "../types/ai";
 
@@ -22,6 +22,7 @@ export function useAIGenerator() {
     } catch (requestError) {
       const message = getApiErrorMessage(requestError);
       setError(message);
+      notifyApiFailure(requestError, "AI generation failed");
       throw requestError;
     } finally {
       setLoading(false);

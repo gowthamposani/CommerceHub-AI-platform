@@ -1,15 +1,8 @@
 import { useCallback, useEffect, useState } from "react";
 
+import { getApiErrorMessage, notifyApiFailure } from "../lib/api";
 import { getDashboard } from "../services/admin.service";
 import type { DashboardSummary } from "../types/admin";
-
-function getErrorMessage(error: unknown): string {
-  if (error instanceof Error) {
-    return error.message;
-  }
-
-  return "Dashboard data could not be loaded.";
-}
 
 export function useDashboard() {
   const [data, setData] = useState<DashboardSummary | null>(null);
@@ -24,7 +17,8 @@ export function useDashboard() {
       const dashboard = await getDashboard();
       setData(dashboard);
     } catch (requestError) {
-      setError(getErrorMessage(requestError));
+      setError(getApiErrorMessage(requestError));
+      notifyApiFailure(requestError, "Dashboard unavailable");
     } finally {
       setLoading(false);
     }

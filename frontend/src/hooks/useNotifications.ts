@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 
-import { getApiErrorMessage } from "../lib/api";
+import { getApiErrorMessage, notifyApiFailure } from "../lib/api";
 import {
   getNotificationHistory,
   getNotificationTemplates,
@@ -34,6 +34,7 @@ export function useNotifications() {
       setTemplates([]);
       setHistory([]);
       setError(getApiErrorMessage(requestError));
+      notifyApiFailure(requestError, "Notifications unavailable");
     } finally {
       setLoading(false);
     }
@@ -49,6 +50,7 @@ export function useNotifications() {
         await refetch();
       } catch (requestError) {
         setError(getApiErrorMessage(requestError));
+        notifyApiFailure(requestError, "Notification send failed");
       } finally {
         setSending(false);
       }

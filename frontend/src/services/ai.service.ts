@@ -1,4 +1,4 @@
-import { apiClient } from "../lib/api";
+import { post } from "../lib/api";
 import type {
   AIProductDescription,
   AIProductDescriptionRequest,
@@ -41,12 +41,19 @@ function mapProductDescriptionResponse(
   };
 }
 
-export async function generateProductDescription(
-  request: AIProductDescriptionRequest,
-): Promise<AIProductDescription> {
-  const { data } = await apiClient.post<ProductDescriptionResponse>(
-    "/ai/product-description",
-    mapProductDescriptionRequest(request),
-  );
-  return mapProductDescriptionResponse(data.data);
+export class AIProductDescriptionApiService {
+  async generateProductDescription(
+    request: AIProductDescriptionRequest,
+  ): Promise<AIProductDescription> {
+    const { data } = await post<ProductDescriptionResponse, ProductDescriptionRequestPayload>(
+      "/ai/product-description",
+      mapProductDescriptionRequest(request),
+    );
+    return mapProductDescriptionResponse(data.data);
+  }
 }
+
+export const aiProductDescriptionApiService = new AIProductDescriptionApiService();
+
+export const generateProductDescription = (request: AIProductDescriptionRequest) =>
+  aiProductDescriptionApiService.generateProductDescription(request);

@@ -1,5 +1,6 @@
 import { Outlet } from "react-router-dom";
 
+import { ToastViewport } from "../components/admin/ToastViewport";
 import { AdminSidebar } from "../components/layout/AdminSidebar";
 import { AdminTopNavigation } from "../components/layout/AdminTopNavigation";
 import { AppFooter } from "../components/layout/AppFooter";
@@ -15,6 +16,7 @@ export function AdminLayout() {
         </main>
         <AppFooter />
       </div>
+      <ToastViewport />
     </div>
   );
 }
