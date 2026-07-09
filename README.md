@@ -21,3 +21,42 @@ Health check:
 ```bash
 curl http://127.0.0.1:8000/health
 ```
+
+## Docker Setup
+
+Create a local backend environment file from the safe template:
+
+```bash
+cp backend/.env.example backend/.env
+```
+
+Update `POSTGRES_PASSWORD` and the matching password segment in `DATABASE_URL` inside `backend/.env` before starting the stack.
+
+Start the backend development stack:
+
+```bash
+docker compose -f docker/docker-compose.yml up --build
+```
+
+Services:
+
+- Backend: `http://localhost:8000`
+- Swagger: `http://localhost:8000/docs`
+- Health: `http://localhost:8000/health`
+- PostgreSQL: `localhost:5432`
+- Redis: `localhost:6379`
+
+The backend container mounts `backend/` into the container and runs Uvicorn with hot reload for development.
+
+## CI
+
+Backend CI runs on pushes and pull requests targeting `develop` and `feature/*` branches.
+
+The backend workflow:
+
+- Sets up Python 3.12
+- Installs backend dependencies
+- Runs Ruff linting
+- Compiles `backend/app`
+- Runs pytest for `backend/tests`
+- Uploads pytest JUnit results as a workflow artifact
