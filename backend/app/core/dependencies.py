@@ -9,6 +9,7 @@ from app.database.session import get_db
 from app.models.user import User
 from app.services.auth_service import AuthenticationService
 from app.services.customer_service import CustomerService
+from app.services.wishlist_service import WishlistService
 
 settings = get_settings()
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl=f"{settings.api_v1_prefix}/auth/login")
@@ -26,6 +27,12 @@ def get_customer_service(db: Session = Depends(get_db)) -> CustomerService:
     return CustomerService(db)
 
 
+def get_wishlist_service(db: Session = Depends(get_db)) -> WishlistService:
+    """Inject the wishlist service."""
+
+    return WishlistService(db)
+
+
 def get_current_user(
     token: str = Depends(oauth2_scheme),
     auth_service: AuthenticationService = Depends(get_auth_service),
@@ -35,4 +42,10 @@ def get_current_user(
     return auth_service.get_current_user(token)
 
 
-__all__ = ["get_auth_service", "get_customer_service", "get_current_user", "oauth2_scheme"]
+__all__ = [
+    "get_auth_service",
+    "get_customer_service",
+    "get_current_user",
+    "get_wishlist_service",
+    "oauth2_scheme",
+]

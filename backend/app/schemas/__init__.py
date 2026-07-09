@@ -21,6 +21,7 @@ from app.schemas.customer import (
     CustomerProfileResponse,
     CustomerProfileUpdateRequest,
 )
+from app.schemas.wishlist import AddWishlistItemRequest, WishlistResponse
 
 __all__ = [
     "AddressCreateRequest",
@@ -28,6 +29,7 @@ __all__ = [
     "AddressUpdateRequest",
     "ApiResponse",
     "AuthSessionData",
+    "AddWishlistItemRequest",
     "EmptyData",
     "CustomerProfileRequest",
     "CustomerProfileResponse",
@@ -40,4 +42,5 @@ __all__ = [
     "RoleRead",
     "TokenPairData",
     "UserRead",
+    "WishlistResponse",
 ]

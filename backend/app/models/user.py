@@ -17,6 +17,7 @@ if TYPE_CHECKING:  # pragma: no cover - typing only
     from app.models.address import Address
     from app.models.refresh_token import RefreshToken
     from app.models.role import Role
+    from app.models.wishlist import Wishlist
 
 
 class User(Base):
@@ -70,6 +71,11 @@ class User(Base):
         cascade="all, delete-orphan",
         lazy="selectin",
         order_by=lambda: (Address.is_default.desc(), Address.created_at.asc()),
+    )
+    wishlist_items: Mapped[list["Wishlist"]] = relationship(
+        back_populates="customer",
+        cascade="all, delete-orphan",
+        lazy="selectin",
     )
 
     @property
