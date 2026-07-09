@@ -1,3 +1,19 @@
+import {
+  Area,
+  AreaChart,
+  Bar,
+  BarChart,
+  CartesianGrid,
+  Cell,
+  Pie,
+  PieChart,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from "recharts";
+import type { ReactNode } from "react";
+
 import type {
   AnalyticsData,
   CategoryPerformance,
@@ -5,6 +21,7 @@ import type {
   RecentActivity,
   RevenuePoint,
 } from "../../types/admin";
+import { EmptyState } from "./EmptyState";
 
 type DashboardChartsProps =
   | {
@@ -22,7 +39,9 @@ type DashboardChartsProps =
       recentActivity?: never;
     };
 
-function formatCurrency(value: number): string {
+const categoryColors = ["#C98B2B", "#1F1A14", "#A56D1E", "#D8B06D", "#756B5E"];
+
+function formatCompactCurrency(value: number): string {
   return new Intl.NumberFormat("en-US", {
     currency: "USD",
     maximumFractionDigits: 0,
@@ -31,20 +50,40 @@ function formatCurrency(value: number): string {
   }).format(value);
 }
 
-function maxValue(values: number[]): number {
-  return Math.max(...values, 1);
+function formatTooltipCurrency(value: unknown): string {
+  return formatCompactCurrency(typeof value === "number" ? value : Number(value) || 0);
 }
 
 function toneClass(tone: RecentActivity["tone"]): string {
   if (tone === "success") {
-    return "bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300";
+    return "bg-emerald-50 text-emerald-700 ring-emerald-200 dark:bg-emerald-950 dark:text-emerald-300 dark:ring-emerald-900";
   }
 
   if (tone === "warning") {
-    return "bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300";
+    return "bg-amber-50 text-amber-800 ring-amber-200 dark:bg-amber-950 dark:text-amber-300 dark:ring-amber-900";
   }
 
-  return "bg-sky-100 text-sky-700 dark:bg-sky-950 dark:text-sky-300";
+  return "bg-sky-50 text-sky-700 ring-sky-200 dark:bg-sky-950 dark:text-sky-300 dark:ring-sky-900";
+}
+
+function ChartCard({
+  children,
+  eyebrow,
+  title,
+}: {
+  children: ReactNode;
+  eyebrow?: string;
+  title: string;
+}) {
+  return (
+    <section className="rounded-admin border border-admin-border bg-white p-6 shadow-admin transition duration-200 dark:border-slate-800 dark:bg-slate-900">
+      {eyebrow ? (
+        <p className="text-xs font-semibold uppercase tracking-wide text-admin-gold">{eyebrow}</p>
+      ) : null}
+      <h3 className="mt-1 text-base font-semibold text-admin-ink dark:text-white">{title}</h3>
+      <div className="mt-6">{children}</div>
+    </section>
+  );
 }
 
 export function AnalyticsCharts({
@@ -54,164 +93,145 @@ export function AnalyticsCharts({
   topCategories,
   recentActivity,
 }: DashboardChartsProps) {
-  const fallbackAnalytics = analytics ?? {
-    revenueSeries: [],
-    topCategories: [],
-    topProducts: [],
-  };
-  const resolvedMonthlyRevenue =
-    monthlyRevenue ??
-    fallbackAnalytics.revenueSeries.map((item, index) => ({
-      month: item.label.slice(0, 3) || `M${index + 1}`,
-      revenue: Number(item.value.replace(/[^0-9.-]+/g, "")) || (index + 1) * 25000,
-    }));
-  const resolvedOrdersOverview =
-    ordersOverview ??
-    fallbackAnalytics.topProducts.map((product) => ({
-      label: product.name.slice(0, 3),
-      orders: product.orders,
-    }));
-  const resolvedTopCategories =
-    topCategories ??
-    fallbackAnalytics.topCategories.map((category) => ({
-      name: category.name,
-      value: category.share,
-    }));
-  const resolvedRecentActivity =
-    recentActivity ??
-    fallbackAnalytics.topProducts.slice(0, 3).map((product, index) => ({
-      id: product.name,
-      title: product.name,
-      description: `${product.orders.toLocaleString()} orders recorded.`,
-      timestamp: `${index + 1}h ago`,
-      tone: "info" as const,
-    }));
-
-  const revenueMax = maxValue(resolvedMonthlyRevenue.map((point) => point.revenue));
-  const orderMax = maxValue(resolvedOrdersOverview.map((point) => point.orders));
-  const categoryMax = maxValue(resolvedTopCategories.map((category) => category.value));
-
-  const revenuePolyline = resolvedMonthlyRevenue
-    .map((point, index) => {
-      const x = 20 + index * (260 / Math.max(resolvedMonthlyRevenue.length - 1, 1));
-      const y = 170 - (point.revenue / revenueMax) * 130;
-      return `${x},${y}`;
-    })
-    .join(" ");
+  const resolvedMonthlyRevenue = monthlyRevenue ?? analytics?.revenueSeries ?? [];
+  const resolvedOrdersOverview = ordersOverview ?? analytics?.ordersOverview ?? [];
+  const resolvedTopCategories = topCategories ?? analytics?.topCategories ?? [];
+  const resolvedRecentActivity = recentActivity ?? [];
 
   return (
-    <section className="grid gap-4 xl:grid-cols-[1.35fr_0.65fr]">
-      <div className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900">
-        <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-          <div>
-            <h2 className="text-base font-semibold">Monthly Revenue</h2>
-            <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
-              Revenue trend across the current reporting period.
-            </p>
+    <section className="grid gap-6 xl:grid-cols-[1.35fr_0.65fr]">
+      <ChartCard eyebrow="Revenue" title="Monthly Revenue">
+        {resolvedMonthlyRevenue.length > 0 ? (
+          <div className="h-72">
+            <ResponsiveContainer height="100%" width="100%">
+              <AreaChart data={resolvedMonthlyRevenue} margin={{ left: 0, right: 8, top: 8 }}>
+                <defs>
+                  <linearGradient id="adminRevenue" x1="0" x2="0" y1="0" y2="1">
+                    <stop offset="5%" stopColor="#C98B2B" stopOpacity={0.35} />
+                    <stop offset="95%" stopColor="#C98B2B" stopOpacity={0.02} />
+                  </linearGradient>
+                </defs>
+                <CartesianGrid stroke="#E7DED2" strokeDasharray="4 4" vertical={false} />
+                <XAxis axisLine={false} dataKey="month" tickLine={false} />
+                <YAxis
+                  axisLine={false}
+                  tickFormatter={(value: number) => formatCompactCurrency(value)}
+                  tickLine={false}
+                  width={72}
+                />
+                <Tooltip
+                  formatter={(value) => [formatTooltipCurrency(value), "Revenue"]}
+                  contentStyle={{ borderRadius: 16, borderColor: "#E7DED2" }}
+                />
+                <Area
+                  dataKey="revenue"
+                  fill="url(#adminRevenue)"
+                  stroke="#C98B2B"
+                  strokeWidth={3}
+                  type="monotone"
+                />
+              </AreaChart>
+            </ResponsiveContainer>
           </div>
-          <span className="rounded-lg bg-emerald-50 px-3 py-1 text-sm font-medium text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300">
-            {formatCurrency(resolvedMonthlyRevenue[resolvedMonthlyRevenue.length - 1]?.revenue ?? 0)}
-          </span>
-        </div>
+        ) : (
+          <EmptyState title="No revenue data available" />
+        )}
+      </ChartCard>
 
-        <div className="mt-6 overflow-hidden rounded-lg bg-slate-50 p-4 dark:bg-slate-950">
-          <svg viewBox="0 0 300 190" className="h-64 w-full" role="img" aria-label="Monthly revenue line chart">
-            <defs>
-              <linearGradient id="revenueFill" x1="0" x2="0" y1="0" y2="1">
-                <stop offset="0%" stopColor="#10b981" stopOpacity="0.32" />
-                <stop offset="100%" stopColor="#10b981" stopOpacity="0.02" />
-              </linearGradient>
-            </defs>
-            <polyline
-              fill="none"
-              points={revenuePolyline}
-              stroke="#059669"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="4"
-            />
-            <polygon fill="url(#revenueFill)" points={`20,180 ${revenuePolyline} 280,180`} />
-            {resolvedMonthlyRevenue.map((point, index) => {
-              const x = 20 + index * (260 / Math.max(resolvedMonthlyRevenue.length - 1, 1));
-              const y = 170 - (point.revenue / revenueMax) * 130;
+      <div className="space-y-6">
+        <ChartCard eyebrow="Orders" title="Orders Overview">
+          {resolvedOrdersOverview.length > 0 ? (
+            <div className="h-64">
+              <ResponsiveContainer height="100%" width="100%">
+                <BarChart data={resolvedOrdersOverview}>
+                  <CartesianGrid stroke="#E7DED2" strokeDasharray="4 4" vertical={false} />
+                  <XAxis axisLine={false} dataKey="label" tickLine={false} />
+                  <YAxis axisLine={false} tickLine={false} width={42} />
+                  <Tooltip contentStyle={{ borderRadius: 16, borderColor: "#E7DED2" }} />
+                  <Bar dataKey="orders" fill="#C98B2B" radius={[12, 12, 0, 0]} />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          ) : (
+            <EmptyState title="No orders data available" />
+          )}
+        </ChartCard>
 
-              return (
-                <g key={point.month}>
-                  <circle cx={x} cy={y} fill="#ffffff" r="5" stroke="#059669" strokeWidth="3" />
-                  <text
-                    fill="currentColor"
-                    fontSize="10"
-                    textAnchor="middle"
-                    x={x}
-                    y="188"
+        <ChartCard eyebrow="Categories" title="Top Categories">
+          {resolvedTopCategories.length > 0 ? (
+            <div className="grid items-center gap-4 sm:grid-cols-[160px_1fr]">
+              <div className="h-40">
+                <ResponsiveContainer height="100%" width="100%">
+                  <PieChart>
+                    <Pie
+                      data={resolvedTopCategories}
+                      dataKey="value"
+                      innerRadius={42}
+                      outerRadius={68}
+                      paddingAngle={3}
+                    >
+                      {resolvedTopCategories.map((category, index) => (
+                        <Cell
+                          fill={categoryColors[index % categoryColors.length]}
+                          key={category.name}
+                        />
+                      ))}
+                    </Pie>
+                    <Tooltip contentStyle={{ borderRadius: 16, borderColor: "#E7DED2" }} />
+                  </PieChart>
+                </ResponsiveContainer>
+              </div>
+              <div className="space-y-3">
+                {resolvedTopCategories.map((category, index) => (
+                  <div key={category.name} className="flex items-center justify-between gap-4">
+                    <span className="flex min-w-0 items-center gap-2 text-sm text-admin-muted dark:text-slate-300">
+                      <span
+                        className="h-2.5 w-2.5 shrink-0 rounded-full"
+                        style={{ backgroundColor: categoryColors[index % categoryColors.length] }}
+                      />
+                      <span className="truncate">{category.name}</span>
+                    </span>
+                    <span className="text-sm font-semibold">{category.value}%</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ) : (
+            <EmptyState title="No category data available" />
+          )}
+        </ChartCard>
+      </div>
+
+      {recentActivity ? (
+        <section className="rounded-admin border border-admin-border bg-white p-6 shadow-admin dark:border-slate-800 dark:bg-slate-900 xl:col-span-2">
+          <p className="text-xs font-semibold uppercase tracking-wide text-admin-gold">Activity</p>
+          <h3 className="mt-1 text-base font-semibold">Recent Activities</h3>
+          {resolvedRecentActivity.length > 0 ? (
+            <div className="mt-6 grid gap-4 lg:grid-cols-3">
+              {resolvedRecentActivity.map((activity) => (
+                <article
+                  key={activity.id}
+                  className="rounded-admin border border-admin-border bg-admin-background p-4 dark:border-slate-800 dark:bg-slate-950"
+                >
+                  <span
+                    className={`rounded-full px-3 py-1 text-xs font-medium ring-1 ${toneClass(
+                      activity.tone,
+                    )}`}
                   >
-                    {point.month}
-                  </text>
-                </g>
-              );
-            })}
-          </svg>
-        </div>
-      </div>
-
-      <div className="space-y-4">
-        <div className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900">
-          <h2 className="text-base font-semibold">Orders Overview</h2>
-          <div className="mt-5 flex h-48 items-end gap-2" aria-label="Orders overview bar chart">
-            {resolvedOrdersOverview.map((point) => (
-              <div key={point.label} className="flex flex-1 flex-col items-center gap-2">
-                <div className="flex h-36 w-full items-end rounded-md bg-slate-100 dark:bg-slate-800">
-                  <div
-                    className="w-full rounded-md bg-sky-600"
-                    style={{ height: `${Math.max(12, (point.orders / orderMax) * 100)}%` }}
-                  />
-                </div>
-                <span className="text-xs text-slate-500 dark:text-slate-400">{point.label}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <div className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900">
-          <h2 className="text-base font-semibold">Top Categories</h2>
-          <div className="mt-5 space-y-3">
-            {resolvedTopCategories.map((category) => (
-              <div key={category.name}>
-                <div className="mb-2 flex justify-between text-sm">
-                  <span>{category.name}</span>
-                  <span className="font-medium">{category.value}%</span>
-                </div>
-                <div className="h-2 rounded-full bg-slate-100 dark:bg-slate-800">
-                  <div
-                    className="h-2 rounded-full bg-violet-600"
-                    style={{ width: `${Math.max(8, (category.value / categoryMax) * 100)}%` }}
-                  />
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      <div className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900 xl:col-span-2">
-        <h2 className="text-base font-semibold">Recent Activity</h2>
-        <div className="mt-5 grid gap-3 lg:grid-cols-3">
-          {resolvedRecentActivity.map((activity) => (
-            <article
-              key={activity.id}
-              className="rounded-lg border border-slate-200 p-4 dark:border-slate-800"
-            >
-              <span className={`rounded-full px-2.5 py-1 text-xs font-medium ${toneClass(activity.tone)}`}>
-                {activity.timestamp}
-              </span>
-              <h3 className="mt-4 text-sm font-semibold">{activity.title}</h3>
-              <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
-                {activity.description}
-              </p>
-            </article>
-          ))}
-        </div>
-      </div>
+                    {activity.timestamp}
+                  </span>
+                  <h4 className="mt-4 text-sm font-semibold">{activity.title}</h4>
+                  <p className="mt-2 text-sm leading-6 text-admin-muted dark:text-slate-400">
+                    {activity.description}
+                  </p>
+                </article>
+              ))}
+            </div>
+          ) : (
+            <EmptyState title="No recent activity available" />
+          )}
+        </section>
+      ) : null}
     </section>
   );
 }

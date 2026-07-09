@@ -1,8 +1,15 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 
+import { AdminErrorBoundary } from "../components/admin/AdminErrorBoundary";
 import { AdminLayout } from "../layouts/AdminLayout";
 import { AuthLayout } from "../layouts/AuthLayout";
 import { MainLayout } from "../layouts/MainLayout";
+import AIProductGenerator from "../pages/admin/AIProductGenerator";
+import Analytics from "../pages/admin/Analytics";
+import Dashboard from "../pages/admin/Dashboard";
+import Notifications from "../pages/admin/Notifications";
+import Settings from "../pages/admin/Settings";
+import Users from "../pages/admin/Users";
 
 type PlaceholderPageProps = {
   title: string;
@@ -62,18 +69,56 @@ export function AppRoutes() {
         <Route path="/admin" element={<Navigate to="/admin/dashboard" replace />} />
         <Route
           path="/admin/dashboard"
-          element={<PlaceholderPage title="Admin Dashboard" />}
+          element={
+            <AdminErrorBoundary>
+              <Dashboard />
+            </AdminErrorBoundary>
+          }
         />
-        <Route path="/admin/users" element={<PlaceholderPage title="Users" />} />
-        <Route path="/admin/products" element={<PlaceholderPage title="Products" />} />
-        <Route path="/admin/orders" element={<PlaceholderPage title="Orders" />} />
-        <Route path="/admin/analytics" element={<PlaceholderPage title="Analytics" />} />
+        <Route
+          path="/admin/users"
+          element={
+            <AdminErrorBoundary>
+              <Users />
+            </AdminErrorBoundary>
+          }
+        />
+        <Route
+          path="/admin/analytics"
+          element={
+            <AdminErrorBoundary>
+              <Analytics />
+            </AdminErrorBoundary>
+          }
+        />
         <Route
           path="/admin/notifications"
-          element={<PlaceholderPage title="Notifications" />}
+          element={
+            <AdminErrorBoundary>
+              <Notifications />
+            </AdminErrorBoundary>
+          }
         />
-        <Route path="/admin/ai-tools" element={<PlaceholderPage title="AI Tools" />} />
-        <Route path="/admin/settings" element={<PlaceholderPage title="Settings" />} />
+        <Route
+          path="/admin/ai-tools"
+          element={
+            <AdminErrorBoundary>
+              <AIProductGenerator />
+            </AdminErrorBoundary>
+          }
+        />
+        <Route
+          path="/admin/ai-product-generator"
+          element={<Navigate to="/admin/ai-tools" replace />}
+        />
+        <Route
+          path="/admin/settings"
+          element={
+            <AdminErrorBoundary>
+              <Settings />
+            </AdminErrorBoundary>
+          }
+        />
       </Route>
 
       <Route path="*" element={<Navigate to="/" replace />} />

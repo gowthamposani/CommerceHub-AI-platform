@@ -3,6 +3,7 @@ import type {
   AIProductDescription,
   AIProductDescriptionRequest,
   ProductDescriptionRequestPayload,
+  ProductDescriptionDataResponse,
   ProductDescriptionResponse,
 } from "../types/ai";
 
@@ -15,23 +16,27 @@ export type {
 function mapProductDescriptionRequest(
   request: AIProductDescriptionRequest,
 ): ProductDescriptionRequestPayload {
+  const specificationList = [
+    ...request.features,
+    ...Object.entries(request.specifications ?? {}).map(([name, value]) => `${name}: ${value}`),
+  ];
+
   return {
     product_name: request.productName,
     brand: request.brand,
     category: request.category,
-    features: request.features,
-    specifications: request.specifications ?? {},
+    specifications: specificationList,
   };
 }
 
 function mapProductDescriptionResponse(
-  response: ProductDescriptionResponse,
+  response: ProductDescriptionDataResponse,
 ): AIProductDescription {
   return {
-    generatedDescription: response.generated_description,
-    generatedKeywords: response.generated_keywords,
+    generatedDescription: response.description ?? response.generated_description ?? "",
+    generatedKeywords: response.keywords ?? response.generated_keywords ?? [],
     seoTitle: response.seo_title,
-    metaDescription: response.meta_description,
+    metaDescription: response.seo_description ?? response.meta_description ?? "",
     highlights: response.highlights,
   };
 }
@@ -43,7 +48,5 @@ export async function generateProductDescription(
     "/ai/product-description",
     mapProductDescriptionRequest(request),
   );
-  return mapProductDescriptionResponse(data);
+  return mapProductDescriptionResponse(data.data);
 }
-
-export const generateMockProductDescription = generateProductDescription;

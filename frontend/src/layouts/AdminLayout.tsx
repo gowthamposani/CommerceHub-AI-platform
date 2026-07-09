@@ -6,7 +6,7 @@ import { AppFooter } from "../components/layout/AppFooter";
 
 export function AdminLayout() {
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-950 dark:bg-slate-950 dark:text-slate-100">
+    <div className="min-h-screen bg-admin-background text-admin-ink dark:bg-slate-950 dark:text-slate-100">
       <AdminSidebar />
       <div className="flex min-h-screen flex-col lg:pl-72">
         <AdminTopNavigation />

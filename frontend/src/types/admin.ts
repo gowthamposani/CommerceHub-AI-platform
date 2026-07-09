@@ -7,18 +7,6 @@ export type ApiEnvelope<T> = {
   data: T;
 };
 
-export type DashboardSummaryResponse = {
-  total_users: number;
-  total_customers: number;
-  total_sellers: number;
-  total_products: number;
-  total_orders: number;
-  pending_seller_requests: number;
-  revenue: string | number;
-  generated_at: string;
-  active_users?: number;
-};
-
 export type RevenuePoint = {
   month: string;
   revenue: number;
@@ -42,11 +30,13 @@ export type RecentActivity = {
   tone: "success" | "warning" | "info";
 };
 
+export type NotificationSeverity = "critical" | "warning" | "info";
+
 export type NotificationItem = {
   id: string;
   title: string;
   message: string;
-  severity: "critical" | "warning" | "info";
+  severity: NotificationSeverity;
   createdAt: string;
 };
 
@@ -55,7 +45,7 @@ export type RecentOrder = {
   customer: string;
   seller: string;
   amount: number;
-  status: "Paid" | "Processing" | "Review";
+  status: string;
 };
 
 export type SystemStatusItem = {
@@ -71,8 +61,26 @@ export type QuickAction = {
   href: string;
 };
 
+export type DashboardSummaryResponse = {
+  total_users: number;
+  total_customers: number;
+  total_sellers: number;
+  total_products: number;
+  total_orders: number;
+  pending_seller_requests: number;
+  revenue: string | number;
+  generated_at: string;
+  monthly_revenue?: RevenuePoint[];
+  orders_overview?: OrdersPoint[];
+  top_categories?: CategoryPerformance[];
+  recent_activity?: RecentActivity[];
+  latest_notifications?: NotificationItem[];
+  recent_orders?: RecentOrder[];
+  quick_actions?: QuickAction[];
+  system_status?: SystemStatusItem[];
+};
+
 export type DashboardSummary = {
-  dataSource: "api" | "mock";
   totalUsers: number;
   totalCustomers: number;
   totalSellers: number;
@@ -140,17 +148,53 @@ export type UpdateCategoryRequest = {
   is_active?: boolean | null;
 };
 
-export type AnalyticsData = {
-  revenueSeries: Array<{ label: string; value: string; score: number }>;
-  topCategories: Array<{ name: string; share: number }>;
-  topProducts: Array<{ name: string; orders: number }>;
+export type AnalyticsResponse = {
+  total_revenue?: string | number;
+  today_orders?: number;
+  monthly_orders?: number;
+  active_customers?: number;
+  active_sellers?: number;
+  best_selling_category?: string;
+  low_stock_products?: number;
+  generated_at?: string;
+  monthly_revenue?: string | number;
+  total_customers?: number;
+  total_sellers?: number;
+  top_categories?: string[] | CategoryPerformance[];
+  top_products?: string[];
+  revenue_series?: RevenuePoint[];
+  orders_overview?: OrdersPoint[];
+  category_performance?: CategoryPerformance[];
 };
 
-export type AnalyticsResponse = {
-  monthly_revenue: string | number;
-  monthly_orders: number;
-  total_customers: number;
-  total_sellers: number;
-  top_categories: string[];
-  top_products: string[];
+export type AnalyticsMetric = {
+  label: string;
+  value: string;
+};
+
+export type AnalyticsData = {
+  metrics: AnalyticsMetric[];
+  generatedAt?: string;
+  revenueSeries: RevenuePoint[];
+  ordersOverview: OrdersPoint[];
+  topCategories: CategoryPerformance[];
+};
+
+export type NotificationTemplate = {
+  id: string;
+  name: string;
+  channel: string;
+};
+
+export type NotificationHistoryItem = {
+  id: string;
+  title: string;
+  channel: string;
+  status: string;
+  createdAt: string;
+};
+
+export type SendNotificationRequest = {
+  recipient: string;
+  message: string;
 };

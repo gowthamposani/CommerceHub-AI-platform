@@ -16,8 +16,7 @@ export type ProductDescriptionRequestPayload = {
   product_name: string;
   brand: string;
   category: string;
-  features: string[];
-  specifications: Record<string, string>;
+  specifications: string[];
 };
 
 export type AIProductDescription = {
@@ -29,9 +28,26 @@ export type AIProductDescription = {
 };
 
 export type ProductDescriptionResponse = {
-  generated_description: string;
-  generated_keywords: string[];
+  success: boolean;
+  message: string;
+  data: {
+    title: string;
+    description: string;
+    seo_title: string;
+    seo_description: string;
+    highlights: string[];
+    keywords: string[];
+  };
+};
+
+export type ProductDescriptionDataResponse = {
+  title?: string;
+  description?: string;
   seo_title: string;
-  meta_description: string;
+  seo_description?: string;
+  generated_description?: string;
+  generated_keywords?: string[];
+  meta_description?: string;
   highlights: string[];
+  keywords?: string[];
 };

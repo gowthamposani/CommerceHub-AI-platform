@@ -1,3 +1,13 @@
+import {
+  Clock3,
+  DollarSign,
+  Package,
+  ShoppingCart,
+  Store,
+  UserCheck,
+  Users,
+} from "lucide-react";
+
 import type { DashboardSummary } from "../../types/admin";
 
 type DashboardCardsProps = {
@@ -22,60 +32,73 @@ export function DashboardCards({ summary }: DashboardCardsProps) {
       label: "Total Users",
       value: formatNumber(summary.totalUsers),
       helper: "All platform accounts",
-      accent: "border-l-slate-900 dark:border-l-slate-100",
+      icon: Users,
     },
     {
       label: "Total Customers",
       value: formatNumber(summary.totalCustomers),
-      helper: "Active buyer ecosystem",
-      accent: "border-l-sky-600",
+      helper: "Buyer ecosystem",
+      icon: UserCheck,
     },
     {
       label: "Total Sellers",
       value: formatNumber(summary.totalSellers),
       helper: "Marketplace partners",
-      accent: "border-l-violet-600",
+      icon: Store,
     },
     {
       label: "Total Products",
       value: formatNumber(summary.totalProducts),
       helper: "Catalog inventory",
-      accent: "border-l-emerald-600",
+      icon: Package,
     },
     {
-      label: "Total Orders",
+      label: "Orders",
       value: formatNumber(summary.totalOrders),
       helper: "Commerce transactions",
-      accent: "border-l-amber-600",
+      icon: ShoppingCart,
     },
     {
       label: "Revenue",
       value: formatCurrency(summary.revenue),
-      helper: "Recognized marketplace revenue",
-      accent: "border-l-rose-600",
+      helper: "Recognized revenue",
+      icon: DollarSign,
     },
     {
-      label: "Pending Seller Requests",
+      label: "Pending Requests",
       value: formatNumber(summary.pendingSellerRequests),
-      helper: "Requires admin review",
-      accent: "border-l-red-600",
+      helper: "Admin review queue",
+      icon: Clock3,
     },
   ];
 
   return (
     <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4" aria-label="Dashboard metrics">
-      {cards.map((card) => (
-        <article
-          key={card.label}
-          className={`min-h-36 rounded-lg border border-l-4 border-slate-200 bg-white p-5 shadow-sm transition hover:shadow-md dark:border-slate-800 dark:bg-slate-900 ${card.accent}`}
-        >
-          <p className="text-sm font-medium text-slate-500 dark:text-slate-400">{card.label}</p>
-          <p className="mt-3 text-2xl font-semibold text-slate-950 dark:text-white">
-            {card.value}
-          </p>
-          <p className="mt-4 text-sm text-slate-500 dark:text-slate-400">{card.helper}</p>
-        </article>
-      ))}
+      {cards.map((card) => {
+        const Icon = card.icon;
+
+        return (
+          <article
+            key={card.label}
+            className="group min-h-40 rounded-admin border border-admin-border bg-white p-6 shadow-admin transition duration-200 hover:-translate-y-0.5 hover:shadow-admin dark:border-slate-800 dark:bg-slate-900"
+          >
+            <div className="flex items-start justify-between gap-4">
+              <div>
+                <p className="text-sm font-medium text-admin-muted dark:text-slate-400">
+                  {card.label}
+                </p>
+                <p className="mt-3 text-2xl font-semibold text-admin-ink dark:text-white">
+                  {card.value}
+                </p>
+              </div>
+              <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-admin bg-admin-cream text-admin-gold transition group-hover:bg-admin-gold group-hover:text-white">
+                <Icon className="h-5 w-5" aria-hidden="true" />
+              </span>
+            </div>
+            <p className="mt-5 text-sm text-admin-muted dark:text-slate-400">{card.helper}</p>
+          </article>
+        );
+      })}
     </section>
   );
 }
