@@ -8,7 +8,9 @@ export class ProtectedRoutePage extends ApiClientUtility {
   }
 
   currentUser(accessToken?: string) {
-    const headers = accessToken ? { Authorization: `Bearer ${accessToken}` } : {};
+    const headers: Record<string, string> = accessToken
+      ? { Authorization: `Bearer ${accessToken}` }
+      : {};
     return this.get('/auth/me', headers);
   }
 }

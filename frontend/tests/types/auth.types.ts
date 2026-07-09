@@ -1,5 +1,3 @@
-import type { StorageState } from '@playwright/test';
-
 export type RegistrationRole = 'customer' | 'seller';
 export type RoleName = 'customer' | 'seller' | 'admin';
 export type UserStatus = 'active' | 'pending_approval' | 'inactive' | 'suspended';
@@ -70,7 +68,21 @@ export interface BrowserStorageOrigin {
   localStorage: BrowserStorageItem[];
 }
 
-export type BrowserStorageState = StorageState;
+export interface BrowserStorageCookie {
+  name: string;
+  value: string;
+  domain: string;
+  path: string;
+  expires: number;
+  httpOnly: boolean;
+  secure: boolean;
+  sameSite: 'Lax' | 'None' | 'Strict';
+}
+
+export interface BrowserStorageState {
+  cookies: BrowserStorageCookie[];
+  origins: BrowserStorageOrigin[];
+}
 
 export interface AuthTestData {
   customer: AuthRegistrationPayload;

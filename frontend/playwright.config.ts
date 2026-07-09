@@ -9,6 +9,12 @@ export default defineConfig({
   retries: process.env.CI ? 2 : 0,
   workers: process.env.CI ? 1 : undefined,
   reporter: [['list'], ['html', { open: 'never' }]],
+  webServer: {
+    command: 'npm run dev -- --host 127.0.0.1',
+    url: appBaseUrl,
+    reuseExistingServer: !process.env.CI,
+    timeout: 120_000,
+  },
   use: {
     baseURL: appBaseUrl,
     trace: 'on-first-retry',

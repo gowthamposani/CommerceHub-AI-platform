@@ -22,6 +22,7 @@ from app.schemas.customer import (
     CustomerProfileResponse,
     CustomerProfileUpdateRequest,
 )
+from app.schemas.order import CheckoutRequest, OrderItemResponse, OrderResponse
 from app.schemas.wishlist import AddWishlistItemRequest, WishlistResponse
 
 __all__ = [
@@ -38,9 +39,12 @@ __all__ = [
     "CustomerProfileRequest",
     "CustomerProfileResponse",
     "CustomerProfileUpdateRequest",
+    "CheckoutRequest",
     "LoginRequest",
     "LogoutRequest",
     "RefreshTokenRequest",
+    "OrderItemResponse",
+    "OrderResponse",
     "RegisterRequest",
     "RegistrationRole",
     "RoleRead",

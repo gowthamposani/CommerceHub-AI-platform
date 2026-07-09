@@ -15,7 +15,7 @@ export class SessionPage extends ApiClientUtility {
   constructor(
     request: APIRequestContext,
     private readonly browser: Browser,
-    private readonly config: E2EConfig = e2eConfig,
+    config: E2EConfig = e2eConfig,
   ) {
     super(request, config);
     this.storageUtility = new StorageUtility(config);

@@ -23,11 +23,20 @@ const toNumber = (value: string | undefined, fallback: number): number => {
 };
 
 const appOrigin = trimTrailingSlash(process.env.E2E_APP_BASE_URL ?? 'http://127.0.0.1:3000');
-const apiOrigin = trimTrailingSlash(process.env.E2E_API_BASE_URL ?? 'http://127.0.0.1:8000');
+
+const resolveApiBaseUrl = (): string => {
+  const configuredValue =
+    process.env.E2E_API_BASE_URL ??
+    process.env.VITE_API_BASE_URL ??
+    'http://127.0.0.1:8000/api/v1';
+
+  const trimmed = trimTrailingSlash(configuredValue);
+  return trimmed.endsWith('/api/v1') ? trimmed : `${trimmed}/api/v1`;
+};
 
 export const e2eConfig: E2EConfig = {
   appBaseUrl: appOrigin,
-  apiBaseUrl: `${apiOrigin}/api/v1`,
+  apiBaseUrl: resolveApiBaseUrl(),
   jwtSecret: process.env.E2E_JWT_SECRET ?? 'test-secret-key',
   jwtAlgorithm: process.env.E2E_JWT_ALGORITHM ?? 'HS256',
   tokenIssuer: process.env.E2E_TOKEN_ISSUER ?? 'test-commercehub',
