@@ -5,7 +5,7 @@ from __future__ import annotations
 import logging
 
 from backend.app.schemas.ai_schema import ProductDescriptionRequest, ProductDescriptionResponse
-from backend.app.utils.ai_provider import AIProviderProtocol
+from backend.app.utils.ai_provider import AIProvider
 
 
 logger = logging.getLogger(__name__)
@@ -18,7 +18,7 @@ class AIServiceError(RuntimeError):
 class AIService:
     """Coordinates AI product description use cases."""
 
-    def __init__(self, provider: AIProviderProtocol) -> None:
+    def __init__(self, provider: AIProvider) -> None:
         self.provider = provider
 
     def generate_product_description(

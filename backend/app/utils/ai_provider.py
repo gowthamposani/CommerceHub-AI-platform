@@ -1,8 +1,9 @@
-"""AI provider abstraction for product description generation."""
+"""Enterprise AI provider abstraction and provider selection."""
 
 from __future__ import annotations
 
 import logging
+from enum import StrEnum
 from typing import Protocol
 
 from backend.app.core.config import settings
@@ -16,8 +17,16 @@ class AIProviderError(RuntimeError):
     """Raised when AI provider generation fails."""
 
 
-class AIProviderProtocol(Protocol):
-    """Provider contract consumed by the AI service layer."""
+class AIProviderName(StrEnum):
+    """Supported AI provider names."""
+
+    MOCK = "MOCK"
+    OPENAI = "OPENAI"
+    GEMINI = "GEMINI"
+
+
+class AIProvider(Protocol):
+    """Provider contract consumed by all AI service-layer features."""
 
     def generate_product_description(
         self,
@@ -26,42 +35,20 @@ class AIProviderProtocol(Protocol):
         """Generate product merchandising content."""
 
 
-class ConfigurableAIProvider:
-    """AI provider adapter with deterministic fallback behavior.
+class MockAIProvider:
+    """Deterministic mock AI provider used for local development and missing keys."""
 
-    Production provider calls are intentionally deferred until Gemini/OpenAI
-    configuration and SDK choices are finalized.
-    """
+    provider_name = AIProviderName.MOCK
 
     def generate_product_description(
         self,
         payload: ProductDescriptionRequest,
     ) -> ProductDescriptionData:
-        """Generate product description content or a deterministic mock response."""
-        if not self._has_configured_provider():
-            logger.info(
-                "AI provider API key is not configured; returning deterministic mock response.",
-                extra={"feature": "ai_product_description"},
-            )
-            return self._mock_product_description(payload=payload)
-
-        # TODO: Integrate Gemini/OpenAI-compatible provider call using environment
-        # configuration only. Keep this adapter behind AIProviderProtocol so the
-        # service layer remains provider-agnostic.
+        """Generate deterministic product description content."""
         logger.info(
-            "AI provider API key detected; production provider integration is pending.",
-            extra={"feature": "ai_product_description"},
+            "Generating product description with MockAIProvider.",
+            extra={"feature": "ai_product_description", "ai_provider": self.provider_name.value},
         )
-        return self._mock_product_description(payload=payload)
-
-    @staticmethod
-    def _has_configured_provider() -> bool:
-        return bool(settings.gemini_api_key or settings.openai_api_key)
-
-    @staticmethod
-    def _mock_product_description(
-        payload: ProductDescriptionRequest,
-    ) -> ProductDescriptionData:
         specifications = payload.specifications or ["Reliable quality", "Customer-ready value"]
         highlights = specifications[:5]
         keywords = [
@@ -85,3 +72,103 @@ class ConfigurableAIProvider:
             highlights=highlights,
             keywords=list(dict.fromkeys(keywords)),
         )
+
+
+class OpenAIProvider:
+    """OpenAI-compatible provider stub.
+
+    TODO: Add OpenAI-compatible SDK/client integration after provider contract,
+    retry policy, and secret management are finalized.
+    """
+
+    provider_name = AIProviderName.OPENAI
+
+    def generate_product_description(
+        self,
+        payload: ProductDescriptionRequest,
+    ) -> ProductDescriptionData:
+        """Generate content through OpenAI-compatible provider when implemented."""
+        logger.info(
+            "OpenAIProvider selected; returning mock response until integration is complete.",
+            extra={"feature": "ai_product_description", "ai_provider": self.provider_name.value},
+        )
+        return MockAIProvider().generate_product_description(payload=payload)
+
+
+class GeminiProvider:
+    """Gemini provider stub.
+
+    TODO: Add Gemini SDK/client integration after provider contract, retry policy,
+    and secret management are finalized.
+    """
+
+    provider_name = AIProviderName.GEMINI
+
+    def generate_product_description(
+        self,
+        payload: ProductDescriptionRequest,
+    ) -> ProductDescriptionData:
+        """Generate content through Gemini provider when implemented."""
+        logger.info(
+            "GeminiProvider selected; returning mock response until integration is complete.",
+            extra={"feature": "ai_product_description", "ai_provider": self.provider_name.value},
+        )
+        return MockAIProvider().generate_product_description(payload=payload)
+
+
+class AIProviderFactory:
+    """Factory for selecting AI providers from environment configuration."""
+
+    @staticmethod
+    def create() -> AIProvider:
+        """Create an AI provider using configured provider and API keys."""
+        configured_provider = AIProviderFactory._configured_provider()
+
+        if configured_provider is AIProviderName.OPENAI:
+            if settings.openai_api_key:
+                return OpenAIProvider()
+            logger.warning(
+                "OPENAI provider selected but OPENAI_API_KEY is missing; using MockAIProvider.",
+                extra={"feature": "ai_provider"},
+            )
+            return MockAIProvider()
+
+        if configured_provider is AIProviderName.GEMINI:
+            if settings.gemini_api_key:
+                return GeminiProvider()
+            logger.warning(
+                "GEMINI provider selected but GEMINI_API_KEY is missing; using MockAIProvider.",
+                extra={"feature": "ai_provider"},
+            )
+            return MockAIProvider()
+
+        return MockAIProvider()
+
+    @staticmethod
+    def _configured_provider() -> AIProviderName:
+        provider_name = settings.ai_provider.upper()
+        try:
+            return AIProviderName(provider_name)
+        except ValueError:
+            logger.warning(
+                "Unsupported AI_PROVIDER configured; using MockAIProvider.",
+                extra={"feature": "ai_provider", "ai_provider": provider_name},
+            )
+            return AIProviderName.MOCK
+
+
+class ConfigurableAIProvider:
+    """Backward-compatible provider facade used by existing route dependency wiring."""
+
+    def __init__(self, provider: AIProvider | None = None) -> None:
+        self.provider = provider or AIProviderFactory.create()
+
+    def generate_product_description(
+        self,
+        payload: ProductDescriptionRequest,
+    ) -> ProductDescriptionData:
+        """Delegate product description generation to the selected provider."""
+        return self.provider.generate_product_description(payload=payload)
+
+
+AIProviderProtocol = AIProvider

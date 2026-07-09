@@ -17,6 +17,7 @@ class Settings:
         "DATABASE_URL",
         "postgresql+psycopg://commercehub:commercehub@localhost:5432/commercehub_ai",
     )
+    ai_provider: str = os.getenv("AI_PROVIDER", "MOCK")
     gemini_api_key: str = os.getenv("GEMINI_API_KEY", "")
     openai_api_key: str = os.getenv("OPENAI_API_KEY", "")
 
