@@ -129,7 +129,7 @@ export const AnalyticsCharts = memo(function AnalyticsCharts({
                   width={72}
                 />
                 <Tooltip
-                  formatter={(value) => [formatTooltipCurrency(value), "Revenue"]}
+                  formatter={(value: unknown) => [formatTooltipCurrency(value), "Revenue"]}
                   contentStyle={{ borderRadius: 16, borderColor: "#E7DED2" }}
                 />
                 <Area
