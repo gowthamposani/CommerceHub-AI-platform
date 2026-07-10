@@ -15,7 +15,7 @@ import type {
   NotificationTemplate,
   SendNotificationRequest,
   UpdateCategoryRequest,
-  UpdateUserStatusRequest,
+  UpdateUserStatusRequest
 } from "../types/admin";
 
 type NotificationTemplateResponse = NotificationTemplate & {
@@ -41,16 +41,11 @@ export type {
   SendNotificationRequest,
   UpdateCategoryRequest,
   UpdateUserStatusRequest,
-  UserStatus,
+  UserStatus
 } from "../types/admin";
 
 function unwrapEnvelope<T>(payload: T | ApiEnvelope<T>): T {
-  if (
-    typeof payload === "object" &&
-    payload !== null &&
-    "success" in payload &&
-    "data" in payload
-  ) {
+  if (typeof payload === "object" && payload !== null && "success" in payload && "data" in payload) {
     return (payload as ApiEnvelope<T>).data;
   }
 
@@ -70,13 +65,11 @@ function formatCurrency(value: string | number | undefined): string {
   return new Intl.NumberFormat("en-US", {
     currency: "USD",
     maximumFractionDigits: 0,
-    style: "currency",
+    style: "currency"
   }).format(numericValue(value));
 }
 
-function normalizeCategories(
-  categories: AnalyticsResponse["top_categories"],
-): CategoryPerformance[] {
+function normalizeCategories(categories: AnalyticsResponse["top_categories"]): CategoryPerformance[] {
   if (!categories) {
     return [];
   }
@@ -87,8 +80,8 @@ function normalizeCategories(
         ? null
         : {
             name: category.name,
-            value: category.value,
-          },
+            value: category.value
+          }
     )
     .filter((category): category is CategoryPerformance => category !== null);
 }
@@ -110,7 +103,7 @@ function mapDashboard(response: DashboardSummaryResponse): DashboardSummary {
     latestNotifications: response.latest_notifications ?? [],
     recentOrders: response.recent_orders ?? [],
     quickActions: response.quick_actions ?? [],
-    systemStatus: response.system_status ?? [],
+    systemStatus: response.system_status ?? []
   };
 }
 
@@ -121,7 +114,7 @@ function mapUser(response: AdminUserResponse): AdminUser {
     email: response.email,
     role: response.role,
     status: response.status,
-    createdAt: response.created_at,
+    createdAt: response.created_at
   };
 }
 
@@ -131,7 +124,7 @@ function mapCategory(response: CategoryResponse): Category {
     name: response.name,
     description: response.description ?? "",
     isActive: response.is_active,
-    createdAt: response.created_at,
+    createdAt: response.created_at
   };
 }
 
@@ -150,11 +143,11 @@ function mapAnalytics(response: AnalyticsResponse): AnalyticsData {
       { label: "Active Customers", value: formatNumber(activeCustomers) },
       { label: "Active Sellers", value: formatNumber(activeSellers) },
       { label: "Best Category", value: response.best_selling_category ?? "No data available" },
-      { label: "Low Stock Products", value: formatNumber(response.low_stock_products) },
+      { label: "Low Stock Products", value: formatNumber(response.low_stock_products) }
     ],
     revenueSeries: response.revenue_series ?? [],
     ordersOverview: response.orders_overview ?? [],
-    topCategories,
+    topCategories
   };
 }
 
@@ -162,7 +155,7 @@ function mapNotificationTemplate(response: NotificationTemplateResponse): Notifi
   return {
     id: String(response.id ?? response.template_id ?? response.name ?? "template"),
     name: response.name ?? response.template_name ?? "No data available",
-    channels: response.channels ?? response.supported_channels ?? [],
+    channels: response.channels ?? response.supported_channels ?? []
   };
 }
 
@@ -176,58 +169,46 @@ function mapNotificationHistory(response: NotificationHistoryResponse): Notifica
     recipient,
     channel: response.channel,
     status: response.status,
-    createdAt: response.createdAt ?? response.created_at ?? "",
+    createdAt: response.createdAt ?? response.created_at ?? ""
   };
 }
 
 export class AdminApiService {
   async getDashboard(): Promise<DashboardSummary> {
-    const response = await get<ApiEnvelope<DashboardSummaryResponse> | DashboardSummaryResponse>(
-      "/admin/dashboard",
-    );
+    const response = await get<ApiEnvelope<DashboardSummaryResponse> | DashboardSummaryResponse>("/admin/dashboard");
     return mapDashboard(unwrapEnvelope<DashboardSummaryResponse>(response.data));
   }
 
   async getUsers(): Promise<AdminUser[]> {
-    const response = await get<ApiEnvelope<AdminUserResponse[]> | AdminUserResponse[]>(
-      "/admin/users",
-    );
+    const response = await get<ApiEnvelope<AdminUserResponse[]> | AdminUserResponse[]>("/admin/users");
     return unwrapEnvelope<AdminUserResponse[]>(response.data).map(mapUser);
   }
 
-  async updateUserStatus(
-    userId: string,
-    payload: UpdateUserStatusRequest,
-  ): Promise<AdminUser> {
+  async updateUserStatus(userId: string, payload: UpdateUserStatusRequest): Promise<AdminUser> {
     const response = await apiClient.patch<ApiEnvelope<AdminUserResponse> | AdminUserResponse>(
       `/admin/users/${userId}/status`,
-      payload,
+      payload
     );
     return mapUser(unwrapEnvelope<AdminUserResponse>(response.data));
   }
 
   async getCategories(): Promise<Category[]> {
-    const response = await get<ApiEnvelope<CategoryResponse[]> | CategoryResponse[]>(
-      "/admin/categories",
-    );
+    const response = await get<ApiEnvelope<CategoryResponse[]> | CategoryResponse[]>("/admin/categories");
     return unwrapEnvelope<CategoryResponse[]>(response.data).map(mapCategory);
   }
 
   async createCategory(payload: CreateCategoryRequest): Promise<Category> {
-    const response = await post<
-      ApiEnvelope<CategoryResponse> | CategoryResponse,
-      CreateCategoryRequest
-    >("/admin/categories", payload);
+    const response = await post<ApiEnvelope<CategoryResponse> | CategoryResponse, CreateCategoryRequest>(
+      "/admin/categories",
+      payload
+    );
     return mapCategory(unwrapEnvelope<CategoryResponse>(response.data));
   }
 
-  async updateCategory(
-    categoryId: string,
-    payload: UpdateCategoryRequest,
-  ): Promise<Category> {
+  async updateCategory(categoryId: string, payload: UpdateCategoryRequest): Promise<Category> {
     const response = await apiClient.put<ApiEnvelope<CategoryResponse> | CategoryResponse>(
       `/admin/categories/${categoryId}`,
-      payload,
+      payload
     );
     return mapCategory(unwrapEnvelope<CategoryResponse>(response.data));
   }
@@ -237,25 +218,21 @@ export class AdminApiService {
   }
 
   async getAnalytics(): Promise<AnalyticsData> {
-    const response = await get<ApiEnvelope<AnalyticsResponse> | AnalyticsResponse>(
-      "/admin/analytics",
-    );
+    const response = await get<ApiEnvelope<AnalyticsResponse> | AnalyticsResponse>("/admin/analytics");
     return mapAnalytics(unwrapEnvelope<AnalyticsResponse>(response.data));
   }
 
   async getNotificationTemplates(): Promise<NotificationTemplate[]> {
-    const response = await get<
-      ApiEnvelope<NotificationTemplateResponse[]> | NotificationTemplateResponse[]
-    >("/notifications/templates");
-    return unwrapEnvelope<NotificationTemplateResponse[]>(response.data).map(
-      mapNotificationTemplate,
+    const response = await get<ApiEnvelope<NotificationTemplateResponse[]> | NotificationTemplateResponse[]>(
+      "/notifications/templates"
     );
+    return unwrapEnvelope<NotificationTemplateResponse[]>(response.data).map(mapNotificationTemplate);
   }
 
   async getNotificationHistory(): Promise<NotificationHistoryItem[]> {
-    const response = await get<
-      ApiEnvelope<NotificationHistoryResponse[]> | NotificationHistoryResponse[]
-    >("/notifications/history");
+    const response = await get<ApiEnvelope<NotificationHistoryResponse[]> | NotificationHistoryResponse[]>(
+      "/notifications/history"
+    );
     return unwrapEnvelope<NotificationHistoryResponse[]>(response.data).map(mapNotificationHistory);
   }
 
@@ -263,7 +240,7 @@ export class AdminApiService {
     await post("/notifications/send", {
       channel: "IN_APP",
       recipient: payload.recipient,
-      body: payload.message,
+      body: payload.message
     });
   }
 }
@@ -275,15 +252,13 @@ export const getUsers = () => adminApiService.getUsers();
 export const updateUserStatus = (userId: string, payload: UpdateUserStatusRequest) =>
   adminApiService.updateUserStatus(userId, payload);
 export const getCategories = () => adminApiService.getCategories();
-export const createCategory = (payload: CreateCategoryRequest) =>
-  adminApiService.createCategory(payload);
+export const createCategory = (payload: CreateCategoryRequest) => adminApiService.createCategory(payload);
 export const updateCategory = (categoryId: string, payload: UpdateCategoryRequest) =>
   adminApiService.updateCategory(categoryId, payload);
 export const deleteCategory = (categoryId: string) => adminApiService.deleteCategory(categoryId);
 export const getAnalytics = () => adminApiService.getAnalytics();
 export const getNotificationTemplates = () => adminApiService.getNotificationTemplates();
 export const getNotificationHistory = () => adminApiService.getNotificationHistory();
-export const sendNotification = (payload: SendNotificationRequest) =>
-  adminApiService.sendNotification(payload);
+export const sendNotification = (payload: SendNotificationRequest) => adminApiService.sendNotification(payload);
 
 export const getDashboardData = getDashboard;

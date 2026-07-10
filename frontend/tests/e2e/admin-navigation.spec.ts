@@ -14,7 +14,7 @@ test.describe("Admin module navigation", () => {
     analyticsPage,
     notificationsPage,
     settingsPage,
-    page,
+    page
   }) => {
     await adminDashboardPage.gotoDashboard();
 

@@ -45,7 +45,12 @@ export function SellerDashboardAlertsPanel({
                     <p className="mt-1 text-sm text-gray-600">{alert.message}</p>
                     <p className="mt-1 text-xs font-semibold text-gray-500">{formatDate(alert.created_at)}</p>
                   </div>
-                  <Button size="sm" variant="ghost" aria-label={`Dismiss ${alert.title}`} onClick={() => onDismiss(alert.id)}>
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    aria-label={`Dismiss ${alert.title}`}
+                    onClick={() => onDismiss(alert.id)}
+                  >
                     Dismiss
                   </Button>
                 </div>

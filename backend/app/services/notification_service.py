@@ -4,13 +4,13 @@ from __future__ import annotations
 
 import logging
 
-from backend.app.schemas.notification_schema import (
+from app.schemas.notification_schema import (
     NotificationHistoryResponse,
     NotificationSendRequest,
     NotificationSendResponse,
     NotificationTemplatesResponse,
 )
-from backend.app.utils.notification_provider import NotificationProviderProtocol
+from app.utils.notification_provider import NotificationProviderProtocol
 
 logger = logging.getLogger(__name__)
 

@@ -22,10 +22,7 @@ import { DASHBOARD_DATE_PRESETS } from "@/constants/sellerDashboard";
 import { useSearch } from "@/hooks/useSearch";
 import { queryKeys } from "@/lib/queryKeys";
 import { getSellers } from "@/services/sellerService";
-import {
-  getSellerDashboardOverview,
-  searchSellerDashboard
-} from "@/services/sellerDashboardService";
+import { getSellerDashboardOverview, searchSellerDashboard } from "@/services/sellerDashboardService";
 import type { DashboardDatePreset } from "@/types/sellerDashboard";
 
 function configuredSellerId(): string {

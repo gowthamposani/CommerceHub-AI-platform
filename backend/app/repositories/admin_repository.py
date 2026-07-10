@@ -6,7 +6,7 @@ import logging
 from datetime import UTC, datetime
 from decimal import Decimal
 
-from backend.app.schemas.admin_schema import (
+from app.schemas.admin_schema import (
     AdminAnalyticsData,
     AdminDashboardData,
     AdminUserData,

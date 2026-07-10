@@ -4,51 +4,41 @@ import type {
   AIProductDescriptionRequest,
   ProductDescriptionRequestPayload,
   ProductDescriptionDataResponse,
-  ProductDescriptionResponse,
+  ProductDescriptionResponse
 } from "../types/ai";
 
-export type {
-  AIProductDescription,
-  AIProductDescriptionRequest,
-  ProductSpecification,
-} from "../types/ai";
+export type { AIProductDescription, AIProductDescriptionRequest, ProductSpecification } from "../types/ai";
 
-function mapProductDescriptionRequest(
-  request: AIProductDescriptionRequest,
-): ProductDescriptionRequestPayload {
+function mapProductDescriptionRequest(request: AIProductDescriptionRequest): ProductDescriptionRequestPayload {
   const specificationList = [
     ...request.features,
-    ...Object.entries(request.specifications ?? {}).map(([name, value]) => `${name}: ${value}`),
+    ...Object.entries(request.specifications ?? {}).map(([name, value]) => `${name}: ${value}`)
   ];
 
   return {
     product_name: request.productName,
     brand: request.brand,
     category: request.category,
-    specifications: specificationList,
+    specifications: specificationList
   };
 }
 
-function mapProductDescriptionResponse(
-  response: ProductDescriptionDataResponse,
-): AIProductDescription {
+function mapProductDescriptionResponse(response: ProductDescriptionDataResponse): AIProductDescription {
   return {
     title: response.title ?? response.seo_title,
     generatedDescription: response.description ?? response.generated_description ?? "",
     generatedKeywords: response.keywords ?? response.generated_keywords ?? [],
     seoTitle: response.seo_title,
     metaDescription: response.seo_description ?? response.meta_description ?? "",
-    highlights: response.highlights,
+    highlights: response.highlights
   };
 }
 
 export class AIProductDescriptionApiService {
-  async generateProductDescription(
-    request: AIProductDescriptionRequest,
-  ): Promise<AIProductDescription> {
+  async generateProductDescription(request: AIProductDescriptionRequest): Promise<AIProductDescription> {
     const { data } = await post<ProductDescriptionResponse, ProductDescriptionRequestPayload>(
       "/ai/product-description",
-      mapProductDescriptionRequest(request),
+      mapProductDescriptionRequest(request)
     );
     return mapProductDescriptionResponse(data.data);
   }

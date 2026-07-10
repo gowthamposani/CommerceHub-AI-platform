@@ -7,7 +7,7 @@ from datetime import UTC, datetime
 from typing import Protocol
 from uuid import NAMESPACE_URL, uuid5
 
-from backend.app.schemas.notification_schema import (
+from app.schemas.notification_schema import (
     NotificationChannel,
     NotificationHistoryData,
     NotificationSendData,

@@ -10,7 +10,7 @@ import pytest
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
 
-from backend.app.main import app as fastapi_app
+from app.main import app as fastapi_app
 
 
 @pytest.fixture()

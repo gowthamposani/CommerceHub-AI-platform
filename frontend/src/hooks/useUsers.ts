@@ -23,24 +23,19 @@ export function useUsers() {
     }
   }, []);
 
-  const updateStatus = useCallback(
-    async (userId: string, payload: UpdateUserStatusRequest) => {
-      setError(null);
+  const updateStatus = useCallback(async (userId: string, payload: UpdateUserStatusRequest) => {
+    setError(null);
 
-      try {
-        const updatedUser = await updateUserStatus(userId, payload);
-        setData((currentUsers) =>
-          currentUsers.map((user) => (user.id === updatedUser.id ? updatedUser : user)),
-        );
-        return updatedUser;
-      } catch (requestError) {
-        const message = getApiErrorMessage(requestError);
-        setError(message);
-        throw requestError;
-      }
-    },
-    [],
-  );
+    try {
+      const updatedUser = await updateUserStatus(userId, payload);
+      setData((currentUsers) => currentUsers.map((user) => (user.id === updatedUser.id ? updatedUser : user)));
+      return updatedUser;
+    } catch (requestError) {
+      const message = getApiErrorMessage(requestError);
+      setError(message);
+      throw requestError;
+    }
+  }, []);
 
   useEffect(() => {
     void refetch();

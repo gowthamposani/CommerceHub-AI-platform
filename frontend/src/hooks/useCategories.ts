@@ -1,12 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 
 import { getApiErrorMessage } from "../lib/api";
-import {
-  createCategory,
-  deleteCategory,
-  getCategories,
-  updateCategory,
-} from "../services/admin.service";
+import { createCategory, deleteCategory, getCategories, updateCategory } from "../services/admin.service";
 import type { Category, CreateCategoryRequest, UpdateCategoryRequest } from "../types/admin";
 
 export function useCategories() {
@@ -42,33 +37,26 @@ export function useCategories() {
     }
   }, []);
 
-  const update = useCallback(
-    async (categoryId: string, payload: UpdateCategoryRequest) => {
-      setError(null);
+  const update = useCallback(async (categoryId: string, payload: UpdateCategoryRequest) => {
+    setError(null);
 
-      try {
-        const category = await updateCategory(categoryId, payload);
-        setData((currentCategories) =>
-          currentCategories.map((item) => (item.id === category.id ? category : item)),
-        );
-        return category;
-      } catch (requestError) {
-        const message = getApiErrorMessage(requestError);
-        setError(message);
-        throw requestError;
-      }
-    },
-    [],
-  );
+    try {
+      const category = await updateCategory(categoryId, payload);
+      setData((currentCategories) => currentCategories.map((item) => (item.id === category.id ? category : item)));
+      return category;
+    } catch (requestError) {
+      const message = getApiErrorMessage(requestError);
+      setError(message);
+      throw requestError;
+    }
+  }, []);
 
   const remove = useCallback(async (categoryId: string) => {
     setError(null);
 
     try {
       await deleteCategory(categoryId);
-      setData((currentCategories) =>
-        currentCategories.filter((category) => category.id !== categoryId),
-      );
+      setData((currentCategories) => currentCategories.filter((category) => category.id !== categoryId));
     } catch (requestError) {
       const message = getApiErrorMessage(requestError);
       setError(message);

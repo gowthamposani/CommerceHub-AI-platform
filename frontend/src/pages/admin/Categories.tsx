@@ -10,9 +10,7 @@ export default function Categories() {
     <div className="space-y-6">
       <div>
         <h2 className="text-2xl font-semibold">Categories</h2>
-        <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
-          Manage marketplace taxonomy
-        </p>
+        <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">Manage marketplace taxonomy</p>
       </div>
 
       {loading ? (

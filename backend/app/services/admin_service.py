@@ -5,7 +5,7 @@ from __future__ import annotations
 import logging
 from typing import Protocol
 
-from backend.app.schemas.admin_schema import (
+from app.schemas.admin_schema import (
     AdminAnalyticsData,
     AdminAnalyticsResponse,
     AdminDashboardData,

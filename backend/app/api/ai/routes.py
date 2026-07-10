@@ -7,9 +7,9 @@ from typing import Annotated, Protocol
 
 from fastapi import APIRouter, Depends, HTTPException, status
 
-from backend.app.schemas.ai_schema import ProductDescriptionRequest, ProductDescriptionResponse
-from backend.app.services.ai_service import AIService, AIServiceError
-from backend.app.utils.ai_provider import ConfigurableAIProvider
+from app.schemas.ai_schema import ProductDescriptionRequest, ProductDescriptionResponse
+from app.services.ai_service import AIService, AIServiceError
+from app.utils.ai_provider import ConfigurableAIProvider
 
 logger = logging.getLogger(__name__)
 

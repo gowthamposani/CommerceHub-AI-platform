@@ -7,7 +7,9 @@ import type { AuthSession, LoginPayload, RegisterPayload } from "@/types/auth";
 import { getStorageItem, removeStorageItem, setStorageItem } from "@/utils/storage";
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [session, setSession] = useState<AuthSession | null>(() => getStorageItem<AuthSession | null>(AUTH_SESSION_STORAGE_KEY, null));
+  const [session, setSession] = useState<AuthSession | null>(() =>
+    getStorageItem<AuthSession | null>(AUTH_SESSION_STORAGE_KEY, null)
+  );
 
   const persistSession = useCallback((nextSession: AuthSession | null) => {
     setSession(nextSession);

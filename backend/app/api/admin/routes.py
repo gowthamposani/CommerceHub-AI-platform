@@ -7,8 +7,8 @@ from typing import Annotated, Protocol
 
 from fastapi import APIRouter, Depends, HTTPException, Path, status
 
-from backend.app.repositories.admin_repository import AdminRepository
-from backend.app.schemas.admin_schema import (
+from app.repositories.admin_repository import AdminRepository
+from app.schemas.admin_schema import (
     AdminAnalyticsResponse,
     AdminDashboardResponse,
     AdminUserResponse,
@@ -16,7 +16,7 @@ from backend.app.schemas.admin_schema import (
     UpdateUserRoleRequest,
     UpdateUserStatusRequest,
 )
-from backend.app.services.admin_service import AdminService, AdminServiceError
+from app.services.admin_service import AdminService, AdminServiceError
 
 logger = logging.getLogger(__name__)
 

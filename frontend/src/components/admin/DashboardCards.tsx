@@ -1,12 +1,4 @@
-import {
-  Clock3,
-  DollarSign,
-  Package,
-  ShoppingCart,
-  Store,
-  UserCheck,
-  Users,
-} from "lucide-react";
+import { Clock3, DollarSign, Package, ShoppingCart, Store, UserCheck, Users } from "lucide-react";
 import { memo, useMemo } from "react";
 
 import type { DashboardSummary } from "../../types/admin";
@@ -23,7 +15,7 @@ function formatCurrency(value: number): string {
   return new Intl.NumberFormat("en-US", {
     currency: "USD",
     maximumFractionDigits: 0,
-    style: "currency",
+    style: "currency"
   }).format(value);
 }
 
@@ -34,46 +26,46 @@ export const DashboardCards = memo(function DashboardCards({ summary }: Dashboar
         label: "Total Users",
         value: formatNumber(summary.totalUsers),
         helper: "All platform accounts",
-        icon: Users,
+        icon: Users
       },
       {
         label: "Total Customers",
         value: formatNumber(summary.totalCustomers),
         helper: "Buyer ecosystem",
-        icon: UserCheck,
+        icon: UserCheck
       },
       {
         label: "Total Sellers",
         value: formatNumber(summary.totalSellers),
         helper: "Marketplace partners",
-        icon: Store,
+        icon: Store
       },
       {
         label: "Total Products",
         value: formatNumber(summary.totalProducts),
         helper: "Catalog inventory",
-        icon: Package,
+        icon: Package
       },
       {
         label: "Orders",
         value: formatNumber(summary.totalOrders),
         helper: "Commerce transactions",
-        icon: ShoppingCart,
+        icon: ShoppingCart
       },
       {
         label: "Revenue",
         value: formatCurrency(summary.revenue),
         helper: "Recognized revenue",
-        icon: DollarSign,
+        icon: DollarSign
       },
       {
         label: "Pending Requests",
         value: formatNumber(summary.pendingSellerRequests),
         helper: "Admin review queue",
-        icon: Clock3,
-      },
+        icon: Clock3
+      }
     ],
-    [summary],
+    [summary]
   );
 
   return (
@@ -88,12 +80,8 @@ export const DashboardCards = memo(function DashboardCards({ summary }: Dashboar
           >
             <div className="flex items-start justify-between gap-4">
               <div>
-                <p className="text-sm font-medium text-admin-muted dark:text-slate-400">
-                  {card.label}
-                </p>
-                <p className="mt-3 text-2xl font-semibold text-admin-ink dark:text-white">
-                  {card.value}
-                </p>
+                <p className="text-sm font-medium text-admin-muted dark:text-slate-400">{card.label}</p>
+                <p className="mt-3 text-2xl font-semibold text-admin-ink dark:text-white">{card.value}</p>
               </div>
               <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-admin bg-admin-cream text-admin-gold transition group-hover:bg-admin-gold group-hover:text-white">
                 <Icon className="h-5 w-5" aria-hidden="true" />

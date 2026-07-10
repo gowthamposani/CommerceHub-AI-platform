@@ -15,16 +15,10 @@ const pageSize = 5;
 const statusStyles: Record<AdminUser["status"], string> = {
   ACTIVE: "bg-emerald-50 text-emerald-700 ring-emerald-600/20 dark:bg-emerald-950 dark:text-emerald-300",
   INACTIVE: "bg-slate-100 text-slate-700 ring-slate-600/20 dark:bg-slate-800 dark:text-slate-300",
-  BLOCKED: "bg-rose-50 text-rose-700 ring-rose-600/20 dark:bg-rose-950 dark:text-rose-300",
+  BLOCKED: "bg-rose-50 text-rose-700 ring-rose-600/20 dark:bg-rose-950 dark:text-rose-300"
 };
 
-export function UserTable({
-  users,
-  searchValue,
-  currentPage,
-  onSearchChange,
-  onPageChange,
-}: UserTableProps) {
+export function UserTable({ users, searchValue, currentPage, onSearchChange, onPageChange }: UserTableProps) {
   const totalPages = Math.max(1, Math.ceil(users.length / pageSize));
   const start = (currentPage - 1) * pageSize;
   const visibleUsers = users.slice(start, start + pageSize);
@@ -66,18 +60,14 @@ export function UserTable({
             {visibleUsers.map((user) => (
               <tr key={user.id} className="hover:bg-slate-50 dark:hover:bg-slate-950">
                 <td className="whitespace-nowrap px-5 py-4 font-medium">{user.fullName}</td>
-                <td className="whitespace-nowrap px-5 py-4 text-slate-600 dark:text-slate-300">
-                  {user.email}
-                </td>
+                <td className="whitespace-nowrap px-5 py-4 text-slate-600 dark:text-slate-300">{user.email}</td>
                 <td className="whitespace-nowrap px-5 py-4">{user.role}</td>
                 <td className="whitespace-nowrap px-5 py-4">
                   <span className={`rounded-full px-2.5 py-1 text-xs font-medium ring-1 ${statusStyles[user.status]}`}>
                     {user.status}
                   </span>
                 </td>
-                <td className="whitespace-nowrap px-5 py-4 text-slate-500 dark:text-slate-400">
-                  {user.createdAt}
-                </td>
+                <td className="whitespace-nowrap px-5 py-4 text-slate-500 dark:text-slate-400">{user.createdAt}</td>
               </tr>
             ))}
           </tbody>

@@ -18,7 +18,7 @@ test.describe("CommerceHub AI application shell", () => {
   test("responsive admin layout supports desktop, tablet, and mobile", async ({
     adminDashboardPage,
     adminLayoutPage,
-    page,
+    page
   }) => {
     for (const viewport of Object.values(viewports)) {
       await page.setViewportSize(viewport);

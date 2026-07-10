@@ -103,9 +103,7 @@ export default function Notifications() {
                 >
                   <span className="font-medium">{template.name}</span>
                   <span className="mt-1 block text-xs text-admin-muted">
-                    {template.channels.length > 0
-                      ? template.channels.join(", ")
-                      : "No channel data available"}
+                    {template.channels.length > 0 ? template.channels.join(", ") : "No channel data available"}
                   </span>
                 </button>
               ))}

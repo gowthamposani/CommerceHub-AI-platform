@@ -67,7 +67,9 @@ export default function RegisterPage() {
         </div>
 
         <form className="grid gap-4" onSubmit={handleSubmit(onSubmit)}>
-          {error ? <div className="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-brand-red">{error}</div> : null}
+          {error ? (
+            <div className="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-brand-red">{error}</div>
+          ) : null}
           <div className="grid gap-4 sm:grid-cols-2">
             <FormField label="First name" error={errors.first_name?.message}>
               <Input autoComplete="given-name" {...register("first_name")} />

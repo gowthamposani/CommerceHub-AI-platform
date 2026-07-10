@@ -1,16 +1,8 @@
 import { useCallback, useEffect, useState } from "react";
 
 import { getApiErrorMessage, notifyApiFailure } from "../lib/api";
-import {
-  getNotificationHistory,
-  getNotificationTemplates,
-  sendNotification,
-} from "../services/admin.service";
-import type {
-  NotificationHistoryItem,
-  NotificationTemplate,
-  SendNotificationRequest,
-} from "../types/admin";
+import { getNotificationHistory, getNotificationTemplates, sendNotification } from "../services/admin.service";
+import type { NotificationHistoryItem, NotificationTemplate, SendNotificationRequest } from "../types/admin";
 
 export function useNotifications() {
   const [templates, setTemplates] = useState<NotificationTemplate[]>([]);
@@ -24,10 +16,7 @@ export function useNotifications() {
     setError(null);
 
     try {
-      const [templateData, historyData] = await Promise.all([
-        getNotificationTemplates(),
-        getNotificationHistory(),
-      ]);
+      const [templateData, historyData] = await Promise.all([getNotificationTemplates(), getNotificationHistory()]);
       setTemplates(templateData);
       setHistory(historyData);
     } catch (requestError) {
@@ -55,7 +44,7 @@ export function useNotifications() {
         setSending(false);
       }
     },
-    [refetch],
+    [refetch]
   );
 
   useEffect(() => {

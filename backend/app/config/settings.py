@@ -109,6 +109,10 @@ class Settings(BaseSettings):
     media_url_prefix: str = "/media"
     product_image_max_bytes: int = 10_485_760
 
+    ai_provider: str = "MOCK"
+    openai_api_key: SecretStr | None = None
+    gemini_api_key: SecretStr | None = None
+
     @field_validator("allowed_origins", "allowed_hosts", mode="before")
     @classmethod
     def split_csv(cls, value: object) -> object:

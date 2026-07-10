@@ -7,14 +7,14 @@ from typing import Annotated, Protocol
 
 from fastapi import APIRouter, Depends, HTTPException, status
 
-from backend.app.schemas.notification_schema import (
+from app.schemas.notification_schema import (
     NotificationHistoryResponse,
     NotificationSendRequest,
     NotificationSendResponse,
     NotificationTemplatesResponse,
 )
-from backend.app.services.notification_service import NotificationService, NotificationServiceError
-from backend.app.utils.notification_provider import MockNotificationProvider
+from app.services.notification_service import NotificationService, NotificationServiceError
+from app.utils.notification_provider import MockNotificationProvider
 
 logger = logging.getLogger(__name__)
 

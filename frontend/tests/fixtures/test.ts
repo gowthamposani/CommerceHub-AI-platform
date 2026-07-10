@@ -35,7 +35,7 @@ export const test = base.extend<CommerceHubFixtures>({
   },
   settingsPage: async ({ page }, useFixture) => {
     await useFixture(new SettingsPage(page));
-  },
+  }
 });
 
 export const enterpriseTest = test.extend({
@@ -43,7 +43,7 @@ export const enterpriseTest = test.extend({
     await mockAdminApis(page);
     await mockAIProductDescriptionSuccess(page);
     await useFixture(page);
-  },
+  }
 });
 
 export { expect } from "@playwright/test";

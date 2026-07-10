@@ -6,8 +6,8 @@ import logging
 from enum import StrEnum
 from typing import Protocol
 
-from backend.app.core.config import settings
-from backend.app.schemas.ai_schema import ProductDescriptionData, ProductDescriptionRequest
+from app.config.settings import get_settings
+from app.schemas.ai_schema import ProductDescriptionData, ProductDescriptionRequest
 
 logger = logging.getLogger(__name__)
 
@@ -121,6 +121,7 @@ class AIProviderFactory:
     @staticmethod
     def create() -> AIProvider:
         """Create an AI provider using configured provider and API keys."""
+        settings = get_settings()
         configured_provider = AIProviderFactory._configured_provider()
 
         if configured_provider is AIProviderName.OPENAI:
@@ -145,6 +146,7 @@ class AIProviderFactory:
 
     @staticmethod
     def _configured_provider() -> AIProviderName:
+        settings = get_settings()
         provider_name = settings.ai_provider.upper()
         try:
             return AIProviderName(provider_name)

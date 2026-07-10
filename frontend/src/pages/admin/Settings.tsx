@@ -1,11 +1,6 @@
 import { EmptyState } from "../../components/admin/EmptyState";
 
-const preferences = [
-  "Compact tables",
-  "Operational alerts",
-  "Dark mode ready",
-  "AI confidence notes",
-];
+const preferences = ["Compact tables", "Operational alerts", "Dark mode ready", "AI confidence notes"];
 
 export default function Settings() {
   return (
