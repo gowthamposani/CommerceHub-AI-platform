@@ -90,15 +90,11 @@ export function WarehouseTable({
                   <td className="px-4 py-3 text-sm text-gray-700">{warehouse.city}</td>
                   <td className="px-4 py-3 text-sm text-gray-700">{warehouse.state}</td>
                   <td className="px-4 py-3 text-sm text-gray-700">{warehouse.country}</td>
-                  <td className="px-4 py-3 text-sm text-gray-700">
-                    {WAREHOUSE_TYPE_LABELS[warehouse.warehouse_type]}
-                  </td>
+                  <td className="px-4 py-3 text-sm text-gray-700">{WAREHOUSE_TYPE_LABELS[warehouse.warehouse_type]}</td>
                   <td className="px-4 py-3 text-sm text-gray-700">
                     {capacity?.capacity_units == null ? "Dynamic" : formatNumber(capacity.capacity_units)}
                   </td>
-                  <td className="px-4 py-3 text-sm text-gray-700">
-                    {formatNumber(capacity?.utilized_units ?? 0)}
-                  </td>
+                  <td className="px-4 py-3 text-sm text-gray-700">{formatNumber(capacity?.utilized_units ?? 0)}</td>
                   <td className="px-4 py-3 text-sm text-gray-700">
                     {capacity?.available_capacity_units == null
                       ? "Dynamic"
@@ -132,7 +128,12 @@ export function WarehouseTable({
                       >
                         <Star className="h-4 w-4" />
                       </Button>
-                      <Button variant="ghost" size="icon" aria-label="Delete warehouse" onClick={() => onDelete(warehouse)}>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        aria-label="Delete warehouse"
+                        onClick={() => onDelete(warehouse)}
+                      >
                         <Trash2 className="h-4 w-4 text-brand-red" />
                       </Button>
                     </div>

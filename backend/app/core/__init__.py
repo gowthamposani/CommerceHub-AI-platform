@@ -1,1 +1,1 @@
-"""Core infrastructure package."""
+"""Core application helpers."""

@@ -9,7 +9,6 @@ from typing import Protocol
 from backend.app.core.config import settings
 from backend.app.schemas.ai_schema import ProductDescriptionData, ProductDescriptionRequest
 
-
 logger = logging.getLogger(__name__)
 
 

@@ -52,9 +52,7 @@ class InventoryService:
         await self._require_product(payload.product_id)
         variant = await self._require_variant(payload.variant_id)
         warehouse = (
-            await self.warehouse_repository.get_active_by_id(payload.warehouse_id)
-            if payload.warehouse_id
-            else None
+            await self.warehouse_repository.get_active_by_id(payload.warehouse_id) if payload.warehouse_id else None
         )
         if variant.product_id != payload.product_id:
             raise ApplicationError(

@@ -61,7 +61,9 @@ export default function LoginPage() {
         </div>
 
         <form className="grid gap-4" onSubmit={handleSubmit(onSubmit)}>
-          {error ? <div className="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-brand-red">{error}</div> : null}
+          {error ? (
+            <div className="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-brand-red">{error}</div>
+          ) : null}
           <FormField label="Email" error={errors.email?.message}>
             <Input type="email" autoComplete="email" {...register("email")} />
           </FormField>
@@ -80,7 +82,10 @@ export default function LoginPage() {
 
         <p className="mt-5 text-center text-sm text-gray-600">
           New to CommerceHub?{" "}
-          <Link className="font-semibold text-gray-950 underline decoration-brand-gold decoration-2" to="/auth/register">
+          <Link
+            className="font-semibold text-gray-950 underline decoration-brand-gold decoration-2"
+            to="/auth/register"
+          >
             Create account
           </Link>
         </p>

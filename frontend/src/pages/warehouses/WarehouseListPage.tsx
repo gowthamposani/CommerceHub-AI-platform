@@ -18,11 +18,7 @@ import { WarehouseCharts } from "@/components/warehouses/WarehouseCharts";
 import { WarehouseDashboardCards } from "@/components/warehouses/WarehouseDashboardCards";
 import { WarehouseTable } from "@/components/warehouses/WarehouseTable";
 import { WarehouseTransferDialog } from "@/components/warehouses/WarehouseTransferDialog";
-import {
-  WAREHOUSE_SORT_OPTIONS,
-  WAREHOUSE_STATUS_OPTIONS,
-  WAREHOUSE_TYPE_OPTIONS
-} from "@/constants/warehouse";
+import { WAREHOUSE_SORT_OPTIONS, WAREHOUSE_STATUS_OPTIONS, WAREHOUSE_TYPE_OPTIONS } from "@/constants/warehouse";
 import { useSearch } from "@/hooks/useSearch";
 import { queryKeys } from "@/lib/queryKeys";
 import { getInventory } from "@/services/inventoryService";
@@ -113,9 +109,7 @@ export default function WarehouseListPage() {
       totalInventory: stats?.inventory_records ?? 0,
       capacityUsed,
       capacityRemaining:
-        capacityRemainingValues.length > 0
-          ? capacityRemainingValues.reduce((sum, value) => sum + value, 0)
-          : null
+        capacityRemainingValues.length > 0 ? capacityRemainingValues.reduce((sum, value) => sum + value, 0) : null
     };
   }, [capacities, statisticsQuery.data?.data]);
 

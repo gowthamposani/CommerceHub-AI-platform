@@ -26,11 +26,7 @@ function PlaceholderPage({ title, description }: PlaceholderPageProps) {
         Placeholder Route
       </p>
       <h2 className="mt-3 text-2xl font-semibold">{title}</h2>
-      {description ? (
-        <p className="mt-2 max-w-2xl text-sm text-slate-500 dark:text-slate-400">
-          {description}
-        </p>
-      ) : null}
+      {description ? <p className="mt-2 max-w-2xl text-sm text-slate-500 dark:text-slate-400">{description}</p> : null}
     </section>
   );
 }
@@ -39,12 +35,8 @@ function FrontendInitializedPage() {
   return (
     <section className="mx-auto flex min-h-[60vh] max-w-xl items-center justify-center">
       <div className="w-full rounded-lg border border-slate-200 bg-white p-8 text-center shadow-sm dark:border-slate-800 dark:bg-slate-900">
-        <p className="text-sm font-medium uppercase tracking-wide text-slate-500 dark:text-slate-400">
-          CommerceHub AI
-        </p>
-        <h1 className="mt-3 text-3xl font-semibold">
-          CommerceHub AI - Frontend Initialized
-        </h1>
+        <p className="text-sm font-medium uppercase tracking-wide text-slate-500 dark:text-slate-400">CommerceHub AI</p>
+        <h1 className="mt-3 text-3xl font-semibold">CommerceHub AI - Frontend Initialized</h1>
       </div>
     </section>
   );
@@ -66,14 +58,8 @@ export function AppRoutes() {
       </Route>
 
       <Route element={<AuthLayout />}>
-        <Route
-          path="/auth/login"
-          element={<PlaceholderPage title="Authentication Placeholder" />}
-        />
-        <Route
-          path="/auth/logout"
-          element={<PlaceholderPage title="Logout Placeholder" />}
-        />
+        <Route path="/auth/login" element={<PlaceholderPage title="Authentication Placeholder" />} />
+        <Route path="/auth/logout" element={<PlaceholderPage title="Logout Placeholder" />} />
       </Route>
 
       <Route element={<AdminLayout />}>
@@ -118,10 +104,7 @@ export function AppRoutes() {
             </AdminPageShell>
           }
         />
-        <Route
-          path="/admin/ai-product-generator"
-          element={<Navigate to="/admin/ai-tools" replace />}
-        />
+        <Route path="/admin/ai-product-generator" element={<Navigate to="/admin/ai-tools" replace />} />
         <Route
           path="/admin/settings"
           element={

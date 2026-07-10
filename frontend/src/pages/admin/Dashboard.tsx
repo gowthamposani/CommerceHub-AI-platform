@@ -3,18 +3,13 @@ import { DashboardCards } from "../../components/admin/DashboardCards";
 import { EmptyState } from "../../components/admin/EmptyState";
 import { LoadingSkeleton } from "../../components/admin/LoadingSkeleton";
 import { useDashboard } from "../../hooks/useDashboard";
-import type {
-  NotificationItem,
-  QuickAction,
-  RecentOrder,
-  SystemStatusItem,
-} from "../../types/admin";
+import type { NotificationItem, QuickAction, RecentOrder, SystemStatusItem } from "../../types/admin";
 
 function formatCurrency(value: number): string {
   return new Intl.NumberFormat("en-US", {
     currency: "USD",
     maximumFractionDigits: 0,
-    style: "currency",
+    style: "currency"
   }).format(value);
 }
 
@@ -90,20 +85,14 @@ function RecentOrders({ orders }: { orders: RecentOrder[] }) {
             {orders.map((order) => (
               <tr key={order.id}>
                 <td className="whitespace-nowrap py-4 pr-4 font-medium">{order.id}</td>
-                <td className="whitespace-nowrap px-4 py-4 text-slate-600 dark:text-slate-300">
-                  {order.customer}
-                </td>
-                <td className="whitespace-nowrap px-4 py-4 text-slate-600 dark:text-slate-300">
-                  {order.seller}
-                </td>
+                <td className="whitespace-nowrap px-4 py-4 text-slate-600 dark:text-slate-300">{order.customer}</td>
+                <td className="whitespace-nowrap px-4 py-4 text-slate-600 dark:text-slate-300">{order.seller}</td>
                 <td className="whitespace-nowrap px-4 py-4">
                   <span className="rounded-full bg-admin-cream px-3 py-1 text-xs font-medium text-admin-ink dark:bg-slate-800 dark:text-slate-200">
                     {order.status}
                   </span>
                 </td>
-                <td className="whitespace-nowrap py-4 pl-4 text-right font-semibold">
-                  {formatCurrency(order.amount)}
-                </td>
+                <td className="whitespace-nowrap py-4 pl-4 text-right font-semibold">{formatCurrency(order.amount)}</td>
               </tr>
             ))}
           </tbody>
@@ -144,9 +133,7 @@ function SystemStatus({ items }: { items: SystemStatusItem[] }) {
               <span className={`h-2.5 w-2.5 shrink-0 rounded-full ${statusClass(item.state)}`} />
               <span className="truncate text-sm font-medium">{item.label}</span>
             </div>
-            <span className="shrink-0 text-sm text-slate-500 dark:text-slate-400">
-              {item.value}
-            </span>
+            <span className="shrink-0 text-sm text-slate-500 dark:text-slate-400">{item.value}</span>
           </div>
         ))}
       </div>
@@ -177,12 +164,8 @@ export default function Dashboard() {
 
           <div className="flex flex-col gap-3 rounded-admin border border-admin-border bg-white p-6 shadow-admin dark:border-slate-800 dark:bg-slate-900 sm:flex-row sm:items-center sm:justify-between">
             <div>
-              <p className="text-sm font-medium text-slate-500 dark:text-slate-400">
-                Generated at
-              </p>
-              <p className="mt-1 text-sm font-semibold">
-                {new Date(dashboard.generatedAt).toLocaleString()}
-              </p>
+              <p className="text-sm font-medium text-slate-500 dark:text-slate-400">Generated at</p>
+              <p className="mt-1 text-sm font-semibold">{new Date(dashboard.generatedAt).toLocaleString()}</p>
             </div>
             <button
               className="inline-flex h-10 items-center justify-center rounded-admin bg-admin-gold px-4 text-sm font-medium text-white transition duration-200 hover:bg-[#B67B24] dark:bg-admin-gold dark:text-white"

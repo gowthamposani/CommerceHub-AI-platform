@@ -1,14 +1,5 @@
 import { NavLink } from "react-router-dom";
-import {
-  BarChart3,
-  Bell,
-  Bot,
-  LayoutDashboard,
-  LogOut,
-  Settings,
-  Users,
-  X,
-} from "lucide-react";
+import { BarChart3, Bell, Bot, LayoutDashboard, LogOut, Settings, Users, X } from "lucide-react";
 
 type AdminNavigationItem = {
   label: string;
@@ -22,7 +13,7 @@ const adminNavigationItems: AdminNavigationItem[] = [
   { label: "Analytics", path: "/admin/analytics", icon: BarChart3 },
   { label: "Notifications", path: "/admin/notifications", icon: Bell },
   { label: "AI Tools", path: "/admin/ai-tools", icon: Bot },
-  { label: "Settings", path: "/admin/settings", icon: Settings },
+  { label: "Settings", path: "/admin/settings", icon: Settings }
 ];
 
 type AdminSidebarProps = {
@@ -45,7 +36,7 @@ export function AdminSidebar({ isOpen = false, onClose }: AdminSidebarProps) {
       <aside
         className={[
           "fixed inset-y-0 left-0 z-50 w-72 border-r border-admin-border bg-white/95 px-4 py-5 shadow-admin-soft backdrop-blur transition-transform duration-200 dark:border-slate-800 dark:bg-slate-950/95 lg:z-40 lg:translate-x-0",
-          isOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0",
+          isOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
         ].join(" ")}
         aria-label="Admin sidebar navigation"
       >
@@ -85,7 +76,7 @@ export function AdminSidebar({ isOpen = false, onClose }: AdminSidebarProps) {
                     "flex items-center gap-3 rounded-admin px-3 py-3 text-sm font-medium transition duration-200 focus:outline-none focus:ring-2 focus:ring-admin-gold/30",
                     isActive
                       ? "bg-admin-gold text-white shadow-admin-soft"
-                      : "text-admin-muted hover:bg-admin-cream hover:text-admin-ink dark:text-slate-300 dark:hover:bg-slate-900 dark:hover:text-white",
+                      : "text-admin-muted hover:bg-admin-cream hover:text-admin-ink dark:text-slate-300 dark:hover:bg-slate-900 dark:hover:text-white"
                   ].join(" ")
                 }
               >

@@ -31,4 +31,3 @@ def register_middleware(app: FastAPI, settings: Settings) -> None:
     app.add_middleware(PerformanceMiddleware)
     app.add_middleware(RequestLoggingMiddleware)
     app.add_middleware(RequestIDMiddleware)
-

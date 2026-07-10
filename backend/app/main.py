@@ -1,57 +1,48 @@
-"""CommerceHub AI FastAPI application entrypoint."""
-
-from collections.abc import AsyncGenerator
-from contextlib import asynccontextmanager
-from pathlib import Path
+"""Application entrypoint."""
 
 from fastapi import FastAPI
-from fastapi.staticfiles import StaticFiles
+from fastapi.middleware.cors import CORSMiddleware
 
-from app.api.admin.routes import router as admin_router
-from app.api.ai.routes import router as ai_router
-from app.api.notifications.routes import router as notification_router
-from app.api.v1.endpoints.health import router as health_router
-from app.api.v1.router import api_router
+from app.api.auth.router import router as auth_router
+from app.api.cart.router import router as cart_router
+from app.api.customer.router import router as customer_router
+from app.api.orders.router import router as order_router
+from app.api.wishlist.router import router as wishlist_router
 from app.config.settings import get_settings
-from app.exceptions.handlers import register_exception_handlers
-from app.logging_config import configure_logging, shutdown_logger, startup_logger
-from app.middleware.registry import register_middleware
+from app.core.exceptions import register_exception_handlers
+from app.core.logging import configure_logging
+from app.middleware.request_logging import RequestResponseLoggingMiddleware
+
+settings = get_settings()
+
+configure_logging(settings)
 
 
-@asynccontextmanager
-async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
-    """Application lifespan for startup and shutdown hooks."""
-    settings = get_settings()
-    configure_logging(settings)
-    startup_logger.info("application startup", extra={"environment": settings.environment})
-    yield
-    shutdown_logger.info("application shutdown")
+app = FastAPI(
+    title=settings.app_name,
+    version=settings.app_version,
+    debug=settings.debug,
+)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=settings.allowed_origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+app.add_middleware(RequestResponseLoggingMiddleware)
+
+register_exception_handlers(app)
+app.include_router(auth_router, prefix=settings.api_v1_prefix)
+app.include_router(cart_router, prefix=settings.api_v1_prefix)
+app.include_router(customer_router, prefix=settings.api_v1_prefix)
+app.include_router(order_router, prefix=settings.api_v1_prefix)
+app.include_router(wishlist_router, prefix=settings.api_v1_prefix)
 
 
-def create_app() -> FastAPI:
-    """Create and configure the FastAPI application."""
-    settings = get_settings()
-    app = FastAPI(
-        title=settings.app_name,
-        version=settings.app_version,
-        description="Enterprise multi-vendor e-commerce backend foundation.",
-        docs_url=settings.docs_url,
-        redoc_url=settings.redoc_url,
-        openapi_url=settings.openapi_url,
-        lifespan=lifespan,
-    )
+@app.get("/health", tags=["Health"], summary="Application health check")
+def health() -> dict[str, str]:
+    """Return API health status."""
 
-    register_middleware(app, settings)
-    register_exception_handlers(app)
-    app.include_router(health_router, tags=["health"])
-    app.include_router(api_router)
-    app.include_router(admin_router)
-    app.include_router(ai_router)
-    app.include_router(notification_router)
-    Path(settings.media_storage_path).mkdir(parents=True, exist_ok=True)
-    app.mount(settings.media_url_prefix, StaticFiles(directory=settings.media_storage_path), name="media")
-
-    return app
-
-
-app = create_app()
+    return {"status": "healthy"}

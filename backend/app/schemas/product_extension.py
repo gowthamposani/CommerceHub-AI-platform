@@ -200,7 +200,7 @@ class ProductAttributeCreate(BaseSchema):
     def normalize_values(cls, values: list[str]) -> list[str]:
         """Normalize and deduplicate attribute values."""
         normalized = [value.strip() for value in values if value.strip()]
-        if len(normalized) != len(set(value.lower() for value in normalized)):
+        if len(normalized) != len({value.lower() for value in normalized}):
             raise ValueError("Duplicate attribute values are not allowed")
         return normalized
 

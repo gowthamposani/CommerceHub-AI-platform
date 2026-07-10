@@ -1,6 +1,5 @@
 """Service layer for product variants and product merchandising metadata."""
 
-from decimal import Decimal
 from typing import Any
 from uuid import UUID
 

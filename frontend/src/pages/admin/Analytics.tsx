@@ -40,9 +40,7 @@ export default function Analytics() {
                 className="rounded-admin border border-admin-border bg-white p-6 shadow-admin transition duration-200 hover:-translate-y-0.5 dark:border-slate-800 dark:bg-slate-900"
               >
                 <p className="text-sm text-admin-muted dark:text-slate-400">{metric.label}</p>
-                <p className="mt-3 text-2xl font-semibold text-admin-ink dark:text-white">
-                  {metric.value}
-                </p>
+                <p className="mt-3 text-2xl font-semibold text-admin-ink dark:text-white">{metric.value}</p>
               </article>
             ))}
           </section>

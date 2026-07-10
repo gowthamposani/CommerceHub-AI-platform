@@ -1,6 +1,6 @@
 """Generic repository foundation for future modules."""
 
-from typing import Generic, TypeVar
+from typing import TypeVar
 from uuid import UUID
 
 from sqlalchemy import Select, select
@@ -11,7 +11,7 @@ from app.database.base import Base
 ModelT = TypeVar("ModelT", bound=Base)
 
 
-class BaseRepository(Generic[ModelT]):
+class BaseRepository[ModelT: Base]:
     """Reusable async repository for entity persistence."""
 
     model: type[ModelT]
@@ -37,4 +37,3 @@ class BaseRepository(Generic[ModelT]):
         """Delete an entity from the current unit of work."""
         await self.session.delete(entity)
         await self.session.flush()
-

@@ -17,7 +17,6 @@ from backend.app.schemas.admin_schema import (
     UpdateUserStatusRequest,
 )
 
-
 logger = logging.getLogger(__name__)
 
 

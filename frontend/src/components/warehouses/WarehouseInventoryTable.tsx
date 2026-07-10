@@ -7,13 +7,7 @@ import { Button } from "@/components/ui/Button";
 import type { InventoryRecord } from "@/types/inventory";
 import { formatNumber } from "@/utils/formatters";
 
-export function WarehouseInventoryTable({
-  inventory,
-  loading
-}: {
-  inventory: InventoryRecord[];
-  loading?: boolean;
-}) {
+export function WarehouseInventoryTable({ inventory, loading }: { inventory: InventoryRecord[]; loading?: boolean }) {
   if (loading) return <TableSkeleton rows={5} />;
   if (inventory.length === 0) {
     return <EmptyState title="No Warehouse Inventory" message="No inventory records are assigned to this warehouse." />;

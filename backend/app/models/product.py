@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING
 from uuid import UUID
 
 from sqlalchemy import Boolean, CheckConstraint, DateTime, ForeignKey, Index, Numeric, String, Text, UniqueConstraint
-from sqlalchemy.dialects.postgresql import UUID as PostgresUUID
+from sqlalchemy.dialects.postgresql import UUID as POSTGRES_UUID
 from sqlalchemy.orm import Mapped, backref, mapped_column, relationship
 
 from app.database.base import Base, SoftDeleteMixin, TimestampMixin, UUIDMixin
@@ -46,17 +46,17 @@ class Product(Base, UUIDMixin, TimestampMixin, SoftDeleteMixin):
     )
 
     seller_id: Mapped[UUID] = mapped_column(
-        PostgresUUID(as_uuid=True),
+        POSTGRES_UUID(as_uuid=True),
         ForeignKey("sellers.id", ondelete="RESTRICT"),
         nullable=False,
     )
     category_id: Mapped[UUID] = mapped_column(
-        PostgresUUID(as_uuid=True),
+        POSTGRES_UUID(as_uuid=True),
         ForeignKey("categories.id", ondelete="RESTRICT"),
         nullable=False,
     )
     brand_id: Mapped[UUID] = mapped_column(
-        PostgresUUID(as_uuid=True),
+        POSTGRES_UUID(as_uuid=True),
         ForeignKey("brands.id", ondelete="RESTRICT"),
         nullable=False,
     )

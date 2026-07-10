@@ -8,10 +8,7 @@ type AdminErrorBoundaryState = {
   hasError: boolean;
 };
 
-export class AdminErrorBoundary extends Component<
-  AdminErrorBoundaryProps,
-  AdminErrorBoundaryState
-> {
+export class AdminErrorBoundary extends Component<AdminErrorBoundaryProps, AdminErrorBoundaryState> {
   state: AdminErrorBoundaryState = { hasError: false };
 
   static getDerivedStateFromError(): AdminErrorBoundaryState {

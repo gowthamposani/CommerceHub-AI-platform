@@ -1,9 +1,8 @@
 import { apiRequest } from "@/api/client";
-import type { ApiResponse } from "@/types/common";
 import type { AuthUser, LoginPayload, RegisterPayload, TokenPair } from "@/types/auth";
 
 export function login(payload: LoginPayload) {
-  return apiRequest<ApiResponse<TokenPair>>({
+  return apiRequest<TokenPair>({
     method: "POST",
     url: "/auth/login",
     data: payload
@@ -11,7 +10,7 @@ export function login(payload: LoginPayload) {
 }
 
 export function register(payload: RegisterPayload) {
-  return apiRequest<ApiResponse<TokenPair>>({
+  return apiRequest<TokenPair>({
     method: "POST",
     url: "/auth/register",
     data: payload
@@ -19,14 +18,14 @@ export function register(payload: RegisterPayload) {
 }
 
 export function getCurrentUser() {
-  return apiRequest<ApiResponse<AuthUser>>({
+  return apiRequest<AuthUser>({
     method: "GET",
     url: "/auth/me"
   });
 }
 
 export function logout() {
-  return apiRequest<ApiResponse<{ detail: string }>>({
+  return apiRequest<{ detail: string }>({
     method: "POST",
     url: "/auth/logout"
   });

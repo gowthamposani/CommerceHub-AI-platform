@@ -22,10 +22,7 @@ test.describe("AI Product Description Generator", () => {
     await expect(page.getByText("At least one feature is required.")).toBeVisible();
   });
 
-  test("shows enterprise error handling when generation fails", async ({
-    aiProductGeneratorPage,
-    page,
-  }) => {
+  test("shows enterprise error handling when generation fails", async ({ aiProductGeneratorPage, page }) => {
     await mockAIProductDescriptionFailure(page);
     await aiProductGeneratorPage.gotoGenerator();
     await aiProductGeneratorPage.fillProductForm();

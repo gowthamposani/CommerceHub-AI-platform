@@ -11,12 +11,12 @@ from app.common.responses import StandardResponse
 from app.dependencies.database import get_db_session
 from app.dependencies.request import get_pagination, get_search
 from app.schemas.seller import (
+    SellerBusinessType,
     SellerCreate,
     SellerFilter,
     SellerListResponse,
     SellerResponse,
     SellerStatus,
-    SellerBusinessType,
     SellerUpdate,
 )
 from app.services.seller import SellerService

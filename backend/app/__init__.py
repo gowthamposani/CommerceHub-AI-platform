@@ -1,2 +1,1 @@
-"""CommerceHub AI backend application package."""
-
+"""CommerceHub backend application package."""

@@ -140,4 +140,3 @@ class SellerService:
         business_email = update_data.get("business_email")
         if business_email and await self.repository.get_by_business_email(str(business_email), exclude_id=seller_id):
             raise ApplicationError("Business email already exists", status_code=status.HTTP_409_CONFLICT)
-

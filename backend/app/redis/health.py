@@ -15,4 +15,3 @@ async def check_redis(url: str) -> dict[str, object]:
         return {"healthy": False, "configured": bool(url), "message": str(exc)}
     finally:
         await client.aclose()
-

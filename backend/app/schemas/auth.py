@@ -1,104 +1,140 @@
-"""Authentication request and response schemas."""
+"""Authentication schemas."""
 
+from __future__ import annotations
+
+import re
 from datetime import datetime
+from enum import StrEnum
+from typing import Annotated, Literal, TypeVar
 from uuid import UUID
 
-from pydantic import BaseModel, ConfigDict, EmailStr, Field, field_validator
+from pydantic import BaseModel, ConfigDict, EmailStr, Field, StringConstraints, field_validator
 
-from app.common.enums import UserRole
+from app.models.enums import RoleName, UserStatus
+
+NameStr = Annotated[str, StringConstraints(strip_whitespace=True, min_length=1, max_length=100)]
+PasswordStr = Annotated[str, StringConstraints(min_length=8, max_length=128)]
+TokenStr = Annotated[str, StringConstraints(strip_whitespace=True, min_length=1, max_length=4096)]
+
+DataT = TypeVar("DataT")
 
 
-class UserResponse(BaseModel):
-    """Authenticated user response."""
+class ApiResponse[DataT](BaseModel):
+    """Standard API envelope used across the backend."""
+
+    success: bool = True
+    message: str = ""
+    data: DataT | None = None
+
+
+class RegistrationRole(StrEnum):
+    """Publicly registrable roles."""
+
+    CUSTOMER = "customer"
+    SELLER = "seller"
+
+
+class RoleRead(BaseModel):
+    """Role response schema."""
+
+    model_config = ConfigDict(from_attributes=True)
+
+    id: UUID
+    name: RoleName
+    created_at: datetime
+    updated_at: datetime
+
+
+class UserRead(BaseModel):
+    """User response schema."""
 
     model_config = ConfigDict(from_attributes=True)
 
     id: UUID
     first_name: str
     last_name: str
+    full_name: str
     email: EmailStr
-    phone: str | None
-    role: UserRole
-    status: str
-    is_active: bool
-    is_verified: bool
+    role: RoleRead
+    status: UserStatus
     created_at: datetime
     updated_at: datetime
+    last_login_at: datetime | None = None
+
+
+class TokenPairData(BaseModel):
+    """Access and refresh token payload."""
+
+    model_config = ConfigDict(from_attributes=True)
+
+    access_token: str
+    refresh_token: str
+    token_type: Literal["bearer"] = Field(default="bearer")
+    access_token_expires_at: datetime
+    refresh_token_expires_at: datetime
+
+
+class AuthSessionData(BaseModel):
+    """Authenticated session response payload."""
+
+    model_config = ConfigDict(from_attributes=True)
+
+    user: UserRead
+    tokens: TokenPairData
+
+
+class EmptyData(BaseModel):
+    """Empty response payload for endpoints that only return a message."""
+
+    model_config = ConfigDict(from_attributes=True)
 
 
 class RegisterRequest(BaseModel):
-    """User registration payload."""
+    """Registration payload."""
 
-    first_name: str = Field(min_length=2, max_length=100)
-    last_name: str = Field(min_length=2, max_length=100)
+    first_name: NameStr
+    last_name: NameStr
     email: EmailStr
-    password: str = Field(min_length=8, max_length=128)
-    role: UserRole = UserRole.CUSTOMER
-    phone: str | None = Field(default=None, max_length=20)
-
-    @field_validator("phone")
-    @classmethod
-    def validate_phone_number(cls, value: str | None) -> str | None:
-        """Validate optional phone number."""
-        if value is None:
-            return None
-        normalized = value.strip()
-        digits = normalized.removeprefix("+")
-        if not digits.isdigit() or len(digits) < 10 or len(digits) > 15:
-            raise ValueError("Phone number must contain 10 to 15 digits")
-        return normalized
+    password: PasswordStr
+    role: RegistrationRole = RegistrationRole.CUSTOMER
 
     @field_validator("password")
     @classmethod
     def validate_password_strength(cls, value: str) -> str:
-        """Enforce a basic production password policy."""
-        if not any(character.isupper() for character in value):
-            raise ValueError("Password must contain at least one uppercase letter")
-        if not any(character.islower() for character in value):
-            raise ValueError("Password must contain at least one lowercase letter")
-        if not any(character.isdigit() for character in value):
+        if not re.search(r"[A-Za-z]", value):
+            raise ValueError("Password must contain at least one letter")
+        if not re.search(r"\d", value):
             raise ValueError("Password must contain at least one number")
         return value
 
 
 class LoginRequest(BaseModel):
-    """User login payload."""
+    """Login payload."""
 
     email: EmailStr
-    password: str = Field(min_length=1, max_length=128)
-    remember_me: bool = False
+    password: PasswordStr
 
 
 class RefreshTokenRequest(BaseModel):
     """Refresh token payload."""
 
-    refresh_token: str = Field(min_length=20)
+    refresh_token: TokenStr
 
 
-class TokenPairResponse(BaseModel):
-    """Access and refresh token response."""
-
-    access_token: str
-    refresh_token: str
-    token_type: str = "bearer"
-    expires_in: int
-    user: UserResponse
+class LogoutRequest(RefreshTokenRequest):
+    """Logout payload."""
 
 
-class MessageResponse(BaseModel):
-    """Simple message response."""
-
-    detail: str
-
-
-class ForgotPasswordRequest(BaseModel):
-    """Forgot password request."""
-
-    email: EmailStr
-
-
-class ResetPasswordRequest(BaseModel):
-    """Reset password request for future email-token delivery."""
-
-    token: str = Field(min_length=20)
-    new_password: str = Field(min_length=8, max_length=128)
+__all__ = [
+    "ApiResponse",
+    "AuthSessionData",
+    "EmptyData",
+    "LoginRequest",
+    "LogoutRequest",
+    "RefreshTokenRequest",
+    "RegisterRequest",
+    "RegistrationRole",
+    "RoleRead",
+    "TokenPairData",
+    "UserRead",
+]

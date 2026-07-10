@@ -4,7 +4,14 @@ import { Button } from "@/components/ui/Button";
 import { Card, CardContent, CardHeader } from "@/components/ui/Card";
 import { Progress } from "@/components/ui/Progress";
 import { formatCurrency, formatNumber } from "@/utils/formatters";
-import type { InventoryMetrics, OrderMetrics, ProductMetrics, RevenueMetrics, WarehouseMetrics, CustomerMetrics } from "@/types/sellerDashboard";
+import type {
+  InventoryMetrics,
+  OrderMetrics,
+  ProductMetrics,
+  RevenueMetrics,
+  WarehouseMetrics,
+  CustomerMetrics
+} from "@/types/sellerDashboard";
 
 function MetricRow({ label, value }: { label: string; value: string | number }) {
   return (
@@ -44,9 +51,19 @@ export function SellerDashboardWidgets({
           <MetricRow label="Out of Stock" value={formatNumber(products.out_of_stock_products)} />
           <MetricRow label="Low Stock" value={formatNumber(products.low_stock_products)} />
           <div className="flex flex-wrap gap-2 pt-2">
-            <Link to="/products/new"><Button size="sm">Add Product</Button></Link>
-            <Link to="/products"><Button size="sm" variant="secondary">View Products</Button></Link>
-            <Link to="/inventory"><Button size="sm" variant="secondary">Manage Inventory</Button></Link>
+            <Link to="/products/new">
+              <Button size="sm">Add Product</Button>
+            </Link>
+            <Link to="/products">
+              <Button size="sm" variant="secondary">
+                View Products
+              </Button>
+            </Link>
+            <Link to="/inventory">
+              <Button size="sm" variant="secondary">
+                Manage Inventory
+              </Button>
+            </Link>
           </div>
         </CardContent>
       </Card>
@@ -62,8 +79,14 @@ export function SellerDashboardWidgets({
           <MetricRow label="Inventory Value" value={formatCurrency(Number(inventory.inventory_value) || 0)} />
           <MetricRow label="Low Stock Alerts" value={formatNumber(inventory.stock_alerts.length)} />
           <div className="flex flex-wrap gap-2 pt-2">
-            <Link to="/inventory"><Button size="sm">Update Stock</Button></Link>
-            <Link to="/inventory"><Button size="sm" variant="secondary">View Inventory</Button></Link>
+            <Link to="/inventory">
+              <Button size="sm">Update Stock</Button>
+            </Link>
+            <Link to="/inventory">
+              <Button size="sm" variant="secondary">
+                View Inventory
+              </Button>
+            </Link>
           </div>
         </CardContent>
       </Card>
@@ -84,9 +107,19 @@ export function SellerDashboardWidgets({
             <Progress value={Math.min(capacity, 100)} />
           </div>
           <div className="flex flex-wrap gap-2 pt-2">
-            <Link to="/warehouses"><Button size="sm">View Warehouses</Button></Link>
-            <Link to="/warehouses/new"><Button size="sm" variant="secondary">Create Warehouse</Button></Link>
-            <Link to="/warehouses"><Button size="sm" variant="secondary">Transfer Inventory</Button></Link>
+            <Link to="/warehouses">
+              <Button size="sm">View Warehouses</Button>
+            </Link>
+            <Link to="/warehouses/new">
+              <Button size="sm" variant="secondary">
+                Create Warehouse
+              </Button>
+            </Link>
+            <Link to="/warehouses">
+              <Button size="sm" variant="secondary">
+                Transfer Inventory
+              </Button>
+            </Link>
           </div>
         </CardContent>
       </Card>
@@ -103,7 +136,11 @@ export function SellerDashboardWidgets({
           <MetricRow label="Delivered" value={formatNumber(orders.delivered_orders)} />
           <MetricRow label="Cancelled" value={formatNumber(orders.cancelled_orders)} />
           <MetricRow label="Returned" value={formatNumber(orders.returned_orders)} />
-          <Link to="/modules"><Button size="sm" variant="secondary">View Orders</Button></Link>
+          <Link to="/modules">
+            <Button size="sm" variant="secondary">
+              View Orders
+            </Button>
+          </Link>
         </CardContent>
       </Card>
 
@@ -129,7 +166,11 @@ export function SellerDashboardWidgets({
           <MetricRow label="Returning Customers" value={formatNumber(customers.returning_customers)} />
           <MetricRow label="New Customers" value={formatNumber(customers.new_customers)} />
           <MetricRow label="Retention Rate" value={`${Number(customers.customer_retention_rate || 0).toFixed(2)}%`} />
-          <Link to="/modules"><Button size="sm" variant="secondary">View Customers</Button></Link>
+          <Link to="/modules">
+            <Button size="sm" variant="secondary">
+              View Customers
+            </Button>
+          </Link>
         </CardContent>
       </Card>
     </div>

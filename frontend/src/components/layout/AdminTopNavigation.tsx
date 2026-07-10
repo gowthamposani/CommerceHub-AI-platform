@@ -18,12 +18,8 @@ export function AdminTopNavigation({ onOpenSidebar }: AdminTopNavigationProps) {
             <Menu className="h-5 w-5" aria-hidden="true" />
           </button>
           <div>
-            <p className="text-sm font-medium text-admin-muted dark:text-slate-400">
-              Admin Console
-            </p>
-            <h1 className="mt-1 text-xl font-semibold text-admin-ink dark:text-white">
-              Enterprise Workspace
-            </h1>
+            <p className="text-sm font-medium text-admin-muted dark:text-slate-400">Admin Console</p>
+            <h1 className="mt-1 text-xl font-semibold text-admin-ink dark:text-white">Enterprise Workspace</h1>
           </div>
         </div>
 

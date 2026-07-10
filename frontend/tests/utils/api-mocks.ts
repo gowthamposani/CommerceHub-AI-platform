@@ -2,14 +2,14 @@ import type { Page, Route } from "@playwright/test";
 
 const jsonHeaders = {
   "access-control-allow-origin": "*",
-  "content-type": "application/json",
+  "content-type": "application/json"
 };
 
 function fulfillJson(route: Route, payload: unknown, status = 200) {
   return route.fulfill({
     status,
     headers: jsonHeaders,
-    body: JSON.stringify(payload),
+    body: JSON.stringify(payload)
   });
 }
 
@@ -29,15 +29,15 @@ export async function mockAdminApis(page: Page) {
         generated_at: "2026-07-09T10:00:00.000Z",
         monthly_revenue: [
           { month: "Jan", revenue: 12000 },
-          { month: "Feb", revenue: 18000 },
+          { month: "Feb", revenue: 18000 }
         ],
         orders_overview: [
           { label: "Pending", orders: 18 },
-          { label: "Completed", orders: 144 },
+          { label: "Completed", orders: 144 }
         ],
         top_categories: [
           { name: "Electronics", value: 48 },
-          { name: "Fashion", value: 32 },
+          { name: "Fashion", value: 32 }
         ],
         recent_activity: [
           {
@@ -45,8 +45,8 @@ export async function mockAdminApis(page: Page) {
             title: "Seller approval queue updated",
             description: "Pending seller requests refreshed.",
             timestamp: "Today",
-            tone: "info",
-          },
+            tone: "info"
+          }
         ],
         latest_notifications: [
           {
@@ -54,8 +54,8 @@ export async function mockAdminApis(page: Page) {
             title: "System healthy",
             message: "All core services are operational.",
             severity: "info",
-            createdAt: "Today",
-          },
+            createdAt: "Today"
+          }
         ],
         recent_orders: [
           {
@@ -63,22 +63,20 @@ export async function mockAdminApis(page: Page) {
             customer: "Enterprise Buyer",
             seller: "Prime Seller",
             amount: 240,
-            status: "Processing",
-          },
+            status: "Processing"
+          }
         ],
         quick_actions: [
           {
             id: "quick-ai",
             label: "Generate product copy",
             description: "Open AI product tools.",
-            href: "/admin/ai-tools",
-          },
+            href: "/admin/ai-tools"
+          }
         ],
-        system_status: [
-          { label: "API Gateway", value: "Operational", state: "healthy" },
-        ],
-      },
-    }),
+        system_status: [{ label: "API Gateway", value: "Operational", state: "healthy" }]
+      }
+    })
   );
 
   await page.route("**/api/v1/admin/analytics", (route) =>
@@ -96,18 +94,18 @@ export async function mockAdminApis(page: Page) {
         generated_at: "2026-07-09T10:00:00.000Z",
         revenue_series: [
           { month: "Jan", revenue: 12000 },
-          { month: "Feb", revenue: 18000 },
+          { month: "Feb", revenue: 18000 }
         ],
         orders_overview: [
           { label: "Pending", orders: 18 },
-          { label: "Completed", orders: 144 },
+          { label: "Completed", orders: 144 }
         ],
         category_performance: [
           { name: "Electronics", value: 48 },
-          { name: "Fashion", value: 32 },
-        ],
-      },
-    }),
+          { name: "Fashion", value: 32 }
+        ]
+      }
+    })
   );
 
   await page.route("**/api/v1/notifications/templates", (route) =>
@@ -118,10 +116,10 @@ export async function mockAdminApis(page: Page) {
         {
           template_id: "welcome",
           name: "Welcome Notification",
-          supported_channels: ["EMAIL", "IN_APP"],
-        },
-      ],
-    }),
+          supported_channels: ["EMAIL", "IN_APP"]
+        }
+      ]
+    })
   );
 
   await page.route("**/api/v1/notifications/history", (route) =>
@@ -135,10 +133,10 @@ export async function mockAdminApis(page: Page) {
           channel: "EMAIL",
           recipient: "customer@example.com",
           status: "DELIVERED",
-          created_at: "2026-07-09T10:00:00.000Z",
-        },
-      ],
-    }),
+          created_at: "2026-07-09T10:00:00.000Z"
+        }
+      ]
+    })
   );
 
   await page.route("**/api/v1/notifications/send", (route) =>
@@ -150,9 +148,9 @@ export async function mockAdminApis(page: Page) {
         channel: "IN_APP",
         status: "QUEUED",
         provider: "mock",
-        sent_at: "2026-07-09T10:00:00.000Z",
-      },
-    }),
+        sent_at: "2026-07-09T10:00:00.000Z"
+      }
+    })
   );
 }
 
@@ -170,8 +168,8 @@ export async function mockAIProductDescriptionSuccess(page: Page) {
         seo_title: "CommerceHub Smart Speaker",
         seo_description: "Shop CommerceHub smart speakers with room-filling audio.",
         highlights: ["Room-filling sound", "Voice assistant ready"],
-        keywords: ["smart speaker", "commercehub", "audio"],
-      },
+        keywords: ["smart speaker", "commercehub", "audio"]
+      }
     });
   });
 }
@@ -184,10 +182,10 @@ export async function mockAIProductDescriptionFailure(page: Page) {
         success: false,
         message: "AI provider unavailable",
         error_code: "AI_PROVIDER_UNAVAILABLE",
-        details: {},
+        details: {}
       },
-      503,
-    ),
+      503
+    )
   );
 }
 

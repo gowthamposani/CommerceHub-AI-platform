@@ -206,7 +206,9 @@ async def test_validation_rejects_invalid_founded_year(api_client: AsyncClient) 
 @pytest.mark.anyio
 async def test_validation_rejects_invalid_country(api_client: AsyncClient) -> None:
     """Invalid country text is rejected to prevent unsafe input."""
-    response = await api_client.post("/api/v1/brands", json=brand_payload(country_of_origin="<script>alert(1)</script>"))
+    response = await api_client.post(
+        "/api/v1/brands", json=brand_payload(country_of_origin="<script>alert(1)</script>")
+    )
 
     assert response.status_code == 422
 

@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING
 from uuid import UUID
 
 from sqlalchemy import Boolean, CheckConstraint, ForeignKey, Index, Integer, String, UniqueConstraint
-from sqlalchemy.dialects.postgresql import UUID as PostgresUUID
+from sqlalchemy.dialects.postgresql import UUID as POSTGRES_UUID
 from sqlalchemy.orm import Mapped, backref, mapped_column, relationship
 
 from app.database.base import Base, SoftDeleteMixin, TimestampMixin, UUIDMixin
@@ -27,7 +27,7 @@ class ProductImage(Base, UUIDMixin, TimestampMixin, SoftDeleteMixin):
     )
 
     product_id: Mapped[UUID] = mapped_column(
-        PostgresUUID(as_uuid=True),
+        POSTGRES_UUID(as_uuid=True),
         ForeignKey("products.id", ondelete="CASCADE"),
         nullable=False,
     )

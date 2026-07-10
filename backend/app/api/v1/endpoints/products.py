@@ -21,7 +21,6 @@ from app.schemas.product import (
     ProductUpdate,
     PublishProductRequest,
 )
-from app.schemas.product_image import ProductImageListResponse, ProductImageResponse
 from app.schemas.product_extension import (
     ProductAttributeCreate,
     ProductAttributeListResponse,
@@ -43,9 +42,10 @@ from app.schemas.product_extension import (
     ProductVariantStatus,
     ProductVariantUpdate,
 )
-from app.services.product_image import ProductImageService
+from app.schemas.product_image import ProductImageListResponse, ProductImageResponse
 from app.services.product import ProductService
 from app.services.product_extension import ProductExtensionService
+from app.services.product_image import ProductImageService
 
 router = APIRouter(prefix="/products", tags=["products"])
 

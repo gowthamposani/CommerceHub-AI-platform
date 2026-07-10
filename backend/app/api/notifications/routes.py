@@ -5,8 +5,6 @@ from __future__ import annotations
 import logging
 from typing import Annotated, Protocol
 
-from fastapi import APIRouter, Depends, HTTPException, status
-
 from backend.app.schemas.notification_schema import (
     NotificationHistoryResponse,
     NotificationSendRequest,
@@ -18,7 +16,7 @@ from backend.app.services.notification_service import (
     NotificationServiceError,
 )
 from backend.app.utils.notification_provider import MockNotificationProvider
-
+from fastapi import APIRouter, Depends, HTTPException, status
 
 logger = logging.getLogger(__name__)
 

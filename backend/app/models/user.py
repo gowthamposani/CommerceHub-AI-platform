@@ -1,63 +1,109 @@
-"""Authentication and user account models."""
+"""User model."""
+
+from __future__ import annotations
 
 from datetime import datetime
-from uuid import UUID
+from typing import TYPE_CHECKING
+from uuid import UUID, uuid4
 
-from sqlalchemy import Boolean, DateTime, ForeignKey, Index, String, UniqueConstraint
-from sqlalchemy.dialects.postgresql import UUID as PostgresUUID  # noqa: N811
-from sqlalchemy.orm import Mapped, backref, mapped_column, relationship
+from sqlalchemy import DateTime, ForeignKey, String, func
+from sqlalchemy import Enum as SAEnum
+from sqlalchemy.dialects.postgresql import UUID as PGUUID
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from app.database.base import Base, SoftDeleteMixin, TimestampMixin, UUIDMixin
+from app.database.base import Base
+from app.models.enums import UserStatus
+
+if TYPE_CHECKING:  # pragma: no cover - typing only
+    from app.models.address import Address
+    from app.models.cart import Cart
+    from app.models.order import Order
+    from app.models.refresh_token import RefreshToken
+    from app.models.role import Role
+    from app.models.wishlist import Wishlist
 
 
-class User(Base, UUIDMixin, TimestampMixin, SoftDeleteMixin):
-    """Platform user account for customer, seller, and admin access."""
+class User(Base):
+    """Application user with role-based access control."""
 
     __tablename__ = "users"
-    __table_args__ = (
-        UniqueConstraint("email", name="uq_users_email"),
-        Index("ix_users_email", "email"),
-        Index("ix_users_role", "role"),
-        Index("ix_users_status", "status"),
-    )
 
+    id: Mapped[UUID] = mapped_column(PGUUID(as_uuid=True), primary_key=True, default=uuid4)
     first_name: Mapped[str] = mapped_column(String(100), nullable=False)
     last_name: Mapped[str] = mapped_column(String(100), nullable=False)
-    email: Mapped[str] = mapped_column(String(255), nullable=False)
-    phone: Mapped[str | None] = mapped_column(String(20), nullable=True)
-    hashed_password: Mapped[str] = mapped_column(String(255), nullable=False)
-    role: Mapped[str] = mapped_column(String(30), nullable=False, default="customer")
-    status: Mapped[str] = mapped_column(String(30), nullable=False, default="active")
-    is_active: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)
-    is_verified: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
-    failed_login_attempts: Mapped[int] = mapped_column(default=0, nullable=False)
-    locked_until: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
-    last_login_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
-
-
-class RefreshToken(Base, UUIDMixin, TimestampMixin, SoftDeleteMixin):
-    """Persisted refresh token for session rotation and logout."""
-
-    __tablename__ = "refresh_tokens"
-    __table_args__ = (
-        UniqueConstraint("token_hash", name="uq_refresh_tokens_token_hash"),
-        Index("ix_refresh_tokens_user_id", "user_id"),
-        Index("ix_refresh_tokens_expires_at", "expires_at"),
-    )
-
-    user_id: Mapped[UUID] = mapped_column(
-        PostgresUUID(as_uuid=True),
-        ForeignKey("users.id", ondelete="CASCADE"),
+    email: Mapped[str] = mapped_column(String(255), unique=True, index=True, nullable=False)
+    password_hash: Mapped[str] = mapped_column("password", String(255), nullable=False)
+    role_id: Mapped[UUID] = mapped_column(
+        PGUUID(as_uuid=True),
+        ForeignKey("roles.id", ondelete="RESTRICT"),
+        index=True,
         nullable=False,
     )
-    token_hash: Mapped[str] = mapped_column(String(255), nullable=False)
-    expires_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
-    revoked_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
-    user_agent: Mapped[str | None] = mapped_column(String(500), nullable=True)
-    ip_address: Mapped[str | None] = mapped_column(String(80), nullable=True)
-
-    user: Mapped[User] = relationship(
-        "User",
-        lazy="selectin",
-        backref=backref("refresh_tokens", lazy="selectin", cascade="all, delete-orphan"),
+    status: Mapped[UserStatus] = mapped_column(
+        SAEnum(
+            UserStatus,
+            name="user_status_enum",
+            values_callable=lambda enum_cls: [item.value for item in enum_cls],
+            native_enum=False,
+        ),
+        index=True,
+        nullable=False,
+        default=UserStatus.ACTIVE,
     )
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        server_default=func.now(),
+        nullable=False,
+    )
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        server_default=func.now(),
+        onupdate=func.now(),
+        nullable=False,
+    )
+    last_login_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+
+    role: Mapped[Role] = relationship(back_populates="users", lazy="joined")
+    refresh_tokens: Mapped[list[RefreshToken]] = relationship(
+        back_populates="user",
+        cascade="all, delete-orphan",
+        lazy="selectin",
+    )
+    addresses: Mapped[list[Address]] = relationship(
+        back_populates="customer",
+        cascade="all, delete-orphan",
+        lazy="selectin",
+        order_by=lambda: (Address.is_default.desc(), Address.created_at.asc()),
+    )
+    cart: Mapped[Cart | None] = relationship(
+        back_populates="customer",
+        uselist=False,
+        lazy="joined",
+        passive_deletes=True,
+    )
+    orders: Mapped[list[Order]] = relationship(
+        back_populates="customer",
+        cascade="all, delete-orphan",
+        lazy="selectin",
+        passive_deletes=True,
+        order_by=lambda: Order.created_at.desc(),
+    )
+    wishlist_items: Mapped[list[Wishlist]] = relationship(
+        back_populates="customer",
+        cascade="all, delete-orphan",
+        lazy="selectin",
+    )
+
+    @property
+    def full_name(self) -> str:
+        """Return the user's display name."""
+
+        return f"{self.first_name} {self.last_name}".strip()
+
+    def __repr__(self) -> str:  # pragma: no cover - debug helper
+        return f"User(id={self.id!s}, email={self.email!s})"
+
+
+from app.models.address import Address  # noqa: E402
+from app.models.cart import Cart  # noqa: E402
+from app.models.order import Order  # noqa: E402

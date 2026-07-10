@@ -1,6 +1,40 @@
-# TODO: Ignore generated files.
+# Python
+__pycache__/
+*.py[cod]
+*.so
+*.pyo
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
 .venv/
 venv/
 env/
-__pycache__/
-*.py[cod]
+
+# Environment
+.env
+backend/.env
+frontend/.env
+*.local
+
+# Node / Vite / Playwright
+node_modules/
+frontend/node_modules/
+dist/
+frontend/dist/
+*.tsbuildinfo
+vite.config.js
+vite.config.d.ts
+playwright-report/
+test-results/
+frontend/playwright-report/
+frontend/test-results/
+frontend/blob-report/
+frontend/.playwright/
+
+# OS / editors
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

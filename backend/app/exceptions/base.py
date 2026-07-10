@@ -15,4 +15,3 @@ class ApplicationError(Exception):
 
 class DatabaseApplicationError(ApplicationError):
     """Raised for database-related application failures."""
-

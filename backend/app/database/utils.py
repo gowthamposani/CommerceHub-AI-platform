@@ -20,4 +20,3 @@ async def exists(session: AsyncSession, statement: Select[tuple[Any]]) -> bool:
     """Return whether a select statement yields at least one row."""
     result = await session.execute(statement.limit(1))
     return result.scalar_one_or_none() is not None
-

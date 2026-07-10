@@ -7,10 +7,9 @@ from typing import Any
 from unittest.mock import MagicMock
 
 import pytest
+from backend.app.main import app as fastapi_app
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
-
-from backend.app.main import app as fastapi_app
 
 
 @pytest.fixture()

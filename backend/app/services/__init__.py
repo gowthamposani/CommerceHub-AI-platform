@@ -1,7 +1,9 @@
-"""Service package.
+"""Service layer."""
 
-Concrete services are imported directly from their modules to avoid side
-effects during application startup.
-"""
+from app.services.auth_service import AuthenticationService
+from app.services.cart_service import CartService
+from app.services.customer_service import CustomerService
+from app.services.order_service import OrderService
+from app.services.wishlist_service import WishlistService
 
-__all__: list[str] = []
+__all__ = ["AuthenticationService", "CartService", "CustomerService", "OrderService", "WishlistService"]

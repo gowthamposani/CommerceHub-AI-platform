@@ -7,7 +7,6 @@ import logging
 from backend.app.schemas.ai_schema import ProductDescriptionRequest, ProductDescriptionResponse
 from backend.app.utils.ai_provider import AIProvider
 
-
 logger = logging.getLogger(__name__)
 
 

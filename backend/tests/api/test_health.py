@@ -29,6 +29,7 @@ async def test_liveness(api_client: AsyncClient) -> None:
 @pytest.mark.anyio
 async def test_readiness(api_client: AsyncClient, monkeypatch: pytest.MonkeyPatch) -> None:
     """Readiness endpoint validates configured dependencies."""
+
     async def healthy_redis(url: str) -> dict[str, object]:
         return {"healthy": True, "configured": True, "message": "Redis connection successful"}
 
