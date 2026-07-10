@@ -8,14 +8,14 @@ from app.api.cart.router import router as cart_router
 from app.api.customer.router import router as customer_router
 from app.api.orders.router import router as order_router
 from app.api.wishlist.router import router as wishlist_router
-from app.core.config import get_settings
+from app.config.settings import get_settings
 from app.core.exceptions import register_exception_handlers
 from app.core.logging import configure_logging
 from app.middleware.request_logging import RequestResponseLoggingMiddleware
 
 settings = get_settings()
 
-configure_logging()
+configure_logging(settings)
 
 
 app = FastAPI(
