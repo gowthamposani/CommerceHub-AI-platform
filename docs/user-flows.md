@@ -1,144 +1,30 @@
 # User Flows
-# User Flows
 
----
-
-## Customer
-
-Landing
-
-↓
-
-Register
-
-↓
-
-Login
-
-↓
-
-Browse Products
-
-↓
-
-Search
-
-↓
-
-Product Details
-
-↓
-
-Wishlist
-
-↓
-
-Cart
-
-↓
-
-Checkout
-
-↓
-
-Orders
-
-↓
-
-Review
-
----
-
-## Seller
-
-Register
-
-↓
-
-Admin Approval
-
-↓
-
-Login
-
-↓
-
-Dashboard
-
-↓
-
-Products
-
-↓
-
-Inventory
-
-↓
-
-Orders
-
-↓
-
-Revenue
-
----
-
-## Admin
-
-Login
-
-↓
-
-Dashboard
-
-↓
-
-Approve Sellers
-
-↓
-
-Manage Categories
-
-↓
-
-Reports
-
-↓
-
-Analytics
-
----
-
-## Order Flow
-
-Placed
-
-↓
-
-Confirmed
-
-↓
-
-Packed
-
-↓
-
-Shipped
-
-↓
-
-Delivered
-
----
-
-## AI Flow
-
-Generate Product Description
-
-↓
-
-Chat Support
-
-↓
-
-Recommendations
+## Admin Dashboard Flow
+
+```text
+Admin opens /admin/dashboard
+  -> Frontend hook requests /api/v1/admin/dashboard
+  -> Backend returns dashboard envelope
+  -> UI renders cards, charts, activity, notifications, and status
+```
+
+## AI Product Description Flow
+
+```text
+Admin opens /admin/ai-tools
+  -> Admin fills product form
+  -> Frontend posts /api/v1/ai/product-description
+  -> Backend service calls AI provider abstraction
+  -> UI renders title, description, SEO fields, keywords, and highlights
+```
+
+## Notification Flow
+
+```text
+Admin opens /admin/notifications
+  -> Frontend loads templates and history
+  -> Admin sends notification
+  -> Backend service calls notification provider abstraction
+  -> UI refreshes notification data
+```

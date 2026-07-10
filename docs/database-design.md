@@ -1,141 +1,17 @@
 # Database Design
 
-## Database
+## Developer 3 Database Notes
 
-PostgreSQL
+Developer 3 does not currently define SQLAlchemy models or database tables.
 
----
+Current behavior:
 
-# Tables
+- Admin repository returns placeholder data.
+- AI module does not persist generated content.
+- Notification module does not persist notification history.
 
-- Users
-- Roles
-- Categories
-- Products
-- Inventory
-- Cart
-- CartItems
-- Wishlist
-- Orders
-- OrderItems
-- Payments
-- Reviews
-- Addresses
-- Notifications
+Future integration:
 
----
-
-# Users
-
-| Column | Type |
-|---------|------|
-| id | UUID |
-| first_name | varchar |
-| last_name | varchar |
-| email | varchar |
-| password | varchar |
-| role_id | UUID |
-| status | enum |
-| created_at | timestamp |
-
----
-
-# Roles
-
-ADMIN
-
-SELLER
-
-CUSTOMER
-
----
-
-# Categories
-
-id
-
-name
-
-description
-
----
-
-# Products
-
-id
-
-seller_id
-
-category_id
-
-title
-
-description
-
-price
-
-stock
-
-image
-
-status
-
----
-
-# Orders
-
-id
-
-customer_id
-
-payment_id
-
-status
-
-total_amount
-
----
-
-# Relationships
-
-Customer
-
-↓
-
-Orders
-
-↓
-
-Order Items
-
-↓
-
-Products
-
-Seller
-
-↓
-
-Products
-
-Category
-
-↓
-
-Products
-
-Customer
-
-↓
-
-Cart
-
-↓
-
-Cart Items
-
-Product
-
-↓
-
-Reviews
+- User, Seller, Product, Category, Inventory, and Order tables are owned by other developers.
+- Notification persistence should be added only after storage ownership and schema design are agreed.
+- AI generation audit/history storage should be added only after product and audit requirements are finalized.
