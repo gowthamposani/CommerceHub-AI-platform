@@ -3,7 +3,6 @@
 from uuid import UUID
 
 from sqlalchemy import Select, delete, func, or_, select
-from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
 from app.common.pagination import Page, PaginationParams, build_page

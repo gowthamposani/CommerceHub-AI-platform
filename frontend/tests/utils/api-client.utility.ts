@@ -1,15 +1,15 @@
-import { APIRequestContext, APIResponse } from '@playwright/test';
+import { APIRequestContext, APIResponse } from "@playwright/test";
 
-import { e2eConfig, type E2EConfig } from '../config/e2e-config';
+import { e2eConfig, type E2EConfig } from "../config/e2e-config";
 
 export class ApiClientUtility {
   constructor(
     protected readonly request: APIRequestContext,
-    protected readonly config: E2EConfig = e2eConfig,
+    protected readonly config: E2EConfig = e2eConfig
   ) {}
 
   protected endpoint(path: string): string {
-    const normalizedPath = path.startsWith('/') ? path : `/${path}`;
+    const normalizedPath = path.startsWith("/") ? path : `/${path}`;
     return `${this.config.apiBaseUrl}${normalizedPath}`;
   }
 

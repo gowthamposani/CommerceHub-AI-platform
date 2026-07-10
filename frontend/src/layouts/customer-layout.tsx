@@ -1,4 +1,4 @@
-import { Link, NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { Link, NavLink, Outlet, useLocation, useNavigate } from "react-router-dom";
 import {
   ClipboardList,
   Heart,
@@ -9,24 +9,24 @@ import {
   ShoppingBag,
   ShoppingCart,
   Sparkles,
-  UserRound,
-} from 'lucide-react';
+  UserRound
+} from "lucide-react";
 
-import { appConfig } from '../config';
-import { useAuth } from '../auth/use-auth';
-import { Button, Card } from '../components/ui';
-import { initials } from '../utils/format';
-import { cn } from '../utils/cn';
+import { appConfig } from "../config";
+import { useAuth } from "../auth/use-auth";
+import { Button, Card } from "../components/ui";
+import { initials } from "../utils/format";
+import { cn } from "../utils/cn";
 
 const navItems = [
-  { to: '/home', label: 'Home', icon: Home },
-  { to: '/products', label: 'Products', icon: ShoppingBag },
-  { to: '/wishlist', label: 'Wishlist', icon: Heart },
-  { to: '/cart', label: 'Cart', icon: ShoppingCart },
-  { to: '/orders', label: 'Orders', icon: ClipboardList },
-  { to: '/profile', label: 'Profile', icon: UserRound },
-  { to: '/addresses', label: 'Addresses', icon: MapPinned },
-  { to: '/checkout', label: 'Checkout', icon: PackageSearch },
+  { to: "/home", label: "Home", icon: Home },
+  { to: "/products", label: "Products", icon: ShoppingBag },
+  { to: "/wishlist", label: "Wishlist", icon: Heart },
+  { to: "/cart", label: "Cart", icon: ShoppingCart },
+  { to: "/orders", label: "Orders", icon: ClipboardList },
+  { to: "/profile", label: "Profile", icon: UserRound },
+  { to: "/addresses", label: "Addresses", icon: MapPinned },
+  { to: "/checkout", label: "Checkout", icon: PackageSearch }
 ];
 
 export function CustomerLayout(): React.ReactElement {
@@ -36,7 +36,7 @@ export function CustomerLayout(): React.ReactElement {
 
   const handleLogout = async (): Promise<void> => {
     await logout();
-    navigate('/login', { replace: true, state: { from: location } });
+    navigate("/login", { replace: true, state: { from: location } });
   };
 
   return (
@@ -60,8 +60,8 @@ export function CustomerLayout(): React.ReactElement {
                   {initials(user?.first_name, user?.last_name)}
                 </div>
                 <div className="min-w-0">
-                  <p className="truncate text-sm font-semibold text-brand-text">{user?.full_name ?? 'Customer'}</p>
-                  <p className="truncate text-xs text-brand-muted">{user?.email ?? 'Signed in'}</p>
+                  <p className="truncate text-sm font-semibold text-brand-text">{user?.full_name ?? "Customer"}</p>
+                  <p className="truncate text-xs text-brand-muted">{user?.email ?? "Signed in"}</p>
                 </div>
               </div>
             </div>
@@ -73,10 +73,10 @@ export function CustomerLayout(): React.ReactElement {
                   to={item.to}
                   className={({ isActive }) =>
                     cn(
-                      'flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-medium transition',
+                      "flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-medium transition",
                       isActive
-                        ? 'bg-brand-primary text-white shadow-soft'
-                        : 'text-brand-text hover:bg-brand-secondary/80',
+                        ? "bg-brand-primary text-white shadow-soft"
+                        : "text-brand-text hover:bg-brand-secondary/80"
                     )
                   }
                 >
@@ -119,10 +119,10 @@ export function CustomerLayout(): React.ReactElement {
                   to={item.to}
                   className={({ isActive }) =>
                     cn(
-                      'inline-flex shrink-0 items-center gap-2 rounded-full border px-4 py-2 text-sm font-medium transition',
+                      "inline-flex shrink-0 items-center gap-2 rounded-full border px-4 py-2 text-sm font-medium transition",
                       isActive
-                        ? 'border-brand-primary bg-brand-primary text-white'
-                        : 'border-brand-border bg-white text-brand-text hover:border-brand-primary/30',
+                        ? "border-brand-primary bg-brand-primary text-white"
+                        : "border-brand-border bg-white text-brand-text hover:border-brand-primary/30"
                     )
                   }
                 >

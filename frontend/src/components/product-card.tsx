@@ -1,10 +1,10 @@
-import { Link } from 'react-router-dom';
-import { Heart, Package, ShoppingCart, Star } from 'lucide-react';
+import { Link } from "react-router-dom";
+import { Heart, Package, ShoppingCart, Star } from "lucide-react";
 
-import { Button, Card, Badge } from './ui';
-import type { Product } from '../types/domain';
-import { formatCurrency, truncate } from '../utils/format';
-import { cn } from '../utils/cn';
+import { Button, Card, Badge } from "./ui";
+import type { Product } from "../types/domain";
+import { formatCurrency, truncate } from "../utils/format";
+import { cn } from "../utils/cn";
 
 export function ProductCard({
   product,
@@ -12,7 +12,7 @@ export function ProductCard({
   actions,
   compact = false,
   highlight = false,
-  sourceLabel,
+  sourceLabel
 }: {
   product: Product;
   href?: string;
@@ -22,13 +22,11 @@ export function ProductCard({
   sourceLabel?: string;
 }): React.ReactElement {
   const title = (
-    <h3 className={cn('font-semibold text-brand-text', compact ? 'text-base' : 'text-lg')}>
-      {product.title}
-    </h3>
+    <h3 className={cn("font-semibold text-brand-text", compact ? "text-base" : "text-lg")}>{product.title}</h3>
   );
 
   return (
-    <Card className={cn('overflow-hidden', highlight && 'ring-1 ring-brand-primary/20')}>
+    <Card className={cn("overflow-hidden", highlight && "ring-1 ring-brand-primary/20")}>
       <div className="relative h-40 overflow-hidden bg-[linear-gradient(135deg,rgba(201,139,43,0.2),rgba(245,242,237,1))]">
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="flex h-24 w-24 items-center justify-center rounded-full bg-white/80 text-brand-primaryDark shadow-soft">
@@ -47,7 +45,7 @@ export function ProductCard({
         ) : null}
       </div>
 
-      <div className={cn('space-y-4 p-5', compact && 'p-4')}>
+      <div className={cn("space-y-4 p-5", compact && "p-4")}>
         <div className="flex items-start justify-between gap-4">
           <div className="min-w-0 flex-1">
             {href ? (
@@ -58,7 +56,7 @@ export function ProductCard({
               title
             )}
             <p className="mt-2 text-sm leading-6 text-brand-muted">
-              {truncate(product.description ?? 'No product description available yet.', compact ? 88 : 120)}
+              {truncate(product.description ?? "No product description available yet.", compact ? 88 : 120)}
             </p>
           </div>
           <div className="rounded-2xl bg-brand-secondary px-3 py-2 text-right">
@@ -68,8 +66,8 @@ export function ProductCard({
         </div>
 
         <div className="flex flex-wrap items-center gap-2 text-xs text-brand-muted">
-          <Badge tone={product.stock > 0 ? 'success' : 'danger'}>
-            {product.stock > 0 ? `${product.stock} in stock` : 'Out of stock'}
+          <Badge tone={product.stock > 0 ? "success" : "danger"}>
+            {product.stock > 0 ? `${product.stock} in stock` : "Out of stock"}
           </Badge>
           <Badge tone="neutral">
             <Star className="h-3 w-3 fill-current" />
@@ -95,4 +93,3 @@ export function ProductCard({
     </Card>
   );
 }
-

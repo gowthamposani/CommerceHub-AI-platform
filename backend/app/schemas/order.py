@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 from datetime import datetime
-from typing import Optional
 from uuid import UUID
 
 from pydantic import BaseModel, ConfigDict, Field
@@ -16,7 +15,7 @@ class CheckoutRequest(BaseModel):
 
     model_config = ConfigDict(extra="forbid")
 
-    payment_id: Optional[UUID] = None
+    payment_id: UUID | None = None
 
 
 class OrderItemResponse(BaseModel):
@@ -27,7 +26,7 @@ class OrderItemResponse(BaseModel):
     id: UUID
     order_id: UUID
     product_id: UUID
-    product_title: Optional[str] = None
+    product_title: str | None = None
     quantity: int
     unit_price: float
     line_total: float
@@ -42,7 +41,7 @@ class OrderResponse(BaseModel):
 
     id: UUID
     customer_id: UUID
-    payment_id: Optional[UUID] = None
+    payment_id: UUID | None = None
     status: OrderStatus
     items: list[OrderItemResponse] = Field(default_factory=list)
     item_count: int

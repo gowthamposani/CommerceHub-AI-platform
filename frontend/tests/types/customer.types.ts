@@ -1,4 +1,4 @@
-import type { AuthLoginPayload, AuthRegistrationPayload } from '../../src/types/domain';
+import type { AuthLoginPayload, AuthRegistrationPayload } from "../../src/types/domain";
 
 export interface ProductSnapshot {
   id: string;

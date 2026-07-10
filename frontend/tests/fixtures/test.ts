@@ -18,32 +18,32 @@ type CommerceHubFixtures = {
 };
 
 export const test = base.extend<CommerceHubFixtures>({
-  adminDashboardPage: async ({ page }, useFixture) => {
-    await useFixture(new AdminDashboardPage(page));
+  adminDashboardPage: async ({ page }, provide) => {
+    await provide(new AdminDashboardPage(page));
   },
-  adminLayoutPage: async ({ page }, useFixture) => {
-    await useFixture(new AdminLayoutPage(page));
+  adminLayoutPage: async ({ page }, provide) => {
+    await provide(new AdminLayoutPage(page));
   },
-  aiProductGeneratorPage: async ({ page }, useFixture) => {
-    await useFixture(new AIProductGeneratorPage(page));
+  aiProductGeneratorPage: async ({ page }, provide) => {
+    await provide(new AIProductGeneratorPage(page));
   },
-  analyticsPage: async ({ page }, useFixture) => {
-    await useFixture(new AnalyticsPage(page));
+  analyticsPage: async ({ page }, provide) => {
+    await provide(new AnalyticsPage(page));
   },
-  notificationsPage: async ({ page }, useFixture) => {
-    await useFixture(new NotificationsPage(page));
+  notificationsPage: async ({ page }, provide) => {
+    await provide(new NotificationsPage(page));
   },
-  settingsPage: async ({ page }, useFixture) => {
-    await useFixture(new SettingsPage(page));
-  },
+  settingsPage: async ({ page }, provide) => {
+    await provide(new SettingsPage(page));
+  }
 });
 
 export const enterpriseTest = test.extend({
-  page: async ({ page }, useFixture) => {
+  page: async ({ page }, provide) => {
     await mockAdminApis(page);
     await mockAIProductDescriptionSuccess(page);
-    await useFixture(page);
-  },
+    await provide(page);
+  }
 });
 
 export { expect } from "@playwright/test";

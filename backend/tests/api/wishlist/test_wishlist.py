@@ -108,4 +108,3 @@ def test_non_customer_cannot_manage_wishlist(client, seller_headers, product_cat
 
     assert response.status_code == 403, response.text
     assert response.json()["message"] == "Customer access is required"
-

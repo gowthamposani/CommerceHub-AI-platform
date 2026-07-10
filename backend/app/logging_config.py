@@ -58,4 +58,3 @@ error_logger = logging.getLogger("commercehub.error")
 database_logger = logging.getLogger("commercehub.database")
 startup_logger = logging.getLogger("commercehub.startup")
 shutdown_logger = logging.getLogger("commercehub.shutdown")
-

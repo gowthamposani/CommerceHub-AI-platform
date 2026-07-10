@@ -1,6 +1,6 @@
-import type { APIRequestContext } from '@playwright/test';
+import type { APIRequestContext } from "@playwright/test";
 
-import { ApiClientUtility } from '../../utils/api-client.utility';
+import { ApiClientUtility } from "../../utils/api-client.utility";
 
 export class ProtectedRoutePage extends ApiClientUtility {
   constructor(request: APIRequestContext) {
@@ -8,9 +8,7 @@ export class ProtectedRoutePage extends ApiClientUtility {
   }
 
   currentUser(accessToken?: string) {
-    const headers: Record<string, string> = accessToken
-      ? { Authorization: `Bearer ${accessToken}` }
-      : {};
-    return this.get('/auth/me', headers);
+    const headers: Record<string, string> = accessToken ? { Authorization: `Bearer ${accessToken}` } : {};
+    return this.get("/auth/me", headers);
   }
 }

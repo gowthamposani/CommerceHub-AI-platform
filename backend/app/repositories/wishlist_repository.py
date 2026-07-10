@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-from typing import Optional
 from uuid import UUID
 
 from sqlalchemy import column, inspect, select, table
@@ -27,7 +26,7 @@ class WishlistRepository:
         stmt = select(Wishlist).where(Wishlist.customer_id == customer_id).order_by(Wishlist.created_at.desc())
         return list(self.session.scalars(stmt).all())
 
-    def get_item(self, customer_id: UUID, product_id: UUID) -> Optional[Wishlist]:
+    def get_item(self, customer_id: UUID, product_id: UUID) -> Wishlist | None:
         """Return a wishlist item for the given customer and product."""
 
         stmt = select(Wishlist).where(Wishlist.customer_id == customer_id, Wishlist.product_id == product_id)

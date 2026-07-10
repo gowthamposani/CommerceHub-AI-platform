@@ -3,10 +3,11 @@
 from __future__ import annotations
 
 from datetime import datetime
-from typing import TYPE_CHECKING, Optional
+from typing import TYPE_CHECKING
 from uuid import UUID, uuid4
 
-from sqlalchemy import DateTime, Enum as SAEnum, ForeignKey, String, func
+from sqlalchemy import DateTime, ForeignKey, String, func
+from sqlalchemy import Enum as SAEnum
 from sqlalchemy.dialects.postgresql import UUID as PGUUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -14,8 +15,8 @@ from app.database.base import Base
 from app.models.enums import UserStatus
 
 if TYPE_CHECKING:  # pragma: no cover - typing only
-    from app.models.cart import Cart
     from app.models.address import Address
+    from app.models.cart import Cart
     from app.models.order import Order
     from app.models.refresh_token import RefreshToken
     from app.models.role import Role
@@ -60,34 +61,34 @@ class User(Base):
         onupdate=func.now(),
         nullable=False,
     )
-    last_login_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), nullable=True)
+    last_login_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
 
-    role: Mapped["Role"] = relationship(back_populates="users", lazy="joined")
-    refresh_tokens: Mapped[list["RefreshToken"]] = relationship(
+    role: Mapped[Role] = relationship(back_populates="users", lazy="joined")
+    refresh_tokens: Mapped[list[RefreshToken]] = relationship(
         back_populates="user",
         cascade="all, delete-orphan",
         lazy="selectin",
     )
-    addresses: Mapped[list["Address"]] = relationship(
+    addresses: Mapped[list[Address]] = relationship(
         back_populates="customer",
         cascade="all, delete-orphan",
         lazy="selectin",
         order_by=lambda: (Address.is_default.desc(), Address.created_at.asc()),
     )
-    cart: Mapped[Optional["Cart"]] = relationship(
+    cart: Mapped[Cart | None] = relationship(
         back_populates="customer",
         uselist=False,
         lazy="joined",
         passive_deletes=True,
     )
-    orders: Mapped[list["Order"]] = relationship(
+    orders: Mapped[list[Order]] = relationship(
         back_populates="customer",
         cascade="all, delete-orphan",
         lazy="selectin",
         passive_deletes=True,
         order_by=lambda: Order.created_at.desc(),
     )
-    wishlist_items: Mapped[list["Wishlist"]] = relationship(
+    wishlist_items: Mapped[list[Wishlist]] = relationship(
         back_populates="customer",
         cascade="all, delete-orphan",
         lazy="selectin",

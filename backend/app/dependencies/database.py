@@ -11,4 +11,3 @@ async def get_db_session() -> AsyncGenerator[AsyncSession, None]:
     """Provide a request-scoped async database session."""
     async for session in get_async_session():
         yield session
-

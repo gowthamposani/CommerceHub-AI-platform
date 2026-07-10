@@ -1,13 +1,13 @@
-import { customerJourneyConfig } from '../config/customer-journey.config';
-import { RandomUtility } from '../utils/random.utility';
-import type { CustomerJourneyTestData } from '../types/customer.types';
+import { customerJourneyConfig } from "../config/customer-journey.config";
+import { RandomUtility } from "../utils/random.utility";
+import type { CustomerJourneyTestData } from "../types/customer.types";
 
-const FIRST_NAME = 'Manasa';
-const LAST_NAME = 'Athi';
+const FIRST_NAME = "Manasa";
+const LAST_NAME = "Athi";
 
 export class CustomerJourneyTestDataFactory {
   static create(): CustomerJourneyTestData {
-    const email = RandomUtility.email('customer-journey');
+    const email = RandomUtility.email("customer-journey");
     const customerFullName = `${FIRST_NAME} ${LAST_NAME}`;
 
     return {
@@ -16,20 +16,20 @@ export class CustomerJourneyTestDataFactory {
         last_name: LAST_NAME,
         email,
         password: customerJourneyConfig.customerPassword,
-        role: 'customer',
+        role: "customer"
       },
       customerFullName,
       login: {
         email,
-        password: customerJourneyConfig.customerPassword,
+        password: customerJourneyConfig.customerPassword
       },
       invalidLogin: {
         email,
-        password: `${customerJourneyConfig.customerPassword}!wrong`,
+        password: `${customerJourneyConfig.customerPassword}!wrong`
       },
-      paymentReference: RandomUtility.suffix('payment'),
+      paymentReference: RandomUtility.suffix("payment"),
       preferredProductTitle: customerJourneyConfig.preferredProductTitle,
-      preferredProductId: customerJourneyConfig.preferredProductId,
+      preferredProductId: customerJourneyConfig.preferredProductId
     };
   }
 }

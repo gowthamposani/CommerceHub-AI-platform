@@ -1,9 +1,9 @@
-import { Outlet, Link } from 'react-router-dom';
-import { ArrowRight, Sparkles, UserRound, LogIn } from 'lucide-react';
+import { Outlet, Link } from "react-router-dom";
+import { ArrowRight, Sparkles, UserRound, LogIn } from "lucide-react";
 
-import { appConfig } from '../config';
-import { ButtonLink } from '../components/ui';
-import { useAuth } from '../auth/use-auth';
+import { appConfig } from "../config";
+import { ButtonLink } from "../components/ui";
+import { useAuth } from "../auth/use-auth";
 
 export function PublicLayout(): React.ReactElement {
   const { isAuthenticated } = useAuth();
@@ -23,8 +23,8 @@ export function PublicLayout(): React.ReactElement {
 
         <nav className="flex items-center gap-3">
           {isAuthenticated ? (
-            <ButtonLink to="/home" variant="primary">.  
-              Go to home <ArrowRight className="h-4 w-4" />
+            <ButtonLink to="/home" variant="primary">
+              . Go to home <ArrowRight className="h-4 w-4" />
             </ButtonLink>
           ) : (
             <>

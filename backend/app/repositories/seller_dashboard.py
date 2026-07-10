@@ -35,9 +35,7 @@ class SellerDashboardRepository:
 
     async def get_seller(self, seller_id: UUID) -> Seller | None:
         """Return an active seller profile."""
-        result = await self.session.execute(
-            select(Seller).where(Seller.id == seller_id, Seller.is_deleted.is_(False))
-        )
+        result = await self.session.execute(select(Seller).where(Seller.id == seller_id, Seller.is_deleted.is_(False)))
         return result.scalar_one_or_none()
 
     async def product_metrics(self, seller_id: UUID, start_at: datetime, end_at: datetime) -> ProductMetrics:
@@ -118,9 +116,7 @@ class SellerDashboardRepository:
         used_capacity = sum(int(point.value) for point in capacity)
         utilization = Decimal("0.00")
         if total_capacity > 0:
-            utilization = (Decimal(used_capacity) / Decimal(total_capacity) * Decimal("100")).quantize(
-                Decimal("0.01")
-            )
+            utilization = (Decimal(used_capacity) / Decimal(total_capacity) * Decimal("100")).quantize(Decimal("0.01"))
         return WarehouseMetrics(
             total_warehouses=int(row[0] or 0),
             active_warehouses=int(row[1] or 0),
@@ -458,17 +454,21 @@ class SellerDashboardRepository:
 
     def _inventory_search_statement(self, seller_id: UUID, pattern: str) -> Select[tuple[DashboardSearchResult]]:
         """Build inventory search projection."""
-        return select(
-            Inventory.id.label("id"),
-            Inventory.sku.label("label"),
-            Product.product_name.label("description"),
-            Inventory.status.label("status"),
-            Inventory.created_at.label("created_at"),
-        ).join(Product, Inventory.product_id == Product.id).where(
-            Product.seller_id == seller_id,
-            Product.is_deleted.is_(False),
-            Inventory.is_deleted.is_(False),
-            or_(Inventory.sku.ilike(pattern), Product.product_name.ilike(pattern)),
+        return (
+            select(
+                Inventory.id.label("id"),
+                Inventory.sku.label("label"),
+                Product.product_name.label("description"),
+                Inventory.status.label("status"),
+                Inventory.created_at.label("created_at"),
+            )
+            .join(Product, Inventory.product_id == Product.id)
+            .where(
+                Product.seller_id == seller_id,
+                Product.is_deleted.is_(False),
+                Inventory.is_deleted.is_(False),
+                or_(Inventory.sku.ilike(pattern), Product.product_name.ilike(pattern)),
+            )
         )
 
     def _warehouse_search_statement(self, seller_id: UUID, pattern: str) -> Select[tuple[DashboardSearchResult]]:

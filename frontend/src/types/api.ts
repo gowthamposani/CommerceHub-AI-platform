@@ -4,5 +4,4 @@ export interface ApiEnvelope<T> {
   data: T;
 }
 
-export type RequestStatus = 'idle' | 'loading' | 'success' | 'error';
-
+export type RequestStatus = "idle" | "loading" | "success" | "error";

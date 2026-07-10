@@ -16,7 +16,7 @@ export function CategoryTable({ categories }: CategoryTableProps) {
       return categories;
     }
     return categories.filter((category) =>
-      [category.name, category.description].some((value) => value.toLowerCase().includes(search)),
+      [category.name, category.description].some((value) => value.toLowerCase().includes(search))
     );
   }, [categories, query]);
 
@@ -57,9 +57,7 @@ export function CategoryTable({ categories }: CategoryTableProps) {
               {filteredCategories.map((category) => (
                 <tr key={category.id} className="hover:bg-slate-50 dark:hover:bg-slate-950">
                   <td className="whitespace-nowrap px-5 py-4 font-medium">{category.name}</td>
-                  <td className="min-w-72 px-5 py-4 text-slate-600 dark:text-slate-300">
-                    {category.description}
-                  </td>
+                  <td className="min-w-72 px-5 py-4 text-slate-600 dark:text-slate-300">{category.description}</td>
                   <td className="whitespace-nowrap px-5 py-4">
                     <span className="rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-medium text-emerald-700 ring-1 ring-emerald-600/20 dark:bg-emerald-950 dark:text-emerald-300">
                       {category.isActive ? "Active" : "Inactive"}
@@ -74,7 +72,6 @@ export function CategoryTable({ categories }: CategoryTableProps) {
           </table>
         </div>
       </div>
-
     </section>
   );
 }

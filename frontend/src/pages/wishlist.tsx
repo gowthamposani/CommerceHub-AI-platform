@@ -1,14 +1,14 @@
-import { useEffect, useMemo, useState } from 'react';
-import { Heart, ShoppingCart, Trash2 } from 'lucide-react';
+import { useEffect, useMemo, useState } from "react";
+import { Heart, ShoppingCart, Trash2 } from "lucide-react";
 
-import { addCartItem } from '../api/cart';
-import { getProduct } from '../api/catalog';
-import { getApiErrorMessage } from '../api/error';
-import { getWishlist, moveWishlistItemToCart, removeWishlistItem } from '../api/wishlist';
-import type { Product, WishlistItem } from '../types/domain';
-import { Button, ButtonLink, EmptyState, LoadingScreen, SectionHeader, Alert } from '../components/ui';
-import { ProductCard } from '../components/product-card';
-import { shortId } from '../utils/format';
+import { addCartItem } from "../api/cart";
+import { getProduct } from "../api/catalog";
+import { getApiErrorMessage } from "../api/error";
+import { getWishlist, moveWishlistItemToCart, removeWishlistItem } from "../api/wishlist";
+import type { Product, WishlistItem } from "../types/domain";
+import { Button, ButtonLink, EmptyState, LoadingScreen, SectionHeader, Alert } from "../components/ui";
+import { ProductCard } from "../components/product-card";
+import { shortId } from "../utils/format";
 
 interface WishlistEntry {
   item: WishlistItem;
@@ -28,20 +28,22 @@ export function WishlistPage(): React.ReactElement {
 
     try {
       const items = await getWishlist();
-      const resolved = await Promise.allSettled(items.map(async (item) => ({ item, product: (await getProduct(item.product_id)).item })));
+      const resolved = await Promise.allSettled(
+        items.map(async (item) => ({ item, product: (await getProduct(item.product_id)).item }))
+      );
       const nextEntries = resolved.map((result, index) => {
-        if (result.status === 'fulfilled') {
+        if (result.status === "fulfilled") {
           return result.value;
         }
 
         return {
           item: items[index],
-          product: null,
+          product: null
         };
       });
       setEntries(nextEntries);
     } catch (requestError) {
-      setError(getApiErrorMessage(requestError, 'Unable to load wishlist right now.'));
+      setError(getApiErrorMessage(requestError, "Unable to load wishlist right now."));
     } finally {
       setLoading(false);
     }
@@ -61,9 +63,9 @@ export function WishlistPage(): React.ReactElement {
     try {
       await removeWishlistItem(productId);
       await loadWishlist();
-      setMessage('Wishlist item removed.');
+      setMessage("Wishlist item removed.");
     } catch (requestError) {
-      setError(getApiErrorMessage(requestError, 'Could not remove this wishlist item.'));
+      setError(getApiErrorMessage(requestError, "Could not remove this wishlist item."));
     } finally {
       setBusyProductId(null);
     }
@@ -80,7 +82,7 @@ export function WishlistPage(): React.ReactElement {
       await loadWishlist();
       setMessage(`${product?.title ?? `Product ${shortId(productId)}`} moved to cart.`);
     } catch (requestError) {
-      setError(getApiErrorMessage(requestError, 'Could not move this item to the cart.'));
+      setError(getApiErrorMessage(requestError, "Could not move this item to the cart."));
     } finally {
       setBusyProductId(null);
     }
@@ -96,11 +98,23 @@ export function WishlistPage(): React.ReactElement {
         eyebrow="Wishlist"
         title="Items you saved for later"
         description="Keep products ready for purchase and move them to the cart whenever you are ready."
-        action={<ButtonLink to="/products" variant="secondary">Continue shopping</ButtonLink>}
+        action={
+          <ButtonLink to="/products" variant="secondary">
+            Continue shopping
+          </ButtonLink>
+        }
       />
 
-      {message ? <Alert tone="success" title="Wishlist updated">{message}</Alert> : null}
-      {error ? <Alert tone="danger" title="Wishlist error">{error}</Alert> : null}
+      {message ? (
+        <Alert tone="success" title="Wishlist updated">
+          {message}
+        </Alert>
+      ) : null}
+      {error ? (
+        <Alert tone="danger" title="Wishlist error">
+          {error}
+        </Alert>
+      ) : null}
 
       {wishlistCount === 0 ? (
         <EmptyState
@@ -117,10 +131,10 @@ export function WishlistPage(): React.ReactElement {
               ({
                 id: item.product_id,
                 title: `Saved item ${shortId(item.product_id)}`,
-                description: 'Product details are not available yet.',
+                description: "Product details are not available yet.",
                 price: 0,
                 stock: 0,
-                status: 'unknown',
+                status: "unknown"
               } as Product);
 
             return (

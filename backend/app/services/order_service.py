@@ -3,15 +3,14 @@
 from __future__ import annotations
 
 from decimal import Decimal
-from typing import Optional
 from uuid import UUID
 
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
 from app.core.exceptions import AuthorizationError, ConflictError, NotFoundError
-from app.models.enums import RoleName
 from app.models.cart import CartItem
+from app.models.enums import RoleName
 from app.models.order import Order, OrderItem, OrderStatus
 from app.models.user import User
 from app.repositories.cart_repository import CartRepository
@@ -71,7 +70,7 @@ class OrderService:
             raise ConflictError("Product is out of stock")
         return stock
 
-    def _get_product_title(self, snapshot: dict[str, object]) -> Optional[str]:
+    def _get_product_title(self, snapshot: dict[str, object]) -> str | None:
         title = snapshot.get("title")
         if title is None:
             title = snapshot.get("name")
@@ -141,7 +140,7 @@ class OrderService:
             raise ConflictError("Cart is empty")
 
         try:
-            cart_items = sorted(list(cart.items), key=lambda item: str(item.product_id))
+            cart_items = sorted(cart.items, key=lambda item: str(item.product_id))
             line_items: list[tuple[CartItem, Decimal, dict[str, object]]] = []
             total_amount = Decimal("0.00")
 
@@ -208,7 +207,7 @@ class OrderService:
             if order.status not in cancellable_states:
                 raise ConflictError("Order can only be cancelled before shipment")
 
-            for item in sorted(list(order.items), key=lambda order_item: str(order_item.product_id)):
+            for item in sorted(order.items, key=lambda order_item: str(order_item.product_id)):
                 snapshot = self.orders.get_product_snapshot(item.product_id, for_update=True)
                 if snapshot is None:
                     raise NotFoundError("Product not found")

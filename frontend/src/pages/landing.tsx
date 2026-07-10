@@ -1,25 +1,17 @@
-import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import {
-  ArrowRight,
-  Heart,
-  PackageSearch,
-  ShieldCheck,
-  ShoppingCart,
-  Sparkles,
-  Truck,
-} from 'lucide-react';
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { ArrowRight, Heart, PackageSearch, ShieldCheck, ShoppingCart, Sparkles, Truck } from "lucide-react";
 
-import { listProducts } from '../api/catalog';
-import { ButtonLink, Card, SectionBadge, SectionHeader } from '../components/ui';
-import { ProductCard } from '../components/product-card';
-import type { Product } from '../types/domain';
-import { getApiErrorMessage } from '../api/error';
-import { Alert, LoadingScreen, EmptyState } from '../components/ui';
+import { listProducts } from "../api/catalog";
+import { ButtonLink, Card, SectionBadge, SectionHeader } from "../components/ui";
+import { ProductCard } from "../components/product-card";
+import type { Product } from "../types/domain";
+import { getApiErrorMessage } from "../api/error";
+import { Alert, LoadingScreen, EmptyState } from "../components/ui";
 
 export function LandingPage(): React.ReactElement {
   const [products, setProducts] = useState<Product[]>([]);
-  const [source, setSource] = useState<'api' | 'demo'>('demo');
+  const [source, setSource] = useState<"api" | "demo">("demo");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -41,7 +33,7 @@ export function LandingPage(): React.ReactElement {
         if (cancelled) {
           return;
         }
-        setError(getApiErrorMessage(requestError, 'Unable to load featured products'));
+        setError(getApiErrorMessage(requestError, "Unable to load featured products"));
       } finally {
         if (!cancelled) {
           setLoading(false);
@@ -66,8 +58,8 @@ export function LandingPage(): React.ReactElement {
               Shop with a calm, modern experience that feels effortless from first browse to checkout.
             </h1>
             <p className="max-w-2xl text-base leading-8 text-brand-muted sm:text-lg">
-              CommerceHub AI brings together products, wishlist, cart, checkout, orders, and profile
-              management into a polished customer workspace built on secure JWT sessions.
+              CommerceHub AI brings together products, wishlist, cart, checkout, orders, and profile management into a
+              polished customer workspace built on secure JWT sessions.
             </p>
           </div>
 
@@ -79,16 +71,19 @@ export function LandingPage(): React.ReactElement {
             <ButtonLink to="/login" variant="secondary">
               Sign in
             </ButtonLink>
-            <Link to="/products" className="text-sm font-semibold text-brand-primaryDark underline-offset-4 hover:underline">
+            <Link
+              to="/products"
+              className="text-sm font-semibold text-brand-primaryDark underline-offset-4 hover:underline"
+            >
               Explore products
             </Link>
           </div>
 
           <div className="grid gap-4 sm:grid-cols-3">
             {[
-              { label: 'Secure JWT access', icon: ShieldCheck },
-              { label: 'Wishlist and cart', icon: Heart },
-              { label: 'Tracked orders', icon: PackageSearch },
+              { label: "Secure JWT access", icon: ShieldCheck },
+              { label: "Wishlist and cart", icon: Heart },
+              { label: "Tracked orders", icon: PackageSearch }
             ].map((item) => (
               <Card key={item.label} className="p-4">
                 <div className="flex items-start gap-3">
@@ -117,15 +112,13 @@ export function LandingPage(): React.ReactElement {
 
             <div className="grid gap-4 sm:grid-cols-2">
               {[
-                { label: 'Orders placed today', value: '24' },
-                { label: 'Saved addresses', value: '6' },
-                { label: 'Wishlisted products', value: '18' },
-                { label: 'Checkout completion', value: '92%' },
+                { label: "Orders placed today", value: "24" },
+                { label: "Saved addresses", value: "6" },
+                { label: "Wishlisted products", value: "18" },
+                { label: "Checkout completion", value: "92%" }
               ].map((item) => (
                 <Card key={item.label} className="border-brand-border/80 bg-white/85 p-4">
-                  <p className="text-xs font-semibold uppercase tracking-[0.24em] text-brand-muted">
-                    {item.label}
-                  </p>
+                  <p className="text-xs font-semibold uppercase tracking-[0.24em] text-brand-muted">{item.label}</p>
                   <p className="mt-3 text-2xl font-semibold text-brand-text">{item.value}</p>
                 </Card>
               ))}
@@ -149,24 +142,24 @@ export function LandingPage(): React.ReactElement {
           {[
             {
               icon: ShoppingCart,
-              title: 'Cart management',
-              text: 'Add products, adjust quantities, and review totals before checkout.',
+              title: "Cart management",
+              text: "Add products, adjust quantities, and review totals before checkout."
             },
             {
               icon: Heart,
-              title: 'Wishlist saving',
-              text: 'Keep products ready for later and move them into the cart when you are ready.',
+              title: "Wishlist saving",
+              text: "Keep products ready for later and move them into the cart when you are ready."
             },
             {
               icon: Truck,
-              title: 'Order tracking',
-              text: 'Review placed, confirmed, shipped, and delivered statuses from one dashboard.',
+              title: "Order tracking",
+              text: "Review placed, confirmed, shipped, and delivered statuses from one dashboard."
             },
             {
               icon: ShieldCheck,
-              title: 'Protected profile',
-              text: 'Update your name, manage addresses, and keep your account data current.',
-            },
+              title: "Protected profile",
+              text: "Update your name, manage addresses, and keep your account data current."
+            }
           ].map((item) => (
             <Card key={item.title} className="p-5">
               <div className="rounded-2xl bg-brand-secondary p-3 text-brand-primaryDark">
@@ -184,14 +177,17 @@ export function LandingPage(): React.ReactElement {
           eyebrow="Featured products"
           title="Start with a few curated picks"
           description={
-            source === 'demo'
-              ? 'The catalog fallback is active here, which keeps the frontend usable until the product module is fully connected.'
-              : 'These are live products from the backend catalog.'
+            source === "demo"
+              ? "The catalog fallback is active here, which keeps the frontend usable until the product module is fully connected."
+              : "These are live products from the backend catalog."
           }
         />
 
         {loading ? (
-          <LoadingScreen title="Loading featured products" description="Pulling the latest catalog picks into the landing page." />
+          <LoadingScreen
+            title="Loading featured products"
+            description="Pulling the latest catalog picks into the landing page."
+          />
         ) : error ? (
           <EmptyState
             icon={<PackageSearch className="h-8 w-8" />}
@@ -214,15 +210,13 @@ export function LandingPage(): React.ReactElement {
                 product={product}
                 href={`/products/${product.id}`}
                 highlight
-                sourceLabel={source === 'demo' ? 'Preview' : 'Live'}
+                sourceLabel={source === "demo" ? "Preview" : "Live"}
                 actions={
                   <>
                     <ButtonLink to={`/products/${product.id}`} variant="secondary">
                       View details
                     </ButtonLink>
-                    <ButtonLink to="/register">
-                      Join to shop
-                    </ButtonLink>
+                    <ButtonLink to="/register">Join to shop</ButtonLink>
                   </>
                 }
               />

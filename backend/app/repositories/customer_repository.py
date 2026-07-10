@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-from typing import Optional
 from uuid import UUID
 
 from sqlalchemy import select, update
@@ -19,7 +18,7 @@ class CustomerRepository:
     def __init__(self, session: Session) -> None:
         self.session = session
 
-    def get_customer_profile(self, customer_id: UUID) -> Optional[User]:
+    def get_customer_profile(self, customer_id: UUID) -> User | None:
         """Return a customer profile with addresses loaded."""
 
         stmt = select(User).options(selectinload(User.addresses)).where(User.id == customer_id)
@@ -35,13 +34,13 @@ class CustomerRepository:
         )
         return list(self.session.scalars(stmt).all())
 
-    def get_address_for_customer(self, customer_id: UUID, address_id: UUID) -> Optional[Address]:
+    def get_address_for_customer(self, customer_id: UUID, address_id: UUID) -> Address | None:
         """Return a single address owned by the customer."""
 
         stmt = select(Address).where(Address.customer_id == customer_id, Address.id == address_id)
         return self.session.scalar(stmt)
 
-    def get_default_address(self, customer_id: UUID) -> Optional[Address]:
+    def get_default_address(self, customer_id: UUID) -> Address | None:
         """Return the customer's default address, if any."""
 
         stmt = (
@@ -51,7 +50,7 @@ class CustomerRepository:
         )
         return self.session.scalar(stmt)
 
-    def get_fallback_address(self, customer_id: UUID, *, exclude_address_id: UUID) -> Optional[Address]:
+    def get_fallback_address(self, customer_id: UUID, *, exclude_address_id: UUID) -> Address | None:
         """Return another address that can become the default."""
 
         stmt = (
@@ -66,12 +65,12 @@ class CustomerRepository:
         *,
         customer_id: UUID,
         address_line_1: str,
-        address_line_2: Optional[str],
+        address_line_2: str | None,
         city: str,
         state: str,
         postal_code: str,
         country: str,
-        phone_number: Optional[str],
+        phone_number: str | None,
         is_default: bool,
     ) -> Address:
         """Create and flush a new address."""
@@ -92,7 +91,7 @@ class CustomerRepository:
         self.session.refresh(address)
         return address
 
-    def unset_default_addresses(self, customer_id: UUID, *, exclude_address_id: Optional[UUID] = None) -> None:
+    def unset_default_addresses(self, customer_id: UUID, *, exclude_address_id: UUID | None = None) -> None:
         """Clear the default flag for the customer addresses."""
 
         stmt = update(Address).where(Address.customer_id == customer_id)

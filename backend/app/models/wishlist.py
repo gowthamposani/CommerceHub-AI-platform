@@ -20,9 +20,7 @@ class Wishlist(Base):
     """Wishlist entry linking a customer to a product."""
 
     __tablename__ = "wishlist"
-    __table_args__ = (
-        UniqueConstraint("customer_id", "product_id", name="uq_wishlist_customer_product"),
-    )
+    __table_args__ = (UniqueConstraint("customer_id", "product_id", name="uq_wishlist_customer_product"),)
 
     id: Mapped[UUID] = mapped_column(PGUUID(as_uuid=True), primary_key=True, default=uuid4)
     customer_id: Mapped[UUID] = mapped_column(
@@ -44,7 +42,7 @@ class Wishlist(Base):
         nullable=False,
     )
 
-    customer: Mapped["User"] = relationship(back_populates="wishlist_items", lazy="joined")
+    customer: Mapped[User] = relationship(back_populates="wishlist_items", lazy="joined")
 
     def __repr__(self) -> str:  # pragma: no cover - debug helper
         return f"Wishlist(id={self.id!s}, customer_id={self.customer_id!s}, product_id={self.product_id!s})"

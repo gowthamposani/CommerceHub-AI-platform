@@ -1,10 +1,10 @@
-import axios, { type AxiosError, type InternalAxiosRequestConfig } from 'axios';
+import axios, { type AxiosError, type InternalAxiosRequestConfig } from "axios";
 
-import { appConfig } from '../config';
-import { authStorage } from '../auth/auth-storage';
-import { refreshAuthSession } from '../auth/auth-api';
-import type { AuthSession } from '../types/domain';
-import { toApiError } from './error';
+import { appConfig } from "../config";
+import { authStorage } from "../auth/auth-storage";
+import { refreshAuthSession } from "../auth/auth-api";
+import type { AuthSession } from "../types/domain";
+import { toApiError } from "./error";
 
 type RetryableConfig = InternalAxiosRequestConfig & { _retry?: boolean };
 let refreshSessionPromise: Promise<AuthSession> | null = null;
@@ -13,18 +13,18 @@ export const http = axios.create({
   baseURL: appConfig.apiBaseUrl,
   timeout: 15000,
   headers: {
-    Accept: 'application/json',
-    'Content-Type': 'application/json',
-  },
+    Accept: "application/json",
+    "Content-Type": "application/json"
+  }
 });
 
 const isAuthEndpoint = (url?: string): boolean =>
   Boolean(
     url &&
-      (url.includes('/auth/login') ||
-        url.includes('/auth/refresh') ||
-        url.includes('/auth/register') ||
-        url.includes('/auth/logout')),
+    (url.includes("/auth/login") ||
+      url.includes("/auth/refresh") ||
+      url.includes("/auth/register") ||
+      url.includes("/auth/logout"))
   );
 
 const refreshSession = (refreshToken: string): Promise<AuthSession> => {
@@ -71,5 +71,5 @@ http.interceptors.response.use(
     }
 
     return Promise.reject(toApiError(error));
-  },
+  }
 );

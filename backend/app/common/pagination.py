@@ -1,7 +1,7 @@
 """Pagination request and response helpers."""
 
 from math import ceil
-from typing import Generic, TypeVar
+from typing import TypeVar
 
 from pydantic import BaseModel, ConfigDict, Field, computed_field
 
@@ -40,7 +40,7 @@ class PageMeta(BaseModel):
     has_previous: bool
 
 
-class Page(BaseModel, Generic[T]):
+class Page[T](BaseModel):
     """Paginated response payload."""
 
     model_config = ConfigDict(arbitrary_types_allowed=True)
@@ -49,7 +49,7 @@ class Page(BaseModel, Generic[T]):
     meta: PageMeta
 
 
-def build_page(items: list[T], total_items: int, params: PaginationParams) -> Page[T]:
+def build_page[T](items: list[T], total_items: int, params: PaginationParams) -> Page[T]:
     """Build a paginated response from items and total count."""
     total_pages = ceil(total_items / params.page_size) if total_items else 0
     return Page(

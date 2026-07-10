@@ -1,28 +1,20 @@
-import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import {
-  ArrowLeft,
-  Heart,
-  Package,
-  Plus,
-  ShoppingCart,
-  Sparkles,
-  Minus,
-} from 'lucide-react';
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { ArrowLeft, Heart, Package, Plus, ShoppingCart, Sparkles, Minus } from "lucide-react";
 
-import { addCartItem } from '../../api/cart';
-import { addWishlistItem } from '../../api/wishlist';
-import { getProduct } from '../../api/catalog';
-import { getApiErrorMessage } from '../../api/error';
-import { Button, Card, EmptyState, Field, Input, LoadingScreen, Alert, Badge, ButtonLink } from '../../components/ui';
-import type { Product } from '../../types/domain';
-import { formatCurrency } from '../../utils/format';
-import { Button as UiButton } from '../../components/ui';
+import { addCartItem } from "../../api/cart";
+import { addWishlistItem } from "../../api/wishlist";
+import { getProduct } from "../../api/catalog";
+import { getApiErrorMessage } from "../../api/error";
+import { Button, Card, EmptyState, Field, Input, LoadingScreen, Alert, Badge, ButtonLink } from "../../components/ui";
+import type { Product } from "../../types/domain";
+import { formatCurrency } from "../../utils/format";
+import { Button as UiButton } from "../../components/ui";
 
 export function ProductDetailsPage(): React.ReactElement {
   const { productId } = useParams();
   const [product, setProduct] = useState<Product | null>(null);
-  const [source, setSource] = useState<'api' | 'demo'>('demo');
+  const [source, setSource] = useState<"api" | "demo">("demo");
   const [loading, setLoading] = useState(true);
   const [quantity, setQuantity] = useState(1);
   const [busy, setBusy] = useState(false);
@@ -34,7 +26,7 @@ export function ProductDetailsPage(): React.ReactElement {
 
     const load = async (): Promise<void> => {
       if (!productId) {
-        setError('Product id is missing from the route.');
+        setError("Product id is missing from the route.");
         setLoading(false);
         return;
       }
@@ -51,7 +43,7 @@ export function ProductDetailsPage(): React.ReactElement {
         setSource(result.source);
       } catch (requestError) {
         if (!cancelled) {
-          setError(getApiErrorMessage(requestError, 'Unable to load the selected product.'));
+          setError(getApiErrorMessage(requestError, "Unable to load the selected product."));
         }
       } finally {
         if (!cancelled) {
@@ -86,7 +78,7 @@ export function ProductDetailsPage(): React.ReactElement {
       await addCartItem({ product_id: product.id, quantity });
       setMessage(`${product.title} added to your cart.`);
     } catch (requestError) {
-      setError(getApiErrorMessage(requestError, 'Could not add this product to the cart.'));
+      setError(getApiErrorMessage(requestError, "Could not add this product to the cart."));
     } finally {
       setBusy(false);
     }
@@ -105,14 +97,16 @@ export function ProductDetailsPage(): React.ReactElement {
       await addWishlistItem({ product_id: product.id });
       setMessage(`${product.title} added to your wishlist.`);
     } catch (requestError) {
-      setError(getApiErrorMessage(requestError, 'Could not add this product to the wishlist.'));
+      setError(getApiErrorMessage(requestError, "Could not add this product to the wishlist."));
     } finally {
       setBusy(false);
     }
   };
 
   if (loading) {
-    return <LoadingScreen title="Loading product" description="Fetching detailed information for the selected product." />;
+    return (
+      <LoadingScreen title="Loading product" description="Fetching detailed information for the selected product." />
+    );
   }
 
   if (!product) {
@@ -120,7 +114,7 @@ export function ProductDetailsPage(): React.ReactElement {
       <EmptyState
         icon={<Package className="h-8 w-8" />}
         title="Product not found"
-        description={error ?? 'This item does not exist or is no longer available.'}
+        description={error ?? "This item does not exist or is no longer available."}
         action={
           <div className="flex flex-wrap justify-center gap-3">
             <ButtonLink to="/products" variant="primary">
@@ -143,15 +137,23 @@ export function ProductDetailsPage(): React.ReactElement {
           Back to products
         </ButtonLink>
         <div className="flex items-center gap-2">
-          <Badge tone={source === 'demo' ? 'warning' : 'success'}>{source === 'demo' ? 'Preview' : 'Live'}</Badge>
-          <Badge tone={product.stock > 0 ? 'success' : 'danger'}>
-            {product.stock > 0 ? `${product.stock} available` : 'Out of stock'}
+          <Badge tone={source === "demo" ? "warning" : "success"}>{source === "demo" ? "Preview" : "Live"}</Badge>
+          <Badge tone={product.stock > 0 ? "success" : "danger"}>
+            {product.stock > 0 ? `${product.stock} available` : "Out of stock"}
           </Badge>
         </div>
       </div>
 
-      {message ? <Alert tone="success" title="Action complete">{message}</Alert> : null}
-      {error ? <Alert tone="danger" title="Product action failed">{error}</Alert> : null}
+      {message ? (
+        <Alert tone="success" title="Action complete">
+          {message}
+        </Alert>
+      ) : null}
+      {error ? (
+        <Alert tone="danger" title="Product action failed">
+          {error}
+        </Alert>
+      ) : null}
 
       <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
         <Card className="overflow-hidden">
@@ -166,7 +168,9 @@ export function ProductDetailsPage(): React.ReactElement {
           <div className="space-y-5 p-6">
             <div>
               <h1 className="text-3xl font-semibold text-brand-text">{product.title}</h1>
-              <p className="mt-3 text-sm leading-7 text-brand-muted">{product.description ?? 'No description available yet.'}</p>
+              <p className="mt-3 text-sm leading-7 text-brand-muted">
+                {product.description ?? "No description available yet."}
+              </p>
             </div>
 
             <div className="grid gap-4 sm:grid-cols-3">
@@ -180,7 +184,7 @@ export function ProductDetailsPage(): React.ReactElement {
               </Card>
               <Card className="p-4">
                 <p className="text-xs font-semibold uppercase tracking-[0.24em] text-brand-muted">Category</p>
-                <p className="mt-2 text-xl font-semibold text-brand-text">{product.category_id ?? 'General'}</p>
+                <p className="mt-2 text-xl font-semibold text-brand-text">{product.category_id ?? "General"}</p>
               </Card>
             </div>
           </div>
@@ -224,9 +228,7 @@ export function ProductDetailsPage(): React.ReactElement {
 
             <div className="rounded-2xl bg-brand-secondary/50 px-4 py-3">
               <p className="text-xs font-semibold uppercase tracking-[0.24em] text-brand-muted">Estimated total</p>
-              <p className="mt-2 text-2xl font-semibold text-brand-text">
-                {formatCurrency(product.price * quantity)}
-              </p>
+              <p className="mt-2 text-2xl font-semibold text-brand-text">{formatCurrency(product.price * quantity)}</p>
             </div>
 
             <div className="grid gap-3 sm:grid-cols-2">

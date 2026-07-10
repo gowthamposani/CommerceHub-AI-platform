@@ -4,11 +4,12 @@ from __future__ import annotations
 
 from datetime import datetime
 from decimal import Decimal
-from enum import Enum
-from typing import TYPE_CHECKING, Optional
+from enum import StrEnum
+from typing import TYPE_CHECKING
 from uuid import UUID, uuid4
 
-from sqlalchemy import CheckConstraint, DateTime, Enum as SAEnum, ForeignKey, Integer, Numeric, String, func
+from sqlalchemy import CheckConstraint, DateTime, ForeignKey, Integer, Numeric, String, func
+from sqlalchemy import Enum as SAEnum
 from sqlalchemy.dialects.postgresql import UUID as PGUUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -18,7 +19,7 @@ if TYPE_CHECKING:  # pragma: no cover - typing only
     from app.models.user import User
 
 
-class OrderStatus(str, Enum):
+class OrderStatus(StrEnum):
     """Supported order lifecycle states."""
 
     PLACED = "placed"
@@ -34,9 +35,7 @@ class Order(Base):
     """Customer order created during checkout."""
 
     __tablename__ = "orders"
-    __table_args__ = (
-        CheckConstraint("total_amount >= 0", name="ck_orders_total_amount_non_negative"),
-    )
+    __table_args__ = (CheckConstraint("total_amount >= 0", name="ck_orders_total_amount_non_negative"),)
 
     id: Mapped[UUID] = mapped_column(PGUUID(as_uuid=True), primary_key=True, default=uuid4)
     customer_id: Mapped[UUID] = mapped_column(
@@ -45,7 +44,7 @@ class Order(Base):
         index=True,
         nullable=False,
     )
-    payment_id: Mapped[Optional[UUID]] = mapped_column(PGUUID(as_uuid=True), index=True, nullable=True)
+    payment_id: Mapped[UUID | None] = mapped_column(PGUUID(as_uuid=True), index=True, nullable=True)
     status: Mapped[OrderStatus] = mapped_column(
         SAEnum(
             OrderStatus,
@@ -70,8 +69,8 @@ class Order(Base):
         nullable=False,
     )
 
-    customer: Mapped["User"] = relationship(back_populates="orders", lazy="joined")
-    items: Mapped[list["OrderItem"]] = relationship(
+    customer: Mapped[User] = relationship(back_populates="orders", lazy="joined")
+    items: Mapped[list[OrderItem]] = relationship(
         back_populates="order",
         cascade="all, delete-orphan",
         lazy="selectin",
@@ -100,7 +99,7 @@ class OrderItem(Base):
         nullable=False,
     )
     product_id: Mapped[UUID] = mapped_column(PGUUID(as_uuid=True), index=True, nullable=False)
-    product_title: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
+    product_title: Mapped[str | None] = mapped_column(String(255), nullable=True)
     quantity: Mapped[int] = mapped_column(Integer, nullable=False)
     unit_price: Mapped[Decimal] = mapped_column(Numeric(12, 2), nullable=False)
     line_total: Mapped[Decimal] = mapped_column(Numeric(12, 2), nullable=False)
@@ -116,7 +115,7 @@ class OrderItem(Base):
         nullable=False,
     )
 
-    order: Mapped["Order"] = relationship(back_populates="items", lazy="joined")
+    order: Mapped[Order] = relationship(back_populates="items", lazy="joined")
 
     def __repr__(self) -> str:  # pragma: no cover - debug helper
         return (

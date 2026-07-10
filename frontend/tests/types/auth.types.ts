@@ -1,6 +1,6 @@
-export type RegistrationRole = 'customer' | 'seller';
-export type RoleName = 'customer' | 'seller' | 'admin';
-export type UserStatus = 'active' | 'pending_approval' | 'inactive' | 'suspended';
+export type RegistrationRole = "customer" | "seller";
+export type RoleName = "customer" | "seller" | "admin";
+export type UserStatus = "active" | "pending_approval" | "inactive" | "suspended";
 
 export interface AuthRegistrationPayload {
   first_name: string;
@@ -42,7 +42,7 @@ export interface AuthUser {
 export interface AuthTokenPair {
   access_token: string;
   refresh_token: string;
-  token_type: 'bearer';
+  token_type: "bearer";
   access_token_expires_at: string;
   refresh_token_expires_at: string;
 }
@@ -76,7 +76,7 @@ export interface BrowserStorageCookie {
   expires: number;
   httpOnly: boolean;
   secure: boolean;
-  sameSite: 'Lax' | 'None' | 'Strict';
+  sameSite: "Lax" | "None" | "Strict";
 }
 
 export interface BrowserStorageState {

@@ -18,9 +18,7 @@ export default function Users() {
     }
 
     return users.filter((user) =>
-      [user.fullName, user.email, user.role, user.status].some((value) =>
-        value.toLowerCase().includes(search),
-      ),
+      [user.fullName, user.email, user.role, user.status].some((value) => value.toLowerCase().includes(search))
     );
   }, [query, users]);
 
@@ -29,9 +27,7 @@ export default function Users() {
       <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div>
           <h2 className="text-2xl font-semibold">Users</h2>
-          <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
-            Monitor accounts, access, and status
-          </p>
+          <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">Monitor accounts, access, and status</p>
         </div>
         <button
           className="inline-flex h-10 items-center justify-center gap-2 rounded-admin bg-admin-gold px-4 text-sm font-medium text-white transition hover:bg-[#B67B24]"

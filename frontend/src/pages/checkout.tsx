@@ -1,11 +1,11 @@
-import { useEffect, useMemo, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { CreditCard, MapPin, PackageCheck, Sparkles } from 'lucide-react';
+import { useEffect, useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { CreditCard, MapPin, PackageCheck, Sparkles } from "lucide-react";
 
-import { checkoutOrder } from '../api/order';
-import { getCart } from '../api/cart';
-import { getCustomerProfile } from '../api/customer';
-import { getApiErrorMessage } from '../api/error';
+import { checkoutOrder } from "../api/order";
+import { getCart } from "../api/cart";
+import { getCustomerProfile } from "../api/customer";
+import { getApiErrorMessage } from "../api/error";
 import {
   Alert,
   Button,
@@ -15,18 +15,18 @@ import {
   Field,
   Input,
   LoadingScreen,
-  SectionHeader,
-} from '../components/ui';
-import { formatCurrency } from '../utils/format';
-import type { Address, Cart } from '../types/domain';
+  SectionHeader
+} from "../components/ui";
+import { formatCurrency } from "../utils/format";
+import type { Address, Cart } from "../types/domain";
 
 export function CheckoutPage(): React.ReactElement {
   const navigate = useNavigate();
   const [cart, setCart] = useState<Cart | null>(null);
   const [addresses, setAddresses] = useState<Address[]>([]);
   const [loading, setLoading] = useState(true);
-  const [selectedAddressId, setSelectedAddressId] = useState<string>('');
-  const [paymentReference, setPaymentReference] = useState('');
+  const [selectedAddressId, setSelectedAddressId] = useState<string>("");
+  const [paymentReference, setPaymentReference] = useState("");
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -44,15 +44,16 @@ export function CheckoutPage(): React.ReactElement {
         return;
       }
 
-      if (cartResult.status === 'fulfilled') {
+      if (cartResult.status === "fulfilled") {
         setCart(cartResult.value);
       } else {
-        setError(getApiErrorMessage(cartResult.reason, 'Unable to load cart details.'));
+        setError(getApiErrorMessage(cartResult.reason, "Unable to load cart details."));
       }
 
-      if (profileResult.status === 'fulfilled') {
+      if (profileResult.status === "fulfilled") {
         setAddresses(profileResult.value.addresses);
-        const defaultAddress = profileResult.value.addresses.find((address) => address.is_default) ?? profileResult.value.addresses[0];
+        const defaultAddress =
+          profileResult.value.addresses.find((address) => address.is_default) ?? profileResult.value.addresses[0];
         if (defaultAddress) {
           setSelectedAddressId(defaultAddress.id);
         }
@@ -70,7 +71,7 @@ export function CheckoutPage(): React.ReactElement {
 
   const selectedAddress = useMemo(
     () => addresses.find((address) => address.id === selectedAddressId) ?? null,
-    [addresses, selectedAddressId],
+    [addresses, selectedAddressId]
   );
 
   const handleCheckout = async (): Promise<void> => {
@@ -80,19 +81,21 @@ export function CheckoutPage(): React.ReactElement {
 
     try {
       const order = await checkoutOrder({
-        payment_id: paymentReference.trim() ? paymentReference.trim() : undefined,
+        payment_id: paymentReference.trim() ? paymentReference.trim() : undefined
       });
-      setMessage('Your order was placed successfully.');
+      setMessage("Your order was placed successfully.");
       navigate(`/orders/${order.id}`, { replace: true });
     } catch (requestError) {
-      setError(getApiErrorMessage(requestError, 'Could not complete checkout.'));
+      setError(getApiErrorMessage(requestError, "Could not complete checkout."));
     } finally {
       setBusy(false);
     }
   };
 
   if (loading) {
-    return <LoadingScreen title="Loading checkout" description="Checking your cart and saved addresses before checkout." />;
+    return (
+      <LoadingScreen title="Loading checkout" description="Checking your cart and saved addresses before checkout." />
+    );
   }
 
   if (!cart || cart.items.length === 0) {
@@ -114,8 +117,16 @@ export function CheckoutPage(): React.ReactElement {
         description="The backend will validate stock, create the order transactionally, and clear the cart after success."
       />
 
-      {message ? <Alert tone="success" title="Order placed">{message}</Alert> : null}
-      {error ? <Alert tone="danger" title="Checkout error">{error}</Alert> : null}
+      {message ? (
+        <Alert tone="success" title="Order placed">
+          {message}
+        </Alert>
+      ) : null}
+      {error ? (
+        <Alert tone="danger" title="Checkout error">
+          {error}
+        </Alert>
+      ) : null}
 
       <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
         <Card className="space-y-5 p-6">
@@ -139,14 +150,18 @@ export function CheckoutPage(): React.ReactElement {
                 {addresses.map((address) => (
                   <option key={address.id} value={address.id}>
                     {address.address_line_1}, {address.city}
-                    {address.is_default ? ' (default)' : ''}
+                    {address.is_default ? " (default)" : ""}
                   </option>
                 ))}
               </select>
             </Field>
           )}
 
-          <Field label="Payment reference" htmlFor="payment-reference" hint="Optional if your payment flow supplies a reference ID.">
+          <Field
+            label="Payment reference"
+            htmlFor="payment-reference"
+            hint="Optional if your payment flow supplies a reference ID."
+          >
             <Input
               id="payment-reference"
               placeholder="Optional payment id"
@@ -163,7 +178,7 @@ export function CheckoutPage(): React.ReactElement {
                   <p className="text-sm font-semibold text-brand-text">Selected address</p>
                   <p className="mt-2 text-sm leading-6 text-brand-muted">
                     {selectedAddress.address_line_1}
-                    {selectedAddress.address_line_2 ? `, ${selectedAddress.address_line_2}` : ''}
+                    {selectedAddress.address_line_2 ? `, ${selectedAddress.address_line_2}` : ""}
                     <br />
                     {selectedAddress.city}, {selectedAddress.state} {selectedAddress.postal_code}
                     <br />

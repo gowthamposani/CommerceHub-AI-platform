@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Any, Optional
+from typing import Any
 from uuid import UUID
 
 from sqlalchemy import MetaData, Table, inspect, select
@@ -22,9 +22,9 @@ class CartRepository:
 
     def __init__(self, session: Session) -> None:
         self.session = session
-        self._products_table: Optional[Table[Any]] = None
+        self._products_table: Table[Any] | None = None
 
-    def get_cart(self, customer_id: UUID) -> Optional[Cart]:
+    def get_cart(self, customer_id: UUID) -> Cart | None:
         """Return a customer's cart with items loaded."""
 
         stmt = select(Cart).options(selectinload(Cart.items)).where(Cart.customer_id == customer_id)
@@ -43,7 +43,7 @@ class CartRepository:
         self.session.refresh(cart)
         return cart, True
 
-    def get_item_by_id(self, customer_id: UUID, item_id: UUID) -> Optional[CartItem]:
+    def get_item_by_id(self, customer_id: UUID, item_id: UUID) -> CartItem | None:
         """Return a cart item owned by the given customer."""
 
         stmt = (
@@ -53,7 +53,7 @@ class CartRepository:
         )
         return self.session.scalar(stmt)
 
-    def get_item_by_product(self, customer_id: UUID, product_id: UUID) -> Optional[CartItem]:
+    def get_item_by_product(self, customer_id: UUID, product_id: UUID) -> CartItem | None:
         """Return a cart item for a product owned by the given customer."""
 
         stmt = (
@@ -106,7 +106,7 @@ class CartRepository:
         self.session.flush()
         return cart
 
-    def _get_products_table(self) -> Optional[Table[Any]]:
+    def _get_products_table(self) -> Table[Any] | None:
         """Reflect the products table if it exists."""
 
         if self._products_table is not None:
@@ -128,17 +128,17 @@ class CartRepository:
 
         status = getattr(product, "status", None)
         if status is None and hasattr(product, "is_active"):
-            status = "active" if bool(getattr(product, "is_active")) else "inactive"
+            status = "active" if bool(product.is_active) else "inactive"
 
         return {
-            "id": getattr(product, "id"),
+            "id": product.id,
             "title": title,
             "price": price,
             "stock": stock,
             "status": status,
         }
 
-    def get_product_snapshot(self, product_id: UUID) -> Optional[dict[str, Any]]:
+    def get_product_snapshot(self, product_id: UUID) -> dict[str, Any] | None:
         """Return a reflected product row for validation and display."""
 
         if Product is not None:

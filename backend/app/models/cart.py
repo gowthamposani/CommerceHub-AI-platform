@@ -42,8 +42,8 @@ class Cart(Base):
         nullable=False,
     )
 
-    customer: Mapped["User"] = relationship(back_populates="cart", lazy="joined")
-    items: Mapped[list["CartItem"]] = relationship(
+    customer: Mapped[User] = relationship(back_populates="cart", lazy="joined")
+    items: Mapped[list[CartItem]] = relationship(
         back_populates="cart",
         cascade="all, delete-orphan",
         lazy="selectin",
@@ -86,7 +86,7 @@ class CartItem(Base):
         nullable=False,
     )
 
-    cart: Mapped["Cart"] = relationship(back_populates="items", lazy="joined")
+    cart: Mapped[Cart] = relationship(back_populates="items", lazy="joined")
 
     def __repr__(self) -> str:  # pragma: no cover - debug helper
         return (

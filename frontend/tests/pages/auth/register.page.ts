@@ -1,7 +1,7 @@
-import type { APIRequestContext } from '@playwright/test';
+import type { APIRequestContext } from "@playwright/test";
 
-import { ApiClientUtility } from '../../utils/api-client.utility';
-import type { AuthRegistrationPayload } from '../../types/auth.types';
+import { ApiClientUtility } from "../../utils/api-client.utility";
+import type { AuthRegistrationPayload } from "../../types/auth.types";
 
 export class RegisterPage extends ApiClientUtility {
   constructor(request: APIRequestContext) {
@@ -9,20 +9,20 @@ export class RegisterPage extends ApiClientUtility {
   }
 
   register(payload: AuthRegistrationPayload) {
-    return this.post('/auth/register', payload);
+    return this.post("/auth/register", payload);
   }
 
-  registerCustomer(payload: Omit<AuthRegistrationPayload, 'role'>) {
+  registerCustomer(payload: Omit<AuthRegistrationPayload, "role">) {
     return this.register({
       ...payload,
-      role: 'customer',
+      role: "customer"
     });
   }
 
-  registerSeller(payload: Omit<AuthRegistrationPayload, 'role'>) {
+  registerSeller(payload: Omit<AuthRegistrationPayload, "role">) {
     return this.register({
       ...payload,
-      role: 'seller',
+      role: "seller"
     });
   }
 }

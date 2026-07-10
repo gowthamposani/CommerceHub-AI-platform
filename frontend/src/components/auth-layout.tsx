@@ -1,14 +1,14 @@
-import { Link } from 'react-router-dom';
-import { BadgeCheck, ShieldCheck, Sparkles, Truck } from 'lucide-react';
+import { Link } from "react-router-dom";
+import { BadgeCheck, ShieldCheck, Sparkles, Truck } from "lucide-react";
 
-import { appConfig } from '../config';
-import { ButtonLink, Card, SectionBadge } from './ui';
+import { appConfig } from "../config";
+import { ButtonLink, Card, SectionBadge } from "./ui";
 
 export function AuthLayout({
   title,
   description,
   footer,
-  children,
+  children
 }: {
   title: string;
   description: string;
@@ -21,12 +21,8 @@ export function AuthLayout({
         <div className="absolute right-8 top-8 hidden h-40 w-40 rounded-full bg-white/40 blur-3xl lg:block" />
         <SectionBadge>Customer portal</SectionBadge>
         <div className="mt-6 max-w-2xl">
-          <p className="text-sm font-semibold uppercase tracking-[0.3em] text-brand-primaryDark">
-            {appConfig.appName}
-          </p>
-          <h1 className="mt-4 text-4xl font-semibold leading-tight text-brand-text sm:text-5xl">
-            {title}
-          </h1>
+          <p className="text-sm font-semibold uppercase tracking-[0.3em] text-brand-primaryDark">{appConfig.appName}</p>
+          <h1 className="mt-4 text-4xl font-semibold leading-tight text-brand-text sm:text-5xl">{title}</h1>
           <p className="mt-5 max-w-xl text-base leading-7 text-brand-muted">{description}</p>
         </div>
 
@@ -34,24 +30,24 @@ export function AuthLayout({
           {[
             {
               icon: ShieldCheck,
-              title: 'JWT secured',
-              text: 'Access, refresh, and protected routes stay aligned with backend session rules.',
+              title: "JWT secured",
+              text: "Access, refresh, and protected routes stay aligned with backend session rules."
             },
             {
               icon: Truck,
-              title: 'Shopping ready',
-              text: 'Browse products, save favorites, build carts, and check out in a clean flow.',
+              title: "Shopping ready",
+              text: "Browse products, save favorites, build carts, and check out in a clean flow."
             },
             {
               icon: BadgeCheck,
-              title: 'Customer first',
-              text: 'Profile and address management are built for repeat, low-friction ordering.',
+              title: "Customer first",
+              text: "Profile and address management are built for repeat, low-friction ordering."
             },
             {
               icon: Sparkles,
-              title: 'Polished theme',
-              text: 'Soft shadows, rounded surfaces, and gold accents keep the portal premium.',
-            },
+              title: "Polished theme",
+              text: "Soft shadows, rounded surfaces, and gold accents keep the portal premium."
+            }
           ].map((item) => (
             <Card key={item.title} className="bg-white/80 p-5">
               <div className="flex items-start gap-4">
@@ -84,4 +80,3 @@ export function AuthLayout({
     </div>
   );
 }
-

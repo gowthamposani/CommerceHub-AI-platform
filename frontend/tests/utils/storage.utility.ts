@@ -1,5 +1,5 @@
-import type { AuthSession, BrowserStorageState } from '../types/auth.types';
-import { e2eConfig, type E2EConfig } from '../config/e2e-config';
+import type { AuthSession, BrowserStorageState } from "../types/auth.types";
+import { e2eConfig, type E2EConfig } from "../config/e2e-config";
 
 export class StorageUtility {
   constructor(private readonly config: E2EConfig = e2eConfig) {}
@@ -13,15 +13,15 @@ export class StorageUtility {
           localStorage: [
             {
               name: this.config.storageKeys.session,
-              value: JSON.stringify(session),
+              value: JSON.stringify(session)
             },
             {
               name: this.config.storageKeys.rememberMe,
-              value: rememberMe ? 'true' : 'false',
-            },
-          ],
-        },
-      ],
+              value: rememberMe ? "true" : "false"
+            }
+          ]
+        }
+      ]
     };
   }
 
@@ -42,6 +42,6 @@ export class StorageUtility {
   extractRememberMe(storageState: BrowserStorageState): boolean {
     const originState = storageState.origins.find((origin) => origin.origin === this.config.appBaseUrl);
     const rememberItem = originState?.localStorage.find((item) => item.name === this.config.storageKeys.rememberMe);
-    return rememberItem?.value === 'true';
+    return rememberItem?.value === "true";
   }
 }

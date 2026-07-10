@@ -107,7 +107,11 @@ export default function WarehouseViewPage() {
               Edit
             </Button>
           </Link>
-          <Button disabled={warehouse.is_default} loading={defaultMutation.isPending} onClick={() => defaultMutation.mutate()}>
+          <Button
+            disabled={warehouse.is_default}
+            loading={defaultMutation.isPending}
+            onClick={() => defaultMutation.mutate()}
+          >
             <Star className="h-4 w-4" />
             Set Default
           </Button>

@@ -4,13 +4,12 @@ from __future__ import annotations
 
 import logging
 import time
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from uuid import uuid4
 
 from fastapi import Request
 from starlette.middleware.base import BaseHTTPMiddleware, RequestResponseEndpoint
 from starlette.responses import Response
-
 
 logger = logging.getLogger(__name__)
 
@@ -28,7 +27,7 @@ class RequestResponseLoggingMiddleware(BaseHTTPMiddleware):
         """Log request lifecycle metadata and attach request ID response header."""
         request_id = request.headers.get(REQUEST_ID_HEADER, str(uuid4()))
         started_at = time.perf_counter()
-        timestamp = datetime.now(timezone.utc).isoformat()
+        timestamp = datetime.now(UTC).isoformat()
         client_host = request.client.host if request.client else "unknown"
 
         log_context = {

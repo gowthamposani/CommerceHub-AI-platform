@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from datetime import datetime
-from typing import TYPE_CHECKING, Optional
+from typing import TYPE_CHECKING
 from uuid import UUID, uuid4
 
 from sqlalchemy import Boolean, DateTime, ForeignKey, String, func, text
@@ -29,12 +29,12 @@ class Address(Base):
         nullable=False,
     )
     address_line_1: Mapped[str] = mapped_column(String(255), nullable=False)
-    address_line_2: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
+    address_line_2: Mapped[str | None] = mapped_column(String(255), nullable=True)
     city: Mapped[str] = mapped_column(String(100), nullable=False)
     state: Mapped[str] = mapped_column(String(100), nullable=False)
     postal_code: Mapped[str] = mapped_column(String(20), nullable=False)
     country: Mapped[str] = mapped_column(String(100), nullable=False)
-    phone_number: Mapped[Optional[str]] = mapped_column(String(30), nullable=True)
+    phone_number: Mapped[str | None] = mapped_column(String(30), nullable=True)
     is_default: Mapped[bool] = mapped_column(
         Boolean,
         nullable=False,
@@ -53,7 +53,7 @@ class Address(Base):
         nullable=False,
     )
 
-    customer: Mapped["User"] = relationship(back_populates="addresses", lazy="joined")
+    customer: Mapped[User] = relationship(back_populates="addresses", lazy="joined")
 
     def __repr__(self) -> str:  # pragma: no cover - debug helper
         return f"Address(id={self.id!s}, customer_id={self.customer_id!s})"

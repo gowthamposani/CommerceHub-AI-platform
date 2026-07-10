@@ -1,25 +1,25 @@
-import { useEffect, useMemo, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { ArrowLeft, Ban, CheckCircle2, Clock3, Package, Truck } from 'lucide-react';
+import { useEffect, useMemo, useState } from "react";
+import { useParams } from "react-router-dom";
+import { ArrowLeft, Ban, CheckCircle2, Clock3, Package, Truck } from "lucide-react";
 
-import { cancelOrder, getOrder } from '../../api/order';
-import { getApiErrorMessage } from '../../api/error';
-import { Button, ButtonLink, Card, EmptyState, LoadingScreen, SectionHeader, Alert, Badge } from '../../components/ui';
-import { formatCurrency, formatDateTime, shortId } from '../../utils/format';
-import { getOrderStatusLabel, getOrderStatusTone } from '../../utils/status';
-import type { Order, OrderStatus } from '../../types/domain';
+import { cancelOrder, getOrder } from "../../api/order";
+import { getApiErrorMessage } from "../../api/error";
+import { Button, ButtonLink, Card, EmptyState, LoadingScreen, SectionHeader, Alert, Badge } from "../../components/ui";
+import { formatCurrency, formatDateTime, shortId } from "../../utils/format";
+import { getOrderStatusLabel, getOrderStatusTone } from "../../utils/status";
+import type { Order, OrderStatus } from "../../types/domain";
 
 const timeline: Array<{ status: OrderStatus; label: string; icon: React.ReactNode }> = [
-  { status: 'placed', label: 'Placed', icon: <Clock3 className="h-4 w-4" /> },
-  { status: 'confirmed', label: 'Confirmed', icon: <CheckCircle2 className="h-4 w-4" /> },
-  { status: 'packed', label: 'Packed', icon: <Package className="h-4 w-4" /> },
-  { status: 'shipped', label: 'Shipped', icon: <Truck className="h-4 w-4" /> },
-  { status: 'out_for_delivery', label: 'Out for delivery', icon: <Truck className="h-4 w-4" /> },
-  { status: 'delivered', label: 'Delivered', icon: <CheckCircle2 className="h-4 w-4" /> },
-  { status: 'cancelled', label: 'Cancelled', icon: <Ban className="h-4 w-4" /> },
+  { status: "placed", label: "Placed", icon: <Clock3 className="h-4 w-4" /> },
+  { status: "confirmed", label: "Confirmed", icon: <CheckCircle2 className="h-4 w-4" /> },
+  { status: "packed", label: "Packed", icon: <Package className="h-4 w-4" /> },
+  { status: "shipped", label: "Shipped", icon: <Truck className="h-4 w-4" /> },
+  { status: "out_for_delivery", label: "Out for delivery", icon: <Truck className="h-4 w-4" /> },
+  { status: "delivered", label: "Delivered", icon: <CheckCircle2 className="h-4 w-4" /> },
+  { status: "cancelled", label: "Cancelled", icon: <Ban className="h-4 w-4" /> }
 ];
 
-const cancellableStatuses: OrderStatus[] = ['placed', 'confirmed', 'packed'];
+const cancellableStatuses: OrderStatus[] = ["placed", "confirmed", "packed"];
 
 export function OrderDetailsPage(): React.ReactElement {
   const { orderId } = useParams();
@@ -34,7 +34,7 @@ export function OrderDetailsPage(): React.ReactElement {
 
     const load = async (): Promise<void> => {
       if (!orderId) {
-        setError('Order id is missing from the route.');
+        setError("Order id is missing from the route.");
         setLoading(false);
         return;
       }
@@ -49,7 +49,7 @@ export function OrderDetailsPage(): React.ReactElement {
         }
       } catch (requestError) {
         if (!cancelled) {
-          setError(getApiErrorMessage(requestError, 'Unable to load order details.'));
+          setError(getApiErrorMessage(requestError, "Unable to load order details."));
         }
       } finally {
         if (!cancelled) {
@@ -79,7 +79,7 @@ export function OrderDetailsPage(): React.ReactElement {
       return;
     }
 
-    if (!window.confirm('Cancel this order before it is shipped?')) {
+    if (!window.confirm("Cancel this order before it is shipped?")) {
       return;
     }
 
@@ -90,16 +90,21 @@ export function OrderDetailsPage(): React.ReactElement {
     try {
       const nextOrder = await cancelOrder(order.id);
       setOrder(nextOrder);
-      setMessage('Order cancelled successfully.');
+      setMessage("Order cancelled successfully.");
     } catch (requestError) {
-      setError(getApiErrorMessage(requestError, 'Could not cancel this order.'));
+      setError(getApiErrorMessage(requestError, "Could not cancel this order."));
     } finally {
       setBusy(false);
     }
   };
 
   if (loading) {
-    return <LoadingScreen title="Loading order details" description="Retrieving a complete breakdown of the selected order." />;
+    return (
+      <LoadingScreen
+        title="Loading order details"
+        description="Retrieving a complete breakdown of the selected order."
+      />
+    );
   }
 
   if (!order) {
@@ -107,7 +112,7 @@ export function OrderDetailsPage(): React.ReactElement {
       <EmptyState
         icon={<Package className="h-8 w-8" />}
         title="Order not found"
-        description={error ?? 'This order does not exist or you do not have access to it.'}
+        description={error ?? "This order does not exist or you do not have access to it."}
         action={<ButtonLink to="/orders">Back to orders</ButtonLink>}
       />
     );
@@ -123,8 +128,16 @@ export function OrderDetailsPage(): React.ReactElement {
         <Badge tone={getOrderStatusTone(order.status)}>{getOrderStatusLabel(order.status)}</Badge>
       </div>
 
-      {message ? <Alert tone="success" title="Order updated">{message}</Alert> : null}
-      {error ? <Alert tone="danger" title="Order error">{error}</Alert> : null}
+      {message ? (
+        <Alert tone="success" title="Order updated">
+          {message}
+        </Alert>
+      ) : null}
+      {error ? (
+        <Alert tone="danger" title="Order error">
+          {error}
+        </Alert>
+      ) : null}
 
       <SectionHeader
         eyebrow="Order details"
@@ -156,15 +169,15 @@ export function OrderDetailsPage(): React.ReactElement {
                   key={step.status}
                   className={`flex items-center gap-4 rounded-3xl border px-4 py-3 ${
                     isCurrent
-                      ? 'border-brand-primary bg-brand-primary/8'
+                      ? "border-brand-primary bg-brand-primary/8"
                       : isComplete
-                        ? 'border-emerald-200 bg-emerald-50/70'
-                        : 'border-brand-border bg-white'
+                        ? "border-emerald-200 bg-emerald-50/70"
+                        : "border-brand-border bg-white"
                   }`}
                 >
                   <div
                     className={`flex h-10 w-10 items-center justify-center rounded-full ${
-                      isComplete ? 'bg-brand-primary text-white' : 'bg-brand-secondary text-brand-primaryDark'
+                      isComplete ? "bg-brand-primary text-white" : "bg-brand-secondary text-brand-primaryDark"
                     }`}
                   >
                     {step.icon}
@@ -172,7 +185,7 @@ export function OrderDetailsPage(): React.ReactElement {
                   <div className="min-w-0 flex-1">
                     <p className="text-sm font-semibold text-brand-text">{step.label}</p>
                     <p className="mt-1 text-xs text-brand-muted">
-                      {isCurrent ? 'Current status' : isComplete ? 'Completed' : 'Pending'}
+                      {isCurrent ? "Current status" : isComplete ? "Completed" : "Pending"}
                     </p>
                   </div>
                   {isCurrent ? <Badge tone="primary">Active</Badge> : null}
@@ -223,7 +236,7 @@ export function OrderDetailsPage(): React.ReactElement {
 
           <div className="rounded-2xl bg-brand-secondary/40 px-4 py-3 text-xs text-brand-muted">
             Order ID: {order.id}
-            {order.payment_id ? ` · Payment reference: ${order.payment_id}` : ''}
+            {order.payment_id ? ` · Payment reference: ${order.payment_id}` : ""}
           </div>
         </Card>
       </div>

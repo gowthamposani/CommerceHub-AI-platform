@@ -1,8 +1,8 @@
-import { CustomerPortalAssertions } from '../../utils/customer-portal.assertions';
-import { expect, test } from '../../fixtures/customer.fixture';
+import { CustomerPortalAssertions } from "../../utils/customer-portal.assertions";
+import { expect, test } from "../../fixtures/customer.fixture";
 
-test.describe('Customer portal journey', () => {
-  test('registers, logs in, browses products, saves wishlist items, checks out, and logs out', async ({
+test.describe("Customer portal journey", () => {
+  test("registers, logs in, browses products, saves wishlist items, checks out, and logs out", async ({
     customerJourneyData,
     landingPage,
     registerPage,
@@ -16,9 +16,9 @@ test.describe('Customer portal journey', () => {
     checkoutPage,
     ordersPage,
     orderDetailsPage,
-    page,
+    page
   }) => {
-    await test.step('Register a new customer account', async () => {
+    await test.step("Register a new customer account", async () => {
       await landingPage.open();
       await landingPage.expectVisible();
       await landingPage.clickGetStarted();
@@ -30,7 +30,7 @@ test.describe('Customer portal journey', () => {
       await CustomerPortalAssertions.expectAuthenticatedShell(page);
     });
 
-    await test.step('Log out and sign back in with the same customer', async () => {
+    await test.step("Log out and sign back in with the same customer", async () => {
       await navigationPage.logout();
       await loginPage.expectVisible();
       await CustomerPortalAssertions.expectPublicAuthScreen(page);
@@ -41,9 +41,9 @@ test.describe('Customer portal journey', () => {
     });
 
     let selectedProductTitle = customerJourneyData.preferredProductTitle;
-    let selectedPriceText = '';
+    let selectedPriceText = "";
 
-    await test.step('Browse the catalog and view a product', async () => {
+    await test.step("Browse the catalog and view a product", async () => {
       await navigationPage.goToProducts();
       await productsPage.expectVisible();
 
@@ -55,7 +55,7 @@ test.describe('Customer portal journey', () => {
       await CustomerPortalAssertions.expectProductRoute(page, product.title, product.id);
     });
 
-    await test.step('Save the product to the wishlist and move it to the cart', async () => {
+    await test.step("Save the product to the wishlist and move it to the cart", async () => {
       await productDetailsPage.addToWishlist();
 
       await navigationPage.goToWishlist();
@@ -73,25 +73,25 @@ test.describe('Customer portal journey', () => {
         itemCount: 1,
         totalQuantity: 1,
         subtotalText: selectedPriceText,
-        grandTotalText: selectedPriceText,
+        grandTotalText: selectedPriceText
       });
       await CustomerPortalAssertions.expectCartSummary(page, {
         itemCount: 1,
         totalQuantity: 1,
         subtotalText: selectedPriceText,
-        grandTotalText: selectedPriceText,
+        grandTotalText: selectedPriceText
       });
     });
 
-    let orderId = '';
+    let orderId = "";
 
-    await test.step('Checkout and verify the order appears in history', async () => {
+    await test.step("Checkout and verify the order appears in history", async () => {
       await cartPage.proceedToCheckout();
       await checkoutPage.expectVisible();
       orderId = await checkoutPage.placeOrder(customerJourneyData.paymentReference);
 
       await orderDetailsPage.expectVisible(orderId);
-      await orderDetailsPage.expectStatus('Placed');
+      await orderDetailsPage.expectStatus("Placed");
 
       await navigationPage.goToOrders();
       await ordersPage.expectVisible();
@@ -102,7 +102,7 @@ test.describe('Customer portal journey', () => {
       await orderDetailsPage.expectVisible(orderId);
     });
 
-    await test.step('Log out of the customer portal', async () => {
+    await test.step("Log out of the customer portal", async () => {
       await navigationPage.logout();
       await loginPage.expectVisible();
       await expect(page).toHaveURL(/\/login$/);

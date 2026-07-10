@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from decimal import Decimal
-from typing import Any, Optional
+from typing import Any
 from uuid import UUID
 
 from sqlalchemy import MetaData, Table, inspect, select, update
@@ -24,7 +24,7 @@ class OrderRepository:
 
     def __init__(self, session: Session) -> None:
         self.session = session
-        self._products_table: Optional[Table[Any]] = None
+        self._products_table: Table[Any] | None = None
 
     def list_orders(self, customer_id: UUID) -> list[Order]:
         """Return the customer's orders ordered by recency."""
@@ -37,7 +37,7 @@ class OrderRepository:
         )
         return list(self.session.scalars(stmt).all())
 
-    def get_order(self, customer_id: UUID, order_id: UUID) -> Optional[Order]:
+    def get_order(self, customer_id: UUID, order_id: UUID) -> Order | None:
         """Return a single order owned by the customer."""
 
         stmt = (
@@ -52,7 +52,7 @@ class OrderRepository:
         *,
         customer_id: UUID,
         total_amount: Decimal,
-        payment_id: Optional[UUID] = None,
+        payment_id: UUID | None = None,
         status: OrderStatus = OrderStatus.PLACED,
     ) -> Order:
         """Create and flush a new order."""
@@ -73,7 +73,7 @@ class OrderRepository:
         *,
         order: Order,
         product_id: UUID,
-        product_title: Optional[str],
+        product_title: str | None,
         quantity: int,
         unit_price: Decimal,
         line_total: Decimal,
@@ -102,7 +102,7 @@ class OrderRepository:
         self.session.refresh(order)
         return order
 
-    def _get_products_table(self) -> Optional[Table[Any]]:
+    def _get_products_table(self) -> Table[Any] | None:
         """Reflect the products table if it exists."""
 
         if self._products_table is not None:
@@ -124,17 +124,17 @@ class OrderRepository:
 
         status = getattr(product, "status", None)
         if status is None and hasattr(product, "is_active"):
-            status = "active" if bool(getattr(product, "is_active")) else "inactive"
+            status = "active" if bool(product.is_active) else "inactive"
 
         return {
-            "id": getattr(product, "id"),
+            "id": product.id,
             "title": title,
             "price": price,
             "stock": stock,
             "status": status,
         }
 
-    def _stock_column_name(self, snapshot: dict[str, Any]) -> Optional[str]:
+    def _stock_column_name(self, snapshot: dict[str, Any]) -> str | None:
         """Return the stock field name used by the catalog row."""
 
         for field_name in ("stock", "inventory_count", "available_quantity", "quantity"):
@@ -142,7 +142,7 @@ class OrderRepository:
                 return field_name
         return None
 
-    def get_product_snapshot(self, product_id: UUID, *, for_update: bool = False) -> Optional[dict[str, Any]]:
+    def get_product_snapshot(self, product_id: UUID, *, for_update: bool = False) -> dict[str, Any] | None:
         """Return a product snapshot for validation and stock updates."""
 
         if Product is not None:
@@ -162,7 +162,7 @@ class OrderRepository:
         row = self.session.execute(stmt).mappings().first()
         return dict(row) if row is not None else None
 
-    def adjust_product_stock(self, product_id: UUID, quantity_delta: int) -> Optional[dict[str, Any]]:
+    def adjust_product_stock(self, product_id: UUID, quantity_delta: int) -> dict[str, Any] | None:
         """Adjust catalog stock after order placement or cancellation."""
 
         if Product is not None:
@@ -190,7 +190,7 @@ class OrderRepository:
 
             setattr(product, stock_attr, new_stock)
             if hasattr(product, "updated_at"):
-                setattr(product, "updated_at", utc_now())
+                product.updated_at = utc_now()
             self.session.flush()
             self.session.refresh(product)
             return self._serialize_product(product)
@@ -199,9 +199,11 @@ class OrderRepository:
         if products_table is None:
             raise NotFoundError("Product not found")
 
-        row = self.session.execute(
-            select(products_table).where(products_table.c.id == product_id).with_for_update()
-        ).mappings().first()
+        row = (
+            self.session.execute(select(products_table).where(products_table.c.id == product_id).with_for_update())
+            .mappings()
+            .first()
+        )
         if row is None:
             raise NotFoundError("Product not found")
 
@@ -221,11 +223,7 @@ class OrderRepository:
         if "updated_at" in products_table.c:
             update_values["updated_at"] = utc_now()
 
-        self.session.execute(
-            update(products_table)
-            .where(products_table.c.id == product_id)
-            .values(**update_values)
-        )
+        self.session.execute(update(products_table).where(products_table.c.id == product_id).values(**update_values))
         self.session.flush()
         return self.get_product_snapshot(product_id)
 

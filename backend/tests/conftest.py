@@ -6,10 +6,10 @@ from __future__ import annotations
 
 import os
 import sys
-from decimal import Decimal
+from collections.abc import Generator
 from datetime import timedelta
+from decimal import Decimal
 from pathlib import Path
-from typing import Generator
 from uuid import uuid4
 
 from sqlalchemy import Column, Integer, MetaData, Numeric, String, Table, text
@@ -50,7 +50,6 @@ from app.models.refresh_token import RefreshToken  # noqa: F401
 from app.models.role import Role  # noqa: F401
 from app.models.user import User  # noqa: F401
 from app.models.wishlist import Wishlist  # noqa: F401
-
 
 products_metadata = MetaData()
 products_table = Table(

@@ -1,11 +1,11 @@
-import { useEffect, useState } from 'react';
-import { Minus, Plus, ShoppingCart, Trash2, X } from 'lucide-react';
+import { useEffect, useState } from "react";
+import { Minus, Plus, ShoppingCart, Trash2, X } from "lucide-react";
 
-import { clearCart, deleteCartItem, getCart, updateCartQuantity } from '../api/cart';
-import { getApiErrorMessage } from '../api/error';
-import { Button, ButtonLink, Card, EmptyState, LoadingScreen, SectionHeader, Alert, Badge } from '../components/ui';
-import { formatCurrency, shortId } from '../utils/format';
-import type { Cart, CartItem } from '../types/domain';
+import { clearCart, deleteCartItem, getCart, updateCartQuantity } from "../api/cart";
+import { getApiErrorMessage } from "../api/error";
+import { Button, ButtonLink, Card, EmptyState, LoadingScreen, SectionHeader, Alert, Badge } from "../components/ui";
+import { formatCurrency, shortId } from "../utils/format";
+import type { Cart, CartItem } from "../types/domain";
 
 export function CartPage(): React.ReactElement {
   const [cart, setCart] = useState<Cart | null>(null);
@@ -21,7 +21,7 @@ export function CartPage(): React.ReactElement {
     try {
       setCart(await getCart());
     } catch (requestError) {
-      setError(getApiErrorMessage(requestError, 'Unable to load your cart right now.'));
+      setError(getApiErrorMessage(requestError, "Unable to load your cart right now."));
     } finally {
       setLoading(false);
     }
@@ -43,9 +43,9 @@ export function CartPage(): React.ReactElement {
     try {
       const nextCart = await updateCartQuantity(item.id, { quantity });
       setCart(nextCart);
-      setMessage('Cart quantity updated.');
+      setMessage("Cart quantity updated.");
     } catch (requestError) {
-      setError(getApiErrorMessage(requestError, 'Could not update this cart item.'));
+      setError(getApiErrorMessage(requestError, "Could not update this cart item."));
     } finally {
       setBusyItemId(null);
     }
@@ -59,25 +59,25 @@ export function CartPage(): React.ReactElement {
     try {
       const nextCart = await deleteCartItem(itemId);
       setCart(nextCart);
-      setMessage('Cart item removed.');
+      setMessage("Cart item removed.");
     } catch (requestError) {
-      setError(getApiErrorMessage(requestError, 'Could not remove this item from the cart.'));
+      setError(getApiErrorMessage(requestError, "Could not remove this item from the cart."));
     } finally {
       setBusyItemId(null);
     }
   };
 
   const handleClearCart = async (): Promise<void> => {
-    setBusyItemId('clear');
+    setBusyItemId("clear");
     setMessage(null);
     setError(null);
 
     try {
       const nextCart = await clearCart();
       setCart(nextCart);
-      setMessage('Cart cleared.');
+      setMessage("Cart cleared.");
     } catch (requestError) {
-      setError(getApiErrorMessage(requestError, 'Could not clear the cart.'));
+      setError(getApiErrorMessage(requestError, "Could not clear the cart."));
     } finally {
       setBusyItemId(null);
     }
@@ -105,8 +105,16 @@ export function CartPage(): React.ReactElement {
         }
       />
 
-      {message ? <Alert tone="success" title="Cart updated">{message}</Alert> : null}
-      {error ? <Alert tone="danger" title="Cart error">{error}</Alert> : null}
+      {message ? (
+        <Alert tone="success" title="Cart updated">
+          {message}
+        </Alert>
+      ) : null}
+      {error ? (
+        <Alert tone="danger" title="Cart error">
+          {error}
+        </Alert>
+      ) : null}
 
       {items.length === 0 ? (
         <EmptyState
@@ -201,7 +209,12 @@ export function CartPage(): React.ReactElement {
               <ButtonLink to="/checkout" fullWidth>
                 Proceed to checkout
               </ButtonLink>
-              <Button variant="secondary" fullWidth disabled={busyItemId === 'clear'} onClick={() => void handleClearCart()}>
+              <Button
+                variant="secondary"
+                fullWidth
+                disabled={busyItemId === "clear"}
+                onClick={() => void handleClearCart()}
+              >
                 <X className="h-4 w-4" />
                 Clear cart
               </Button>

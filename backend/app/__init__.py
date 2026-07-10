@@ -1,2 +1,1 @@
 """CommerceHub backend application package."""
-

@@ -12,7 +12,6 @@ from backend.app.schemas.notification_schema import (
 )
 from backend.app.utils.notification_provider import NotificationProviderProtocol
 
-
 logger = logging.getLogger(__name__)
 
 

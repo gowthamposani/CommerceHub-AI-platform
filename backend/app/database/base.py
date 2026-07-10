@@ -16,4 +16,3 @@ class Base(DeclarativeBase):
     """Declarative base class used by all models."""
 
     metadata = MetaData(naming_convention=NAMING_CONVENTION)
-

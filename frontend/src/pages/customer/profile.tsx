@@ -1,20 +1,20 @@
-import { useEffect, useMemo, useState } from 'react';
-import { BadgeCheck } from 'lucide-react';
+import { useEffect, useMemo, useState } from "react";
+import { BadgeCheck } from "lucide-react";
 
-import { getCustomerProfile, updateCustomerProfile } from '../../api/customer';
-import { getApiErrorMessage } from '../../api/error';
-import { useAuth } from '../../auth/use-auth';
-import { Alert, Badge, Button, Card, Field, Input, LoadingScreen, SectionHeader } from '../../components/ui';
-import { formatDateTime, initials } from '../../utils/format';
-import { getUserStatusTone } from '../../utils/status';
-import { validateRequired } from '../../utils/validators';
-import type { CustomerProfile } from '../../types/domain';
+import { getCustomerProfile, updateCustomerProfile } from "../../api/customer";
+import { getApiErrorMessage } from "../../api/error";
+import { useAuth } from "../../auth/use-auth";
+import { Alert, Badge, Button, Card, Field, Input, LoadingScreen, SectionHeader } from "../../components/ui";
+import { formatDateTime, initials } from "../../utils/format";
+import { getUserStatusTone } from "../../utils/status";
+import { validateRequired } from "../../utils/validators";
+import type { CustomerProfile } from "../../types/domain";
 
 export function CustomerProfilePage(): React.ReactElement {
   const { user, updateUser } = useAuth();
   const [profile, setProfile] = useState<CustomerProfile | null>(null);
-  const [firstName, setFirstName] = useState(user?.first_name ?? '');
-  const [lastName, setLastName] = useState(user?.last_name ?? '');
+  const [firstName, setFirstName] = useState(user?.first_name ?? "");
+  const [lastName, setLastName] = useState(user?.last_name ?? "");
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [submitted, setSubmitted] = useState(false);
@@ -37,7 +37,7 @@ export function CustomerProfilePage(): React.ReactElement {
         }
       } catch (requestError) {
         if (!cancelled) {
-          setError(getApiErrorMessage(requestError, 'Unable to load your profile right now.'));
+          setError(getApiErrorMessage(requestError, "Unable to load your profile right now."));
         }
       } finally {
         if (!cancelled) {
@@ -55,10 +55,10 @@ export function CustomerProfilePage(): React.ReactElement {
 
   const validationErrors = useMemo(
     () => ({
-      firstName: validateRequired(firstName, 'First name'),
-      lastName: validateRequired(lastName, 'Last name'),
+      firstName: validateRequired(firstName, "First name"),
+      lastName: validateRequired(lastName, "Last name")
     }),
-    [firstName, lastName],
+    [firstName, lastName]
   );
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
@@ -67,7 +67,7 @@ export function CustomerProfilePage(): React.ReactElement {
     setMessage(null);
     setError(null);
 
-    const nextError = validateRequired(firstName, 'First name') ?? validateRequired(lastName, 'Last name');
+    const nextError = validateRequired(firstName, "First name") ?? validateRequired(lastName, "Last name");
     if (nextError) {
       setError(nextError);
       return;
@@ -77,24 +77,26 @@ export function CustomerProfilePage(): React.ReactElement {
       setSaving(true);
       const nextProfile = await updateCustomerProfile({
         first_name: firstName.trim(),
-        last_name: lastName.trim(),
+        last_name: lastName.trim()
       });
       setProfile(nextProfile);
       updateUser({
         first_name: nextProfile.first_name,
         last_name: nextProfile.last_name,
-        full_name: nextProfile.full_name,
+        full_name: nextProfile.full_name
       });
-      setMessage('Profile updated successfully.');
+      setMessage("Profile updated successfully.");
     } catch (requestError) {
-      setError(getApiErrorMessage(requestError, 'Could not update your profile.'));
+      setError(getApiErrorMessage(requestError, "Could not update your profile."));
     } finally {
       setSaving(false);
     }
   };
 
   if (loading) {
-    return <LoadingScreen title="Loading profile" description="Retrieving your customer profile and account details." />;
+    return (
+      <LoadingScreen title="Loading profile" description="Retrieving your customer profile and account details." />
+    );
   }
 
   const currentProfile = profile ?? user;
@@ -107,8 +109,16 @@ export function CustomerProfilePage(): React.ReactElement {
         description="Keep your personal details current so orders, notifications, and support stay aligned."
       />
 
-      {message ? <Alert tone="success" title="Profile updated">{message}</Alert> : null}
-      {error ? <Alert tone="danger" title="Profile error">{error}</Alert> : null}
+      {message ? (
+        <Alert tone="success" title="Profile updated">
+          {message}
+        </Alert>
+      ) : null}
+      {error ? (
+        <Alert tone="danger" title="Profile error">
+          {error}
+        </Alert>
+      ) : null}
 
       <div className="grid gap-6 lg:grid-cols-[0.75fr_1.25fr]">
         <Card className="space-y-5 p-6">
@@ -117,7 +127,7 @@ export function CustomerProfilePage(): React.ReactElement {
               {initials(currentProfile?.first_name, currentProfile?.last_name)}
             </div>
             <div>
-              <p className="text-sm font-semibold text-brand-text">{currentProfile?.full_name ?? 'Customer'}</p>
+              <p className="text-sm font-semibold text-brand-text">{currentProfile?.full_name ?? "Customer"}</p>
               <p className="mt-1 text-xs text-brand-muted">Account identity</p>
             </div>
           </div>
@@ -131,14 +141,14 @@ export function CustomerProfilePage(): React.ReactElement {
               <p className="text-xs font-semibold uppercase tracking-[0.24em] text-brand-muted">Status</p>
               {currentProfile?.status ? (
                 <Badge tone={getUserStatusTone(currentProfile.status)} className="mt-2">
-                  {currentProfile.status.replace(/_/g, ' ')}
+                  {currentProfile.status.replace(/_/g, " ")}
                 </Badge>
               ) : null}
             </Card>
             <Card className="p-4">
               <p className="text-xs font-semibold uppercase tracking-[0.24em] text-brand-muted">Last login</p>
               <p className="mt-2 text-sm font-semibold text-brand-text">
-                {currentProfile?.last_login_at ? formatDateTime(currentProfile.last_login_at) : 'No login yet'}
+                {currentProfile?.last_login_at ? formatDateTime(currentProfile.last_login_at) : "No login yet"}
               </p>
             </Card>
           </div>
@@ -151,7 +161,12 @@ export function CustomerProfilePage(): React.ReactElement {
           </div>
 
           <form className="space-y-4" onSubmit={handleSubmit}>
-            <Field label="First name" htmlFor="profile-first-name" error={submitted ? validationErrors.firstName : null} required>
+            <Field
+              label="First name"
+              htmlFor="profile-first-name"
+              error={submitted ? validationErrors.firstName : null}
+              required
+            >
               <Input
                 id="profile-first-name"
                 value={firstName}
@@ -160,7 +175,12 @@ export function CustomerProfilePage(): React.ReactElement {
               />
             </Field>
 
-            <Field label="Last name" htmlFor="profile-last-name" error={submitted ? validationErrors.lastName : null} required>
+            <Field
+              label="Last name"
+              htmlFor="profile-last-name"
+              error={submitted ? validationErrors.lastName : null}
+              required
+            >
               <Input
                 id="profile-last-name"
                 value={lastName}
@@ -178,7 +198,7 @@ export function CustomerProfilePage(): React.ReactElement {
           <div className="grid gap-3 sm:grid-cols-2">
             <Card className="p-4">
               <p className="text-xs font-semibold uppercase tracking-[0.24em] text-brand-muted">Role</p>
-              <p className="mt-2 text-sm font-semibold text-brand-text">{currentProfile?.role.name ?? 'customer'}</p>
+              <p className="mt-2 text-sm font-semibold text-brand-text">{currentProfile?.role.name ?? "customer"}</p>
             </Card>
             <Card className="p-4">
               <p className="text-xs font-semibold uppercase tracking-[0.24em] text-brand-muted">Addresses</p>

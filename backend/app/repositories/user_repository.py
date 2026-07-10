@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 from datetime import datetime
-from typing import Optional
 from uuid import UUID
 
 from sqlalchemy import select
@@ -21,20 +20,20 @@ class UserRepository:
     def __init__(self, session: Session) -> None:
         self.session = session
 
-    def get_by_email(self, email: str) -> Optional[User]:
+    def get_by_email(self, email: str) -> User | None:
         """Return a user by email address."""
 
         normalized_email = normalize_email(email)
         stmt = select(User).where(User.email == normalized_email)
         return self.session.scalar(stmt)
 
-    def get_by_id(self, user_id: UUID) -> Optional[User]:
+    def get_by_id(self, user_id: UUID) -> User | None:
         """Return a user by identifier."""
 
         stmt = select(User).where(User.id == user_id)
         return self.session.scalar(stmt)
 
-    def get_role_by_name(self, role_name: RoleName) -> Optional[Role]:
+    def get_role_by_name(self, role_name: RoleName) -> Role | None:
         """Return a role by name."""
 
         stmt = select(Role).where(Role.name == role_name)
@@ -83,7 +82,7 @@ class UserRepository:
         self.session.refresh(user)
         return user
 
-    def update_last_login(self, user: User, when: Optional[datetime] = None) -> User:
+    def update_last_login(self, user: User, when: datetime | None = None) -> User:
         """Update the user's last login timestamp."""
 
         user.last_login_at = when or utc_now()

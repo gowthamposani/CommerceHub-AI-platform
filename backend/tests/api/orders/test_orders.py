@@ -46,7 +46,9 @@ def get_product_stock(db_connection, product_id) -> int:
     )
 
 
-def test_checkout_creates_order_empties_cart_and_reduces_stock(client, customer_headers, db_connection, product_catalog):
+def test_checkout_creates_order_empties_cart_and_reduces_stock(
+    client, customer_headers, db_connection, product_catalog
+):
     """Checkout should create an order, clear the cart, and reduce inventory."""
 
     seed_checkout_cart(client, customer_headers, product_catalog)
@@ -187,4 +189,3 @@ def test_non_customer_cannot_access_orders(client, seller_headers):
     response = client.get(ORDERS_ENDPOINT, headers=seller_headers)
     assert response.status_code == 403, response.text
     assert response.json()["message"] == "Customer access is required"
-

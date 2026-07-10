@@ -3,7 +3,7 @@
 from uuid import UUID
 
 from sqlalchemy import Boolean, Index, String, Text, UniqueConstraint
-from sqlalchemy.dialects.postgresql import UUID as PostgresUUID
+from sqlalchemy.dialects.postgresql import UUID as POSTGRES_UUID
 from sqlalchemy.orm import Mapped, mapped_column
 
 from app.database.base import Base, SoftDeleteMixin, TimestampMixin, UUIDMixin
@@ -25,7 +25,7 @@ class Seller(Base, UUIDMixin, TimestampMixin, SoftDeleteMixin):
         Index("ix_sellers_user_id", "user_id"),
     )
 
-    user_id: Mapped[UUID] = mapped_column(PostgresUUID(as_uuid=True), nullable=False)
+    user_id: Mapped[UUID] = mapped_column(POSTGRES_UUID(as_uuid=True), nullable=False)
 
     business_name: Mapped[str] = mapped_column(String(255), nullable=False)
     legal_business_name: Mapped[str | None] = mapped_column(String(255), nullable=True)
@@ -59,4 +59,3 @@ class Seller(Base, UUIDMixin, TimestampMixin, SoftDeleteMixin):
     is_active: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False, index=True)
     is_verified: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
     status: Mapped[str] = mapped_column(String(30), default="pending", nullable=False)
-

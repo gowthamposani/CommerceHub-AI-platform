@@ -1,4 +1,4 @@
-import type { Locator, Page } from '@playwright/test';
+import type { Locator, Page } from "@playwright/test";
 
 export abstract class CustomerBasePage {
   constructor(protected readonly page: Page) {}
@@ -8,11 +8,11 @@ export abstract class CustomerBasePage {
   }
 
   protected link(name: string | RegExp): Locator {
-    return this.page.getByRole('link', { name });
+    return this.page.getByRole("link", { name });
   }
 
   protected button(name: string | RegExp): Locator {
-    return this.page.getByRole('button', { name });
+    return this.page.getByRole("button", { name });
   }
 
   protected field(label: string): Locator {

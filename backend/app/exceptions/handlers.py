@@ -20,8 +20,8 @@ def _error_payload(request: Request, message: str, errors: list[ErrorDetail] | N
         message=message,
         errors=errors or [],
         timestamp=utc_now_iso(),
-        requestId=_request_id(request),
-    ).model_dump()
+        request_id=_request_id(request),
+    ).model_dump(by_alias=True)
 
 
 async def application_error_handler(request: Request, exc: ApplicationError) -> JSONResponse:

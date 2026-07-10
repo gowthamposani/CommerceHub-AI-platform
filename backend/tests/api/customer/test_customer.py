@@ -185,4 +185,3 @@ def test_non_customer_cannot_access_customer_routes(client, seller_headers):
     response = client.get(PROFILE_ENDPOINT, headers=seller_headers)
     assert response.status_code == 403, response.text
     assert response.json()["message"] == "Customer access is required"
-

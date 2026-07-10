@@ -4,8 +4,8 @@ from __future__ import annotations
 
 import re
 from datetime import datetime
-from enum import Enum
-from typing import Annotated, Generic, Literal, Optional, TypeVar
+from enum import StrEnum
+from typing import Annotated, Literal, TypeVar
 from uuid import UUID
 
 from pydantic import BaseModel, ConfigDict, EmailStr, Field, StringConstraints, field_validator
@@ -19,15 +19,15 @@ TokenStr = Annotated[str, StringConstraints(strip_whitespace=True, min_length=1,
 DataT = TypeVar("DataT")
 
 
-class ApiResponse(BaseModel, Generic[DataT]):
+class ApiResponse[DataT](BaseModel):
     """Standard API envelope used across the backend."""
 
     success: bool = True
     message: str = ""
-    data: Optional[DataT] = None
+    data: DataT | None = None
 
 
-class RegistrationRole(str, Enum):
+class RegistrationRole(StrEnum):
     """Publicly registrable roles."""
 
     CUSTOMER = "customer"
@@ -59,7 +59,7 @@ class UserRead(BaseModel):
     status: UserStatus
     created_at: datetime
     updated_at: datetime
-    last_login_at: Optional[datetime] = None
+    last_login_at: datetime | None = None
 
 
 class TokenPairData(BaseModel):

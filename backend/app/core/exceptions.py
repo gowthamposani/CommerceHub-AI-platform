@@ -1,6 +1,6 @@
 """Application exceptions and exception handlers."""
 
-from typing import Any, Optional
+from typing import Any
 
 from fastapi import FastAPI, HTTPException, Request, status
 from fastapi.encoders import jsonable_encoder
@@ -13,7 +13,7 @@ class AppError(Exception):
 
     status_code = status.HTTP_400_BAD_REQUEST
 
-    def __init__(self, message: str, *, data: Optional[Any] = None) -> None:
+    def __init__(self, message: str, *, data: Any | None = None) -> None:
         super().__init__(message)
         self.message = message
         self.data = data if data is not None else {}
@@ -35,7 +35,7 @@ class AuthorizationError(AppError):
     status_code = status.HTTP_403_FORBIDDEN
 
 
-def _error_payload(message: str, data: Optional[Any] = None) -> dict[str, Any]:
+def _error_payload(message: str, data: Any | None = None) -> dict[str, Any]:
     return {"success": False, "message": message, "data": data if data is not None else {}}
 
 
@@ -75,9 +75,7 @@ def register_exception_handlers(app: FastAPI) -> None:
         )
 
     @app.exception_handler(RequestValidationError)
-    async def handle_validation_error(
-        request: Request, exc: RequestValidationError
-    ) -> JSONResponse:  # noqa: ARG001
+    async def handle_validation_error(request: Request, exc: RequestValidationError) -> JSONResponse:  # noqa: ARG001
         return JSONResponse(
             status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
             content=_error_payload(
@@ -90,9 +88,7 @@ def register_exception_handlers(app: FastAPI) -> None:
         )
 
     @app.exception_handler(HTTPException)
-    async def handle_http_exception(
-        request: Request, exc: HTTPException
-    ) -> JSONResponse:  # noqa: ARG001
+    async def handle_http_exception(request: Request, exc: HTTPException) -> JSONResponse:  # noqa: ARG001
         return JSONResponse(
             status_code=exc.status_code,
             content=_error_payload(str(exc.detail)),

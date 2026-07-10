@@ -2,8 +2,9 @@
 
 from __future__ import annotations
 
-from datetime import datetime, timedelta, timezone
-from typing import Any, Mapping, Optional
+from collections.abc import Mapping
+from datetime import UTC, datetime, timedelta
+from typing import Any
 from uuid import uuid4
 
 from jose import JWTError, jwt
@@ -17,7 +18,7 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 def utc_now() -> datetime:
     """Return a timezone-aware UTC timestamp."""
 
-    return datetime.now(timezone.utc)
+    return datetime.now(UTC)
 
 
 def normalize_email(email: str) -> str:
@@ -45,9 +46,9 @@ def create_jwt_token(
     expires_delta: timedelta,
     secret_key: str,
     algorithm: str,
-    issuer: Optional[str] = None,
-    audience: Optional[str] = None,
-    extra_claims: Optional[Mapping[str, Any]] = None,
+    issuer: str | None = None,
+    audience: str | None = None,
+    extra_claims: Mapping[str, Any] | None = None,
 ) -> tuple[str, datetime, str]:
     """Create a signed JWT and return the token, expiry and jti."""
 
@@ -77,9 +78,9 @@ def decode_jwt_token(
     *,
     secret_key: str,
     algorithm: str,
-    expected_type: Optional[str] = None,
-    issuer: Optional[str] = None,
-    audience: Optional[str] = None,
+    expected_type: str | None = None,
+    issuer: str | None = None,
+    audience: str | None = None,
 ) -> dict[str, Any]:
     """Decode and validate a JWT."""
 

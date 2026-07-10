@@ -1,23 +1,23 @@
-import { useEffect, useMemo, useState } from 'react';
-import { ArrowRight, Heart, Search, ShoppingCart, Filter } from 'lucide-react';
+import { useEffect, useMemo, useState } from "react";
+import { ArrowRight, Heart, Search, ShoppingCart, Filter } from "lucide-react";
 
-import { addCartItem } from '../../api/cart';
-import { addWishlistItem } from '../../api/wishlist';
-import { listProducts } from '../../api/catalog';
-import { getApiErrorMessage } from '../../api/error';
-import { Button, Card, EmptyState, Field, Input, LoadingScreen, Select, Alert } from '../../components/ui';
-import { ProductCard } from '../../components/product-card';
-import type { Product } from '../../types/domain';
-import { ButtonLink, SectionHeader } from '../../components/ui';
+import { addCartItem } from "../../api/cart";
+import { addWishlistItem } from "../../api/wishlist";
+import { listProducts } from "../../api/catalog";
+import { getApiErrorMessage } from "../../api/error";
+import { Button, Card, EmptyState, Field, Input, LoadingScreen, Select, Alert } from "../../components/ui";
+import { ProductCard } from "../../components/product-card";
+import type { Product } from "../../types/domain";
+import { ButtonLink, SectionHeader } from "../../components/ui";
 
-type SortOption = 'featured' | 'price-asc' | 'price-desc' | 'stock-desc';
+type SortOption = "featured" | "price-asc" | "price-desc" | "stock-desc";
 
 export function ProductListingPage(): React.ReactElement {
   const [products, setProducts] = useState<Product[]>([]);
-  const [source, setSource] = useState<'api' | 'demo'>('demo');
+  const [source, setSource] = useState<"api" | "demo">("demo");
   const [loading, setLoading] = useState(true);
-  const [search, setSearch] = useState('');
-  const [sortBy, setSortBy] = useState<SortOption>('featured');
+  const [search, setSearch] = useState("");
+  const [sortBy, setSortBy] = useState<SortOption>("featured");
   const [busyProductId, setBusyProductId] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -40,7 +40,7 @@ export function ProductListingPage(): React.ReactElement {
         if (cancelled) {
           return;
         }
-        setError(getApiErrorMessage(requestError, 'Unable to load products right now.'));
+        setError(getApiErrorMessage(requestError, "Unable to load products right now."));
       } finally {
         if (!cancelled) {
           setLoading(false);
@@ -68,16 +68,16 @@ export function ProductListingPage(): React.ReactElement {
     });
 
     switch (sortBy) {
-      case 'price-asc':
+      case "price-asc":
         nextProducts = [...nextProducts].sort((left, right) => left.price - right.price);
         break;
-      case 'price-desc':
+      case "price-desc":
         nextProducts = [...nextProducts].sort((left, right) => right.price - left.price);
         break;
-      case 'stock-desc':
+      case "stock-desc":
         nextProducts = [...nextProducts].sort((left, right) => right.stock - left.stock);
         break;
-      case 'featured':
+      case "featured":
       default:
         nextProducts = [...nextProducts].sort((left, right) => left.title.localeCompare(right.title));
     }
@@ -94,7 +94,7 @@ export function ProductListingPage(): React.ReactElement {
       await addCartItem({ product_id: product.id, quantity: 1 });
       setMessage(`${product.title} added to cart.`);
     } catch (requestError) {
-      setError(getApiErrorMessage(requestError, 'Could not add this product to the cart.'));
+      setError(getApiErrorMessage(requestError, "Could not add this product to the cart."));
     } finally {
       setBusyProductId(null);
     }
@@ -109,14 +109,19 @@ export function ProductListingPage(): React.ReactElement {
       await addWishlistItem({ product_id: product.id });
       setMessage(`${product.title} added to your wishlist.`);
     } catch (requestError) {
-      setError(getApiErrorMessage(requestError, 'Could not add this product to the wishlist.'));
+      setError(getApiErrorMessage(requestError, "Could not add this product to the wishlist."));
     } finally {
       setBusyProductId(null);
     }
   };
 
   if (loading) {
-    return <LoadingScreen title="Loading products" description="Fetching the latest catalog items for your shopping session." />;
+    return (
+      <LoadingScreen
+        title="Loading products"
+        description="Fetching the latest catalog items for your shopping session."
+      />
+    );
   }
 
   return (
@@ -132,10 +137,18 @@ export function ProductListingPage(): React.ReactElement {
         }
       />
 
-      {message ? <Alert tone="success" title="Action complete">{message}</Alert> : null}
-      {error ? <Alert tone="danger" title="Product action failed">{error}</Alert> : null}
+      {message ? (
+        <Alert tone="success" title="Action complete">
+          {message}
+        </Alert>
+      ) : null}
+      {error ? (
+        <Alert tone="danger" title="Product action failed">
+          {error}
+        </Alert>
+      ) : null}
 
-      {source === 'demo' ? (
+      {source === "demo" ? (
         <Alert tone="info" title="Preview catalog">
           The demo product set is active, which keeps the page populated until the live product module is available.
         </Alert>
@@ -178,7 +191,7 @@ export function ProductListingPage(): React.ReactElement {
           icon={<Search className="h-8 w-8" />}
           title="No products matched your search"
           description="Try another search term or clear the filters to review the full catalog."
-          action={<Button onClick={() => setSearch('')}>Clear search</Button>}
+          action={<Button onClick={() => setSearch("")}>Clear search</Button>}
         />
       ) : (
         <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
@@ -187,7 +200,7 @@ export function ProductListingPage(): React.ReactElement {
               key={product.id}
               product={product}
               href={`/products/${product.id}`}
-              sourceLabel={source === 'demo' ? 'Preview' : 'Live'}
+              sourceLabel={source === "demo" ? "Preview" : "Live"}
               actions={
                 <>
                   <ButtonLink to={`/products/${product.id}`} variant="secondary">

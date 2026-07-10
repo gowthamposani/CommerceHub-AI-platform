@@ -1,7 +1,7 @@
-import type { APIRequestContext } from '@playwright/test';
+import type { APIRequestContext } from "@playwright/test";
 
-import { ApiClientUtility } from '../../utils/api-client.utility';
-import type { AuthLoginPayload } from '../../types/auth.types';
+import { ApiClientUtility } from "../../utils/api-client.utility";
+import type { AuthLoginPayload } from "../../types/auth.types";
 
 export class LoginPage extends ApiClientUtility {
   constructor(request: APIRequestContext) {
@@ -9,6 +9,6 @@ export class LoginPage extends ApiClientUtility {
   }
 
   login(payload: AuthLoginPayload) {
-    return this.post('/auth/login', payload);
+    return this.post("/auth/login", payload);
   }
 }

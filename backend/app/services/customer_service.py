@@ -8,8 +8,8 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
 from app.core.exceptions import AuthorizationError, ConflictError, NotFoundError
-from app.models.enums import RoleName
 from app.models.address import Address
+from app.models.enums import RoleName
 from app.models.user import User
 from app.repositories.customer_repository import CustomerRepository
 from app.schemas.customer import (

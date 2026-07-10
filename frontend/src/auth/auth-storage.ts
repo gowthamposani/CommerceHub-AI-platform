@@ -1,8 +1,8 @@
-import { authStorageKeys } from '../config';
-import type { AuthSession } from '../types/domain';
+import { authStorageKeys } from "../config";
+import type { AuthSession } from "../types/domain";
 
-const canUseBrowserStorage = (): boolean => typeof window !== 'undefined';
-const AUTH_STORAGE_EVENT = 'commercehub:auth-storage-changed';
+const canUseBrowserStorage = (): boolean => typeof window !== "undefined";
+const AUTH_STORAGE_EVENT = "commercehub:auth-storage-changed";
 
 const parseSession = (value: string | null): AuthSession | null => {
   if (!value) {
@@ -52,7 +52,7 @@ export const authStorage = {
 
     const remembered = window.localStorage.getItem(authStorageKeys.rememberMe);
     if (remembered !== null) {
-      return remembered === 'true';
+      return remembered === "true";
     }
 
     return window.localStorage.getItem(authStorageKeys.session) !== null;
@@ -68,7 +68,7 @@ export const authStorage = {
 
     const targetStorage = rememberMe ? window.localStorage : window.sessionStorage;
     targetStorage.setItem(authStorageKeys.session, JSON.stringify(session));
-    window.localStorage.setItem(authStorageKeys.rememberMe, rememberMe ? 'true' : 'false');
+    window.localStorage.setItem(authStorageKeys.rememberMe, rememberMe ? "true" : "false");
     emitAuthStorageChange();
   },
 
@@ -111,11 +111,11 @@ export const authStorage = {
     };
 
     window.addEventListener(AUTH_STORAGE_EVENT, handleCustomEvent);
-    window.addEventListener('storage', handleStorage);
+    window.addEventListener("storage", handleStorage);
 
     return () => {
       window.removeEventListener(AUTH_STORAGE_EVENT, handleCustomEvent);
-      window.removeEventListener('storage', handleStorage);
+      window.removeEventListener("storage", handleStorage);
     };
-  },
+  }
 };

@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from datetime import datetime
-from typing import Annotated, Optional
+from typing import Annotated
 from uuid import UUID
 
 from pydantic import BaseModel, ConfigDict, Field, StringConstraints, model_validator
@@ -22,11 +22,11 @@ PhoneNumberStr = Annotated[str, StringConstraints(strip_whitespace=True, min_len
 class CustomerProfileRequest(BaseModel):
     """Payload for updating customer profile details."""
 
-    first_name: Optional[NameStr] = None
-    last_name: Optional[NameStr] = None
+    first_name: NameStr | None = None
+    last_name: NameStr | None = None
 
     @model_validator(mode="after")
-    def validate_payload(self) -> "CustomerProfileRequest":
+    def validate_payload(self) -> CustomerProfileRequest:
         if "first_name" in self.model_fields_set and self.first_name is None:
             raise ValueError("first_name cannot be null")
         if "last_name" in self.model_fields_set and self.last_name is None:
@@ -44,28 +44,28 @@ class AddressCreateRequest(BaseModel):
     """Payload for creating a customer address."""
 
     address_line_1: AddressLineStr
-    address_line_2: Optional[AddressLineStr] = None
+    address_line_2: AddressLineStr | None = None
     city: CityStr
     state: StateStr
     postal_code: PostalCodeStr
     country: CountryStr
-    phone_number: Optional[PhoneNumberStr] = None
+    phone_number: PhoneNumberStr | None = None
     is_default: bool = Field(default=False)
 
 
 class AddressUpdateRequest(BaseModel):
     """Payload for updating a customer address."""
 
-    address_line_1: Optional[AddressLineStr] = None
-    address_line_2: Optional[AddressLineStr] = None
-    city: Optional[CityStr] = None
-    state: Optional[StateStr] = None
-    postal_code: Optional[PostalCodeStr] = None
-    country: Optional[CountryStr] = None
-    phone_number: Optional[PhoneNumberStr] = None
+    address_line_1: AddressLineStr | None = None
+    address_line_2: AddressLineStr | None = None
+    city: CityStr | None = None
+    state: StateStr | None = None
+    postal_code: PostalCodeStr | None = None
+    country: CountryStr | None = None
+    phone_number: PhoneNumberStr | None = None
 
     @model_validator(mode="after")
-    def validate_payload(self) -> "AddressUpdateRequest":
+    def validate_payload(self) -> AddressUpdateRequest:
         if "address_line_1" in self.model_fields_set and self.address_line_1 is None:
             raise ValueError("address_line_1 cannot be null")
         if "city" in self.model_fields_set and self.city is None:
@@ -88,12 +88,12 @@ class AddressResponse(BaseModel):
 
     id: UUID
     address_line_1: str
-    address_line_2: Optional[str] = None
+    address_line_2: str | None = None
     city: str
     state: str
     postal_code: str
     country: str
-    phone_number: Optional[str] = None
+    phone_number: str | None = None
     is_default: bool
     created_at: datetime
     updated_at: datetime

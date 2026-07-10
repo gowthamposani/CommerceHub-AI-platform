@@ -10,17 +10,11 @@ import {
   ResponsiveContainer,
   Tooltip,
   XAxis,
-  YAxis,
+  YAxis
 } from "recharts";
 import { memo, useMemo, type ReactNode } from "react";
 
-import type {
-  AnalyticsData,
-  CategoryPerformance,
-  OrdersPoint,
-  RecentActivity,
-  RevenuePoint,
-} from "../../types/admin";
+import type { AnalyticsData, CategoryPerformance, OrdersPoint, RecentActivity, RevenuePoint } from "../../types/admin";
 import { EmptyState } from "./EmptyState";
 
 type DashboardChartsProps =
@@ -46,7 +40,7 @@ function formatCompactCurrency(value: number): string {
     currency: "USD",
     maximumFractionDigits: 0,
     notation: "compact",
-    style: "currency",
+    style: "currency"
   }).format(value);
 }
 
@@ -66,20 +60,10 @@ function toneClass(tone: RecentActivity["tone"]): string {
   return "bg-sky-50 text-sky-700 ring-sky-200 dark:bg-sky-950 dark:text-sky-300 dark:ring-sky-900";
 }
 
-function ChartCard({
-  children,
-  eyebrow,
-  title,
-}: {
-  children: ReactNode;
-  eyebrow?: string;
-  title: string;
-}) {
+function ChartCard({ children, eyebrow, title }: { children: ReactNode; eyebrow?: string; title: string }) {
   return (
     <section className="rounded-admin border border-admin-border bg-white p-6 shadow-admin transition duration-200 dark:border-slate-800 dark:bg-slate-900">
-      {eyebrow ? (
-        <p className="text-xs font-semibold uppercase tracking-wide text-admin-gold">{eyebrow}</p>
-      ) : null}
+      {eyebrow ? <p className="text-xs font-semibold uppercase tracking-wide text-admin-gold">{eyebrow}</p> : null}
       <h3 className="mt-1 text-base font-semibold text-admin-ink dark:text-white">{title}</h3>
       <div className="mt-6">{children}</div>
     </section>
@@ -91,19 +75,19 @@ export const AnalyticsCharts = memo(function AnalyticsCharts({
   monthlyRevenue,
   ordersOverview,
   topCategories,
-  recentActivity,
+  recentActivity
 }: DashboardChartsProps) {
   const resolvedMonthlyRevenue = useMemo(
     () => monthlyRevenue ?? analytics?.revenueSeries ?? [],
-    [analytics?.revenueSeries, monthlyRevenue],
+    [analytics?.revenueSeries, monthlyRevenue]
   );
   const resolvedOrdersOverview = useMemo(
     () => ordersOverview ?? analytics?.ordersOverview ?? [],
-    [analytics?.ordersOverview, ordersOverview],
+    [analytics?.ordersOverview, ordersOverview]
   );
   const resolvedTopCategories = useMemo(
     () => topCategories ?? analytics?.topCategories ?? [],
-    [analytics?.topCategories, topCategories],
+    [analytics?.topCategories, topCategories]
   );
   const resolvedRecentActivity = useMemo(() => recentActivity ?? [], [recentActivity]);
 
@@ -132,13 +116,7 @@ export const AnalyticsCharts = memo(function AnalyticsCharts({
                   formatter={(value: unknown) => [formatTooltipCurrency(value), "Revenue"]}
                   contentStyle={{ borderRadius: 16, borderColor: "#E7DED2" }}
                 />
-                <Area
-                  dataKey="revenue"
-                  fill="url(#adminRevenue)"
-                  stroke="#C98B2B"
-                  strokeWidth={3}
-                  type="monotone"
-                />
+                <Area dataKey="revenue" fill="url(#adminRevenue)" stroke="#C98B2B" strokeWidth={3} type="monotone" />
               </AreaChart>
             </ResponsiveContainer>
           </div>
@@ -180,10 +158,7 @@ export const AnalyticsCharts = memo(function AnalyticsCharts({
                       paddingAngle={3}
                     >
                       {resolvedTopCategories.map((category, index) => (
-                        <Cell
-                          fill={categoryColors[index % categoryColors.length]}
-                          key={category.name}
-                        />
+                        <Cell fill={categoryColors[index % categoryColors.length]} key={category.name} />
                       ))}
                     </Pie>
                     <Tooltip contentStyle={{ borderRadius: 16, borderColor: "#E7DED2" }} />
@@ -222,17 +197,11 @@ export const AnalyticsCharts = memo(function AnalyticsCharts({
                   key={activity.id}
                   className="rounded-admin border border-admin-border bg-admin-background p-4 dark:border-slate-800 dark:bg-slate-950"
                 >
-                  <span
-                    className={`rounded-full px-3 py-1 text-xs font-medium ring-1 ${toneClass(
-                      activity.tone,
-                    )}`}
-                  >
+                  <span className={`rounded-full px-3 py-1 text-xs font-medium ring-1 ${toneClass(activity.tone)}`}>
                     {activity.timestamp}
                   </span>
                   <h4 className="mt-4 text-sm font-semibold">{activity.title}</h4>
-                  <p className="mt-2 text-sm leading-6 text-admin-muted dark:text-slate-400">
-                    {activity.description}
-                  </p>
+                  <p className="mt-2 text-sm leading-6 text-admin-muted dark:text-slate-400">{activity.description}</p>
                 </article>
               ))}
             </div>

@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 from datetime import datetime
-from typing import Optional
 from uuid import UUID
 
 from pydantic import BaseModel, ConfigDict, Field
@@ -29,7 +28,7 @@ class CartItemResponse(BaseModel):
 
     id: UUID
     product_id: UUID
-    product_title: Optional[str] = None
+    product_title: str | None = None
     quantity: int
     unit_price: float
     line_total: float

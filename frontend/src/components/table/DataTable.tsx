@@ -55,10 +55,11 @@ export function DataTable<T extends { id: string }>({
                 <th
                   key={column.id}
                   scope="col"
-                  className={cn("px-4 py-3 text-left text-xs font-bold uppercase tracking-wide text-gray-500", {
-                    "text-center": column.align === "center",
-                    "text-right": column.align === "right"
-                  })}
+                  className={cn(
+                    "px-4 py-3 text-left text-xs font-bold uppercase tracking-wide text-gray-500",
+                    column.align === "center" ? "text-center" : null,
+                    column.align === "right" ? "text-right" : null
+                  )}
                 >
                   {column.sortable ? (
                     <Button

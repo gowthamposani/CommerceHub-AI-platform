@@ -1,25 +1,17 @@
-import { useEffect, useMemo, useState } from 'react';
-import {
-  ArrowRight,
-  Heart,
-  PackageSearch,
-  ShoppingCart,
-  Sparkles,
-  Truck,
-  UsersRound,
-} from 'lucide-react';
+import { useEffect, useMemo, useState } from "react";
+import { ArrowRight, Heart, PackageSearch, ShoppingCart, Sparkles, Truck, UsersRound } from "lucide-react";
 
-import { getCart } from '../api/cart';
-import { listOrders } from '../api/order';
-import { getCustomerProfile } from '../api/customer';
-import { getWishlist } from '../api/wishlist';
-import { listProducts } from '../api/catalog';
-import { useAuth } from '../auth/use-auth';
-import { ButtonLink, Card, EmptyState, LoadingScreen, SectionHeader, StatCard, Alert } from '../components/ui';
-import { ProductCard } from '../components/product-card';
-import { getApiErrorMessage } from '../api/error';
-import { formatCurrency, formatDateTime } from '../utils/format';
-import type { Cart, CustomerProfile, Order, Product } from '../types/domain';
+import { getCart } from "../api/cart";
+import { listOrders } from "../api/order";
+import { getCustomerProfile } from "../api/customer";
+import { getWishlist } from "../api/wishlist";
+import { listProducts } from "../api/catalog";
+import { useAuth } from "../auth/use-auth";
+import { ButtonLink, Card, EmptyState, LoadingScreen, SectionHeader, StatCard, Alert } from "../components/ui";
+import { ProductCard } from "../components/product-card";
+import { getApiErrorMessage } from "../api/error";
+import { formatCurrency, formatDateTime } from "../utils/format";
+import type { Cart, CustomerProfile, Order, Product } from "../types/domain";
 
 export function HomePage(): React.ReactElement {
   const { user } = useAuth();
@@ -28,7 +20,7 @@ export function HomePage(): React.ReactElement {
   const [orders, setOrders] = useState<Order[]>([]);
   const [wishlistCount, setWishlistCount] = useState(0);
   const [featuredProducts, setFeaturedProducts] = useState<Product[]>([]);
-  const [catalogSource, setCatalogSource] = useState<'api' | 'demo'>('demo');
+  const [catalogSource, setCatalogSource] = useState<"api" | "demo">("demo");
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState<string | null>(null);
 
@@ -39,14 +31,13 @@ export function HomePage(): React.ReactElement {
       setLoading(true);
       setMessage(null);
 
-      const [profileResult, cartResult, wishlistResult, ordersResult, productsResult] =
-        await Promise.allSettled([
-          getCustomerProfile(),
-          getCart(),
-          getWishlist(),
-          listOrders(),
-          listProducts(),
-        ]);
+      const [profileResult, cartResult, wishlistResult, ordersResult, productsResult] = await Promise.allSettled([
+        getCustomerProfile(),
+        getCart(),
+        getWishlist(),
+        listOrders(),
+        listProducts()
+      ]);
 
       if (cancelled) {
         return;
@@ -54,39 +45,39 @@ export function HomePage(): React.ReactElement {
 
       const errors: string[] = [];
 
-      if (profileResult.status === 'fulfilled') {
+      if (profileResult.status === "fulfilled") {
         setProfile(profileResult.value);
       } else {
-        errors.push(getApiErrorMessage(profileResult.reason, 'profile'));
+        errors.push(getApiErrorMessage(profileResult.reason, "profile"));
       }
 
-      if (cartResult.status === 'fulfilled') {
+      if (cartResult.status === "fulfilled") {
         setCart(cartResult.value);
       } else {
-        errors.push(getApiErrorMessage(cartResult.reason, 'cart'));
+        errors.push(getApiErrorMessage(cartResult.reason, "cart"));
       }
 
-      if (wishlistResult.status === 'fulfilled') {
+      if (wishlistResult.status === "fulfilled") {
         setWishlistCount(wishlistResult.value.length);
       } else {
-        errors.push(getApiErrorMessage(wishlistResult.reason, 'wishlist'));
+        errors.push(getApiErrorMessage(wishlistResult.reason, "wishlist"));
       }
 
-      if (ordersResult.status === 'fulfilled') {
+      if (ordersResult.status === "fulfilled") {
         setOrders(ordersResult.value);
       } else {
-        errors.push(getApiErrorMessage(ordersResult.reason, 'orders'));
+        errors.push(getApiErrorMessage(ordersResult.reason, "orders"));
       }
 
-      if (productsResult.status === 'fulfilled') {
+      if (productsResult.status === "fulfilled") {
         setFeaturedProducts(productsResult.value.items.slice(0, 3));
         setCatalogSource(productsResult.value.source);
       } else {
-        errors.push(getApiErrorMessage(productsResult.reason, 'catalog'));
+        errors.push(getApiErrorMessage(productsResult.reason, "catalog"));
       }
 
       if (errors.length > 0) {
-        setMessage('Some dashboard sections could not refresh, but your portal is still available.');
+        setMessage("Some dashboard sections could not refresh, but your portal is still available.");
       }
 
       setLoading(false);
@@ -105,35 +96,40 @@ export function HomePage(): React.ReactElement {
   const stats = useMemo(
     () => [
       {
-        label: 'Cart items',
+        label: "Cart items",
         value: String(cart?.item_count ?? 0),
-        trend: cart ? `Subtotal ${formatCurrency(cart.subtotal)}` : 'No active cart data',
-        icon: <ShoppingCart className="h-5 w-5" />,
+        trend: cart ? `Subtotal ${formatCurrency(cart.subtotal)}` : "No active cart data",
+        icon: <ShoppingCart className="h-5 w-5" />
       },
       {
-        label: 'Wishlist items',
+        label: "Wishlist items",
         value: String(wishlistCount),
-        trend: 'Saved for later',
-        icon: <Heart className="h-5 w-5" />,
+        trend: "Saved for later",
+        icon: <Heart className="h-5 w-5" />
       },
       {
-        label: 'Orders placed',
+        label: "Orders placed",
         value: String(orders.length),
-        trend: recentOrder ? `Latest ${formatDateTime(recentOrder.created_at)}` : 'No orders yet',
-        icon: <PackageSearch className="h-5 w-5" />,
+        trend: recentOrder ? `Latest ${formatDateTime(recentOrder.created_at)}` : "No orders yet",
+        icon: <PackageSearch className="h-5 w-5" />
       },
       {
-        label: 'Saved addresses',
+        label: "Saved addresses",
         value: String(addressesCount),
-        trend: 'Delivery ready',
-        icon: <UsersRound className="h-5 w-5" />,
-      },
+        trend: "Delivery ready",
+        icon: <UsersRound className="h-5 w-5" />
+      }
     ],
-    [addressesCount, cart, orders, recentOrder, wishlistCount],
+    [addressesCount, cart, orders, recentOrder, wishlistCount]
   );
 
   if (loading) {
-    return <LoadingScreen title="Loading your dashboard" description="We are syncing your cart, wishlist, and recent orders." />;
+    return (
+      <LoadingScreen
+        title="Loading your dashboard"
+        description="We are syncing your cart, wishlist, and recent orders."
+      />
+    );
   }
 
   return (
@@ -146,10 +142,11 @@ export function HomePage(): React.ReactElement {
           </div>
           <div>
             <h1 className="text-3xl font-semibold text-brand-text sm:text-4xl">
-              Welcome back, {profile?.full_name ?? user?.full_name ?? 'Customer'}.
+              Welcome back, {profile?.full_name ?? user?.full_name ?? "Customer"}.
             </h1>
             <p className="mt-3 max-w-2xl text-sm leading-7 text-brand-muted sm:text-base">
-              Pick up where you left off, continue browsing products, and manage every part of the purchase journey from one place.
+              Pick up where you left off, continue browsing products, and manage every part of the purchase journey from
+              one place.
             </p>
           </div>
 
@@ -172,16 +169,14 @@ export function HomePage(): React.ReactElement {
 
         <Card className="overflow-hidden p-6">
           <div className="rounded-[24px] bg-[linear-gradient(160deg,rgba(201,139,43,0.16),rgba(245,242,237,0.95))] p-6">
-            <p className="text-sm font-semibold uppercase tracking-[0.24em] text-brand-primaryDark">
-              {user?.email}
-            </p>
+            <p className="text-sm font-semibold uppercase tracking-[0.24em] text-brand-primaryDark">{user?.email}</p>
             <h2 className="mt-4 text-2xl font-semibold text-brand-text">
-              {recentOrder ? 'Your latest order looks good.' : 'Your shopping space is ready.'}
+              {recentOrder ? "Your latest order looks good." : "Your shopping space is ready."}
             </h2>
             <p className="mt-3 text-sm leading-6 text-brand-muted">
               {recentOrder
-                ? `Order ${recentOrder.id.slice(0, 8)} is currently ${recentOrder.status.replace(/_/g, ' ')}.`
-                : 'You have not placed an order yet. Browse products, add favorites, and check out when you are ready.'}
+                ? `Order ${recentOrder.id.slice(0, 8)} is currently ${recentOrder.status.replace(/_/g, " ")}.`
+                : "You have not placed an order yet. Browse products, add favorites, and check out when you are ready."}
             </p>
           </div>
 
@@ -218,20 +213,20 @@ export function HomePage(): React.ReactElement {
         <div className="grid gap-4 md:grid-cols-3">
           {[
             {
-              title: 'Browse the catalog',
-              text: 'Discover available products and move them into your wishlist or cart.',
-              to: '/products',
+              title: "Browse the catalog",
+              text: "Discover available products and move them into your wishlist or cart.",
+              to: "/products"
             },
             {
-              title: 'Review saved items',
-              text: 'Open your wishlist and move anything you are ready to purchase into the cart.',
-              to: '/wishlist',
+              title: "Review saved items",
+              text: "Open your wishlist and move anything you are ready to purchase into the cart.",
+              to: "/wishlist"
             },
             {
-              title: 'Check delivery addresses',
-              text: 'Make sure your default shipping address is current before checkout.',
-              to: '/addresses',
-            },
+              title: "Check delivery addresses",
+              text: "Make sure your default shipping address is current before checkout.",
+              to: "/addresses"
+            }
           ].map((action) => (
             <Card key={action.title} className="p-5">
               <h3 className="text-lg font-semibold text-brand-text">{action.title}</h3>
@@ -250,9 +245,9 @@ export function HomePage(): React.ReactElement {
           eyebrow="Featured products"
           title="A few products to keep in view"
           description={
-            catalogSource === 'demo'
-              ? 'The demo catalog is currently active, which keeps the UI populated until the product module is fully live.'
-              : 'These suggestions are coming directly from the backend product catalog.'
+            catalogSource === "demo"
+              ? "The demo catalog is currently active, which keeps the UI populated until the product module is fully live."
+              : "These suggestions are coming directly from the backend product catalog."
           }
         />
 
@@ -270,7 +265,7 @@ export function HomePage(): React.ReactElement {
                 key={product.id}
                 product={product}
                 href={`/products/${product.id}`}
-                sourceLabel={catalogSource === 'demo' ? 'Preview' : 'Live'}
+                sourceLabel={catalogSource === "demo" ? "Preview" : "Live"}
                 actions={
                   <>
                     <ButtonLink to={`/products/${product.id}`} variant="secondary">

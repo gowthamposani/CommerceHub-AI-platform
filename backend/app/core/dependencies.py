@@ -7,8 +7,8 @@ from sqlalchemy.orm import Session
 from app.core.config import get_settings
 from app.database.session import get_db
 from app.models.user import User
-from app.services.cart_service import CartService
 from app.services.auth_service import AuthenticationService
+from app.services.cart_service import CartService
 from app.services.customer_service import CustomerService
 from app.services.order_service import OrderService
 from app.services.wishlist_service import WishlistService

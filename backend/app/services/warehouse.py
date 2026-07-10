@@ -185,9 +185,7 @@ class WarehouseService:
         await self.get_warehouse(warehouse_id, current_user)
         summary = await self.repository.inventory_summary(warehouse_id)
         utilized = (
-            summary["total_available_quantity"]
-            + summary["total_reserved_quantity"]
-            + summary["total_damaged_quantity"]
+            summary["total_available_quantity"] + summary["total_reserved_quantity"] + summary["total_damaged_quantity"]
         )
         capacity = summary["capacity_units"] or None
         available_capacity = capacity - utilized if capacity is not None else None

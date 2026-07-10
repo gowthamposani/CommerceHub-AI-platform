@@ -21,7 +21,7 @@ export function useAIGenerator() {
       notifyToast({
         title: "AI content generated",
         message: "The product description is ready to review.",
-        variant: "success",
+        variant: "success"
       });
       return description;
     } catch (requestError) {

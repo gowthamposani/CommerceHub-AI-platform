@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 from datetime import datetime
-from typing import Optional
 from uuid import UUID
 
 from sqlalchemy import select
@@ -28,13 +27,13 @@ class RefreshTokenRepository:
         self.session.refresh(token)
         return token
 
-    def get_by_jti(self, jti: str) -> Optional[RefreshToken]:
+    def get_by_jti(self, jti: str) -> RefreshToken | None:
         """Return a refresh token by its JWT identifier."""
 
         stmt = select(RefreshToken).where(RefreshToken.jti == jti)
         return self.session.scalar(stmt)
 
-    def get_active_by_jti(self, jti: str) -> Optional[RefreshToken]:
+    def get_active_by_jti(self, jti: str) -> RefreshToken | None:
         """Return an active refresh token by JWT identifier."""
 
         stmt = select(RefreshToken).where(
@@ -44,7 +43,7 @@ class RefreshTokenRepository:
         )
         return self.session.scalar(stmt)
 
-    def revoke(self, token: RefreshToken, revoked_at: Optional[datetime] = None) -> RefreshToken:
+    def revoke(self, token: RefreshToken, revoked_at: datetime | None = None) -> RefreshToken:
         """Mark a refresh token as revoked."""
 
         token.revoked_at = revoked_at or utc_now()

@@ -1,4 +1,4 @@
-import { expect } from '@playwright/test';
+import { expect } from "@playwright/test";
 
 import type {
   ApiResponse,
@@ -7,15 +7,15 @@ import type {
   AuthUser,
   BrowserStorageState,
   RegistrationRole,
-  UserStatus,
-} from '../types/auth.types';
-import { StorageUtility } from './storage.utility';
+  UserStatus
+} from "../types/auth.types";
+import { StorageUtility } from "./storage.utility";
 
 export interface ExpectedUserShape {
   first_name: string;
   last_name: string;
   email: string;
-  role: RegistrationRole | 'admin';
+  role: RegistrationRole | "admin";
   status: UserStatus;
 }
 
@@ -34,7 +34,7 @@ export class AuthAssertions {
   static expectTokenPair(tokens: AuthTokenPair): void {
     expect(tokens.access_token).toBeTruthy();
     expect(tokens.refresh_token).toBeTruthy();
-    expect(tokens.token_type).toBe('bearer');
+    expect(tokens.token_type).toBe("bearer");
     expect(tokens.access_token_expires_at).toBeTruthy();
     expect(tokens.refresh_token_expires_at).toBeTruthy();
   }
@@ -59,7 +59,7 @@ export class AuthAssertions {
   static expectRememberedSession(
     storageState: BrowserStorageState,
     expectedSession: AuthSession,
-    expectedRememberMe = true,
+    expectedRememberMe = true
   ): void {
     const storageUtility = new StorageUtility();
     const storedSession = storageUtility.extractSession(storageState);
@@ -74,7 +74,7 @@ export class AuthAssertions {
     }
   }
 
-  static expectUnauthorizedEnvelope(body: ApiResponse<unknown>, expectedMessage = 'Not authenticated'): void {
+  static expectUnauthorizedEnvelope(body: ApiResponse<unknown>, expectedMessage = "Not authenticated"): void {
     this.expectErrorEnvelope(body, expectedMessage);
   }
 }

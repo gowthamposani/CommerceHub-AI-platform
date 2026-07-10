@@ -1,4 +1,4 @@
-import { forwardRef } from 'react';
+import { forwardRef } from "react";
 import type {
   ComponentProps,
   ButtonHTMLAttributes,
@@ -6,31 +6,28 @@ import type {
   InputHTMLAttributes,
   ReactNode,
   SelectHTMLAttributes,
-  TextareaHTMLAttributes,
-} from 'react';
-import { AlertCircle, CheckCircle2, Loader2 } from 'lucide-react';
-import { Link } from 'react-router-dom';
+  TextareaHTMLAttributes
+} from "react";
+import { AlertCircle, CheckCircle2, Loader2 } from "lucide-react";
+import { Link } from "react-router-dom";
 
-import { cn } from '../utils/cn';
+import { cn } from "../utils/cn";
 
-type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'danger';
+type ButtonVariant = "primary" | "secondary" | "ghost" | "danger";
 
 const buttonVariants: Record<ButtonVariant, string> = {
-  primary:
-    'bg-brand-primary text-white shadow-soft hover:bg-brand-primaryDark focus-visible:ring-brand-primary',
+  primary: "bg-brand-primary text-white shadow-soft hover:bg-brand-primaryDark focus-visible:ring-brand-primary",
   secondary:
-    'bg-brand-secondary text-brand-text border border-brand-border hover:border-brand-primary/30 hover:bg-white focus-visible:ring-brand-primary',
-  ghost:
-    'bg-transparent text-brand-text hover:bg-brand-secondary/80 focus-visible:ring-brand-primary',
-  danger:
-    'bg-brand-danger text-white hover:bg-brand-danger/90 focus-visible:ring-brand-danger',
+    "bg-brand-secondary text-brand-text border border-brand-border hover:border-brand-primary/30 hover:bg-white focus-visible:ring-brand-primary",
+  ghost: "bg-transparent text-brand-text hover:bg-brand-secondary/80 focus-visible:ring-brand-primary",
+  danger: "bg-brand-danger text-white hover:bg-brand-danger/90 focus-visible:ring-brand-danger"
 };
 
-function buttonClassName(variant: ButtonVariant = 'primary', fullWidth = false): string {
+function buttonClassName(variant: ButtonVariant = "primary", fullWidth = false): string {
   return cn(
-    'inline-flex items-center justify-center gap-2 rounded-2xl px-4 py-3 text-sm font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60',
+    "inline-flex items-center justify-center gap-2 rounded-2xl px-4 py-3 text-sm font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60",
     buttonVariants[variant],
-    fullWidth && 'w-full',
+    fullWidth && "w-full"
   );
 }
 
@@ -40,23 +37,18 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant = 'primary', fullWidth = false, type = 'button', ...props }, ref) => (
-    <button
-      ref={ref}
-      type={type}
-      className={cn(buttonClassName(variant, fullWidth), className)}
-      {...props}
-    />
-  ),
+  ({ className, variant = "primary", fullWidth = false, type = "button", ...props }, ref) => (
+    <button ref={ref} type={type} className={cn(buttonClassName(variant, fullWidth), className)} {...props} />
+  )
 );
 
-Button.displayName = 'Button';
+Button.displayName = "Button";
 
 export function ButtonLink({
   to,
   children,
   className,
-  variant = 'primary',
+  variant = "primary",
   fullWidth = false,
   ...props
 }: {
@@ -65,7 +57,7 @@ export function ButtonLink({
   className?: string;
   variant?: ButtonVariant;
   fullWidth?: boolean;
-} & Omit<ComponentProps<typeof Link>, 'to' | 'className' | 'children'>): React.ReactElement {
+} & Omit<ComponentProps<typeof Link>, "to" | "className" | "children">): React.ReactElement {
   return (
     <Link to={to} className={cn(buttonClassName(variant, fullWidth), className)} {...props}>
       {children}
@@ -73,81 +65,79 @@ export function ButtonLink({
   );
 }
 
-export const Card = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(
-  ({ className, ...props }, ref) => (
-    <div ref={ref} className={cn('rounded-3xl border border-brand-border bg-white shadow-soft', className)} {...props} />
-  ),
-);
+export const Card = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(({ className, ...props }, ref) => (
+  <div ref={ref} className={cn("rounded-3xl border border-brand-border bg-white shadow-soft", className)} {...props} />
+));
 
-Card.displayName = 'Card';
+Card.displayName = "Card";
 
 export const Input = forwardRef<HTMLInputElement, InputHTMLAttributes<HTMLInputElement>>(
   ({ className, ...props }, ref) => (
     <input
       ref={ref}
       className={cn(
-        'w-full rounded-2xl border border-brand-border bg-white px-4 py-3 text-sm text-brand-text shadow-sm outline-none transition placeholder:text-brand-muted/70 focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/20',
-        className,
+        "w-full rounded-2xl border border-brand-border bg-white px-4 py-3 text-sm text-brand-text shadow-sm outline-none transition placeholder:text-brand-muted/70 focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/20",
+        className
       )}
       {...props}
     />
-  ),
+  )
 );
 
-Input.displayName = 'Input';
+Input.displayName = "Input";
 
 export const Textarea = forwardRef<HTMLTextAreaElement, TextareaHTMLAttributes<HTMLTextAreaElement>>(
   ({ className, ...props }, ref) => (
     <textarea
       ref={ref}
       className={cn(
-        'min-h-[128px] w-full rounded-2xl border border-brand-border bg-white px-4 py-3 text-sm text-brand-text shadow-sm outline-none transition placeholder:text-brand-muted/70 focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/20',
-        className,
+        "min-h-[128px] w-full rounded-2xl border border-brand-border bg-white px-4 py-3 text-sm text-brand-text shadow-sm outline-none transition placeholder:text-brand-muted/70 focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/20",
+        className
       )}
       {...props}
     />
-  ),
+  )
 );
 
-Textarea.displayName = 'Textarea';
+Textarea.displayName = "Textarea";
 
 export const Select = forwardRef<HTMLSelectElement, SelectHTMLAttributes<HTMLSelectElement>>(
   ({ className, ...props }, ref) => (
     <select
       ref={ref}
       className={cn(
-        'w-full rounded-2xl border border-brand-border bg-white px-4 py-3 text-sm text-brand-text shadow-sm outline-none transition focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/20',
-        className,
+        "w-full rounded-2xl border border-brand-border bg-white px-4 py-3 text-sm text-brand-text shadow-sm outline-none transition focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/20",
+        className
       )}
       {...props}
     />
-  ),
+  )
 );
 
-Select.displayName = 'Select';
+Select.displayName = "Select";
 
-type BadgeTone = 'primary' | 'neutral' | 'success' | 'warning' | 'danger' | 'info';
+type BadgeTone = "primary" | "neutral" | "success" | "warning" | "danger" | "info";
 
 const badgeVariants: Record<BadgeTone, string> = {
-  primary: 'bg-brand-primary/12 text-brand-primaryDark',
-  neutral: 'bg-slate-100 text-slate-700',
-  success: 'bg-emerald-50 text-emerald-700',
-  warning: 'bg-amber-50 text-amber-700',
-  danger: 'bg-rose-50 text-rose-700',
-  info: 'bg-blue-50 text-blue-700',
+  primary: "bg-brand-primary/12 text-brand-primaryDark",
+  neutral: "bg-slate-100 text-slate-700",
+  success: "bg-emerald-50 text-emerald-700",
+  warning: "bg-amber-50 text-amber-700",
+  danger: "bg-rose-50 text-rose-700",
+  info: "bg-blue-50 text-blue-700"
 };
 
 export interface BadgeProps extends HTMLAttributes<HTMLSpanElement> {
   tone?: BadgeTone;
 }
 
-export function Badge({ className, tone = 'neutral', ...props }: BadgeProps): React.ReactElement {
+export function Badge({ className, tone = "neutral", ...props }: BadgeProps): React.ReactElement {
   return (
     <span
       className={cn(
-        'inline-flex items-center gap-1 rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-wide',
+        "inline-flex items-center gap-1 rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-wide",
         badgeVariants[tone],
-        className,
+        className
       )}
       {...props}
     />
@@ -155,24 +145,24 @@ export function Badge({ className, tone = 'neutral', ...props }: BadgeProps): Re
 }
 
 export function Spinner({ className }: { className?: string }): React.ReactElement {
-  return <Loader2 className={cn('h-5 w-5 animate-spin text-brand-primary', className)} />;
+  return <Loader2 className={cn("h-5 w-5 animate-spin text-brand-primary", className)} />;
 }
 
-type AlertTone = 'info' | 'success' | 'warning' | 'danger';
+type AlertTone = "info" | "success" | "warning" | "danger";
 
 const alertVariants: Record<AlertTone, string> = {
-  info: 'border-blue-200 bg-blue-50 text-blue-800',
-  success: 'border-emerald-200 bg-emerald-50 text-emerald-800',
-  warning: 'border-amber-200 bg-amber-50 text-amber-800',
-  danger: 'border-rose-200 bg-rose-50 text-rose-800',
+  info: "border-blue-200 bg-blue-50 text-blue-800",
+  success: "border-emerald-200 bg-emerald-50 text-emerald-800",
+  warning: "border-amber-200 bg-amber-50 text-amber-800",
+  danger: "border-rose-200 bg-rose-50 text-rose-800"
 };
 
 export function Alert({
-  tone = 'info',
+  tone = "info",
   title,
   children,
   action,
-  className,
+  className
 }: {
   tone?: AlertTone;
   title?: string;
@@ -181,18 +171,14 @@ export function Alert({
   className?: string;
 }): React.ReactElement {
   return (
-    <div className={cn('rounded-3xl border px-4 py-3', alertVariants[tone], className)}>
+    <div className={cn("rounded-3xl border px-4 py-3", alertVariants[tone], className)}>
       <div className="flex items-start gap-3">
         <div className="mt-0.5 shrink-0">
-          {tone === 'success' ? (
-            <CheckCircle2 className="h-5 w-5" />
-          ) : (
-            <AlertCircle className="h-5 w-5" />
-          )}
+          {tone === "success" ? <CheckCircle2 className="h-5 w-5" /> : <AlertCircle className="h-5 w-5" />}
         </div>
         <div className="min-w-0 flex-1">
           {title ? <p className="text-sm font-semibold">{title}</p> : null}
-          <div className={cn('text-sm', title && 'mt-1')}>{children}</div>
+          <div className={cn("text-sm", title && "mt-1")}>{children}</div>
         </div>
         {action ? <div className="shrink-0">{action}</div> : null}
       </div>
@@ -204,7 +190,7 @@ export function SectionHeader({
   eyebrow,
   title,
   description,
-  action,
+  action
 }: {
   eyebrow?: string;
   title: string;
@@ -231,7 +217,7 @@ export function Field({
   hint,
   error,
   children,
-  required = false,
+  required = false
 }: {
   label: string;
   htmlFor?: string;
@@ -259,7 +245,7 @@ export function StatCard({
   label,
   value,
   icon,
-  trend,
+  trend
 }: {
   label: string;
   value: string;
@@ -284,7 +270,7 @@ export function EmptyState({
   title,
   description,
   action,
-  icon,
+  icon
 }: {
   title: string;
   description: string;
@@ -317,7 +303,7 @@ export function LoadingScreen({ title, description }: { title: string; descripti
   );
 }
 
-export function InlineLoader({ label = 'Loading' }: { label?: string }): React.ReactElement {
+export function InlineLoader({ label = "Loading" }: { label?: string }): React.ReactElement {
   return (
     <div className="inline-flex items-center gap-2 text-sm text-brand-muted">
       <Spinner className="h-4 w-4" />

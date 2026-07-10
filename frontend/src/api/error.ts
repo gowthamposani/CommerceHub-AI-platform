@@ -1,27 +1,26 @@
-import axios from 'axios';
+import axios from "axios";
 
 export class ApiError extends Error {
   constructor(
     message: string,
     public readonly status?: number,
-    public readonly details?: unknown,
+    public readonly details?: unknown
   ) {
     super(message);
-    this.name = 'ApiError';
+    this.name = "ApiError";
   }
 }
 
-export function getApiErrorMessage(error: unknown, fallback = 'Something went wrong'): string {
+export function getApiErrorMessage(error: unknown, fallback = "Something went wrong"): string {
   if (error instanceof ApiError) {
     return error.message;
   }
 
   if (axios.isAxiosError(error)) {
-    const payload = error.response?.data as
-      | { message?: string; data?: { message?: string } | unknown }
-      | undefined;
+    const payload = error.response?.data as { message?: string; data?: { message?: string } | unknown } | undefined;
 
-    const nestedMessage = payload && typeof payload.data === 'object' ? (payload.data as { message?: string }).message : undefined;
+    const nestedMessage =
+      payload && typeof payload.data === "object" ? (payload.data as { message?: string }).message : undefined;
     return nestedMessage ?? payload?.message ?? error.message ?? fallback;
   }
 
@@ -32,17 +31,20 @@ export function getApiErrorMessage(error: unknown, fallback = 'Something went wr
   return fallback;
 }
 
-export function toApiError(error: unknown, fallback = 'Something went wrong'): ApiError {
+export function toApiError(error: unknown, fallback = "Something went wrong"): ApiError {
   if (error instanceof ApiError) {
     return error;
   }
 
   if (axios.isAxiosError(error)) {
-    const payload = error.response?.data as
-      | { message?: string; data?: { message?: string } | unknown }
-      | undefined;
-    const nestedMessage = payload && typeof payload.data === 'object' ? (payload.data as { message?: string }).message : undefined;
-    return new ApiError(nestedMessage ?? payload?.message ?? error.message ?? fallback, error.response?.status, payload);
+    const payload = error.response?.data as { message?: string; data?: { message?: string } | unknown } | undefined;
+    const nestedMessage =
+      payload && typeof payload.data === "object" ? (payload.data as { message?: string }).message : undefined;
+    return new ApiError(
+      nestedMessage ?? payload?.message ?? error.message ?? fallback,
+      error.response?.status,
+      payload
+    );
   }
 
   if (error instanceof Error) {
@@ -51,4 +53,3 @@ export function toApiError(error: unknown, fallback = 'Something went wrong'): A
 
   return new ApiError(fallback, undefined, error);
 }
-

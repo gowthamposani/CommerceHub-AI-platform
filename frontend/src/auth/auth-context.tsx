@@ -1,16 +1,11 @@
-import { createContext, useCallback, useEffect, useMemo, useState } from 'react';
-import type { ReactNode } from 'react';
+import { createContext, useCallback, useEffect, useMemo, useState } from "react";
+import type { ReactNode } from "react";
 
-import { authStorage } from './auth-storage';
-import { login as loginApi, logout as logoutApi, refreshAuthSession, registerCustomer } from './auth-api';
-import type {
-  AuthLoginPayload,
-  AuthRegistrationPayload,
-  AuthSession,
-  AuthUser,
-} from '../types/domain';
+import { authStorage } from "./auth-storage";
+import { login as loginApi, logout as logoutApi, refreshAuthSession, registerCustomer } from "./auth-api";
+import type { AuthLoginPayload, AuthRegistrationPayload, AuthSession, AuthUser } from "../types/domain";
 
-type AuthStatus = 'loading' | 'authenticated' | 'unauthenticated';
+type AuthStatus = "loading" | "authenticated" | "unauthenticated";
 
 interface AuthContextValue {
   session: AuthSession | null;
@@ -31,7 +26,7 @@ const AuthContext = createContext<AuthContextValue | null>(null);
 export function AuthProvider({ children }: { children: ReactNode }): React.ReactElement {
   const [session, setSession] = useState<AuthSession | null>(null);
   const [rememberMe, setRememberMe] = useState(false);
-  const [status, setStatus] = useState<AuthStatus>('loading');
+  const [status, setStatus] = useState<AuthStatus>("loading");
 
   const syncFromStorage = useCallback((): void => {
     const storedSession = authStorage.getSession();
@@ -40,13 +35,13 @@ export function AuthProvider({ children }: { children: ReactNode }): React.React
     if (!storedSession) {
       setSession(null);
       setRememberMe(false);
-      setStatus('unauthenticated');
+      setStatus("unauthenticated");
       return;
     }
 
     setSession(storedSession);
     setRememberMe(storedRememberMe);
-    setStatus('authenticated');
+    setStatus("authenticated");
   }, []);
 
   useEffect(() => {
@@ -98,22 +93,28 @@ export function AuthProvider({ children }: { children: ReactNode }): React.React
     };
   }, [syncFromStorage]);
 
-  const replaceSession = useCallback((nextSession: AuthSession, nextRememberMe = rememberMe): void => {
-    authStorage.saveSession(nextSession, nextRememberMe);
-    setSession(nextSession);
-    setRememberMe(nextRememberMe);
-    setStatus('authenticated');
-  }, [rememberMe]);
+  const replaceSession = useCallback(
+    (nextSession: AuthSession, nextRememberMe = rememberMe): void => {
+      authStorage.saveSession(nextSession, nextRememberMe);
+      setSession(nextSession);
+      setRememberMe(nextRememberMe);
+      setStatus("authenticated");
+    },
+    [rememberMe]
+  );
 
   const register = useCallback(async (payload: AuthRegistrationPayload): Promise<AuthUser> => {
     return registerCustomer(payload);
   }, []);
 
-  const login = useCallback(async (payload: AuthLoginPayload, nextRememberMe = false): Promise<AuthSession> => {
-    const nextSession = await loginApi(payload);
-    replaceSession(nextSession, nextRememberMe);
-    return nextSession;
-  }, [replaceSession]);
+  const login = useCallback(
+    async (payload: AuthLoginPayload, nextRememberMe = false): Promise<AuthSession> => {
+      const nextSession = await loginApi(payload);
+      replaceSession(nextSession, nextRememberMe);
+      return nextSession;
+    },
+    [replaceSession]
+  );
 
   const logout = useCallback(async (): Promise<void> => {
     const refreshToken = session?.tokens.refresh_token ?? authStorage.getSession()?.tokens.refresh_token;
@@ -125,25 +126,28 @@ export function AuthProvider({ children }: { children: ReactNode }): React.React
       authStorage.clearSession();
       setSession(null);
       setRememberMe(false);
-      setStatus('unauthenticated');
+      setStatus("unauthenticated");
     }
   }, [session]);
 
-  const updateUser = useCallback((patch: Partial<AuthUser>): void => {
-    if (!session) {
-      return;
-    }
+  const updateUser = useCallback(
+    (patch: Partial<AuthUser>): void => {
+      if (!session) {
+        return;
+      }
 
-    const nextSession: AuthSession = {
-      ...session,
-      user: {
-        ...session.user,
-        ...patch,
-      },
-    };
+      const nextSession: AuthSession = {
+        ...session,
+        user: {
+          ...session.user,
+          ...patch
+        }
+      };
 
-    replaceSession(nextSession, rememberMe);
-  }, [rememberMe, replaceSession, session]);
+      replaceSession(nextSession, rememberMe);
+    },
+    [rememberMe, replaceSession, session]
+  );
 
   const value = useMemo<AuthContextValue>(
     () => ({
@@ -151,15 +155,15 @@ export function AuthProvider({ children }: { children: ReactNode }): React.React
       user: session?.user ?? null,
       rememberMe,
       status,
-      isReady: status !== 'loading',
-      isAuthenticated: status === 'authenticated',
+      isReady: status !== "loading",
+      isAuthenticated: status === "authenticated",
       register,
       login,
       logout,
       updateUser,
-      replaceSession,
+      replaceSession
     }),
-    [login, logout, rememberMe, register, replaceSession, session, status, updateUser],
+    [login, logout, rememberMe, register, replaceSession, session, status, updateUser]
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

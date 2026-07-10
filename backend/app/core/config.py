@@ -2,7 +2,7 @@
 
 from functools import lru_cache
 from json import JSONDecodeError, loads
-from typing import Annotated, Any, Optional
+from typing import Annotated, Any
 
 from pydantic import Field, field_validator
 from pydantic_settings import BaseSettings, NoDecode, SettingsConfigDict
@@ -17,15 +17,13 @@ class Settings(BaseSettings):
     app_version: str = "1.0.0"
     api_v1_prefix: str = "/api/v1"
     debug: bool = False
-    database_url: str = Field(
-        default="postgresql+psycopg://postgres:postgres@localhost:5432/commercehub"
-    )
+    database_url: str = Field(default="postgresql+psycopg://postgres:postgres@localhost:5432/commercehub")
     jwt_secret_key: str = Field(default="change-me-in-production")
     jwt_algorithm: str = "HS256"
     access_token_expire_minutes: int = 60
     refresh_token_expire_days: int = 7
-    token_issuer: Optional[str] = "commercehub-ai"
-    token_audience: Optional[str] = "commercehub-web"
+    token_issuer: str | None = "commercehub-ai"
+    token_audience: str | None = "commercehub-web"
     cors_origins: Annotated[list[str], NoDecode] = Field(
         default_factory=lambda: ["http://localhost:3000", "http://localhost:5173"]
     )

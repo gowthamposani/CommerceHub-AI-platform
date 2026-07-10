@@ -1,9 +1,9 @@
 """Shared application enumerations."""
 
-from enum import Enum
+from enum import StrEnum
 
 
-class RoleName(str, Enum):
+class RoleName(StrEnum):
     """Available marketplace roles."""
 
     CUSTOMER = "customer"
@@ -11,11 +11,10 @@ class RoleName(str, Enum):
     ADMIN = "admin"
 
 
-class UserStatus(str, Enum):
+class UserStatus(StrEnum):
     """User lifecycle states."""
 
     ACTIVE = "active"
     PENDING_APPROVAL = "pending_approval"
     INACTIVE = "inactive"
     SUSPENDED = "suspended"
-

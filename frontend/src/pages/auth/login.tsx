@@ -1,12 +1,12 @@
-import { useEffect, useMemo, useState } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { ArrowRight, CheckCircle2 } from 'lucide-react';
+import { useEffect, useMemo, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { ArrowRight, CheckCircle2 } from "lucide-react";
 
-import { AuthLayout } from '../../components/auth-layout';
-import { Alert, Button, Field, Input, SectionBadge } from '../../components/ui';
-import { useAuth } from '../../auth/use-auth';
-import { getApiErrorMessage } from '../../api/error';
-import { validateEmail, validatePassword } from '../../utils/validators';
+import { AuthLayout } from "../../components/auth-layout";
+import { Alert, Button, Field, Input, SectionBadge } from "../../components/ui";
+import { useAuth } from "../../auth/use-auth";
+import { getApiErrorMessage } from "../../api/error";
+import { validateEmail, validatePassword } from "../../utils/validators";
 
 interface LoginLocationState {
   from?: {
@@ -19,10 +19,10 @@ export function LoginPage(): React.ReactElement {
   const navigate = useNavigate();
   const location = useLocation();
   const state = location.state as LoginLocationState | null;
-  const redirectTo = state?.from?.pathname ?? '/home';
+  const redirectTo = state?.from?.pathname ?? "/home";
 
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(true);
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
@@ -32,14 +32,14 @@ export function LoginPage(): React.ReactElement {
   const fieldErrors = useMemo(
     () => ({
       email: validateEmail(email),
-      password: validatePassword(password),
+      password: validatePassword(password)
     }),
-    [email, password],
+    [email, password]
   );
 
   useEffect(() => {
     if (isReady && isAuthenticated) {
-      navigate('/home', { replace: true });
+      navigate("/home", { replace: true });
     }
   }, [isAuthenticated, isReady, navigate]);
 
@@ -59,10 +59,10 @@ export function LoginPage(): React.ReactElement {
     try {
       setLoading(true);
       await login({ email, password }, rememberMe);
-      setSuccess('Welcome back. Redirecting to your customer dashboard.');
+      setSuccess("Welcome back. Redirecting to your customer dashboard.");
       navigate(redirectTo, { replace: true });
     } catch (requestError) {
-      setError(getApiErrorMessage(requestError, 'Unable to sign in right now.'));
+      setError(getApiErrorMessage(requestError, "Unable to sign in right now."));
     } finally {
       setLoading(false);
     }
@@ -74,7 +74,7 @@ export function LoginPage(): React.ReactElement {
       description="Sign in to continue browsing products, managing your wishlist, editing your profile, and placing orders without losing your session."
       footer={
         <p>
-          New here?{' '}
+          New here?{" "}
           <Link to="/register" className="font-semibold text-brand-primaryDark underline-offset-4 hover:underline">
             Create your customer account
           </Link>
@@ -89,7 +89,9 @@ export function LoginPage(): React.ReactElement {
 
         <div>
           <h2 className="text-2xl font-semibold text-brand-text">Login</h2>
-          <p className="mt-2 text-sm leading-6 text-brand-muted">Use the email address and password you registered with.</p>
+          <p className="mt-2 text-sm leading-6 text-brand-muted">
+            Use the email address and password you registered with.
+          </p>
         </div>
 
         {error ? (
@@ -137,7 +139,7 @@ export function LoginPage(): React.ReactElement {
           </label>
 
           <Button type="submit" fullWidth disabled={loading}>
-            {loading ? 'Signing you in...' : 'Login'}
+            {loading ? "Signing you in..." : "Login"}
             <ArrowRight className="h-4 w-4" />
           </Button>
         </form>
@@ -146,7 +148,8 @@ export function LoginPage(): React.ReactElement {
           <div className="flex items-start gap-3">
             <CheckCircle2 className="mt-0.5 h-4 w-4 text-brand-primaryDark" />
             <p>
-              Protected routes keep customers in the portal until their access token expires, then the app refreshes the session automatically.
+              Protected routes keep customers in the portal until their access token expires, then the app refreshes the
+              session automatically.
             </p>
           </div>
         </div>

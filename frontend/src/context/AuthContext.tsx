@@ -7,7 +7,9 @@ import type { AuthSession, LoginPayload, RegisterPayload } from "@/types/auth";
 import { getStorageItem, removeStorageItem, setStorageItem } from "@/utils/storage";
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [session, setSession] = useState<AuthSession | null>(() => getStorageItem<AuthSession | null>(AUTH_SESSION_STORAGE_KEY, null));
+  const [session, setSession] = useState<AuthSession | null>(() =>
+    getStorageItem<AuthSession | null>(AUTH_SESSION_STORAGE_KEY, null)
+  );
 
   const persistSession = useCallback((nextSession: AuthSession | null) => {
     setSession(nextSession);
@@ -21,29 +23,25 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const handleLogin = useCallback(
     async (payload: LoginPayload) => {
       const response = await authService.login(payload);
-      if (response.data) {
-        persistSession({
-          accessToken: response.data.access_token,
-          refreshToken: response.data.refresh_token,
-          user: response.data.user
-        });
-      }
+      persistSession({
+        accessToken: response.access_token,
+        refreshToken: response.refresh_token,
+        user: response.user
+      });
     },
     [persistSession]
   );
 
   const handleRegister = useCallback(
     async (payload: RegisterPayload) => {
-      const response = await authService.register(payload);
-      if (response.data) {
-        persistSession({
-          accessToken: response.data.access_token,
-          refreshToken: response.data.refresh_token,
-          user: response.data.user
-        });
-      }
+      await authService.register(payload);
+      await handleLogin({
+        email: payload.email,
+        password: payload.password,
+        remember_me: true
+      });
     },
-    [persistSession]
+    [handleLogin]
   );
 
   const handleLogout = useCallback(async () => {

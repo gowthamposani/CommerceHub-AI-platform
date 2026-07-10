@@ -3,7 +3,7 @@ import axios, {
   type AxiosRequestConfig,
   type AxiosInstance,
   type AxiosResponse,
-  type InternalAxiosRequestConfig,
+  type InternalAxiosRequestConfig
 } from "axios";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? "/api/v1";
@@ -71,8 +71,7 @@ function normalizeApiError(error: unknown): ApiError {
   >;
   const status = axiosError.response?.status;
   const payload = axiosError.response?.data;
-  const nestedError =
-    payload && "error" in payload && payload.error ? payload.error : (payload as ApiErrorPayload);
+  const nestedError = payload && "error" in payload && payload.error ? payload.error : (payload as ApiErrorPayload);
   const message =
     nestedError?.message ??
     (payload && "message" in payload ? payload.message : undefined) ??
@@ -83,8 +82,7 @@ function normalizeApiError(error: unknown): ApiError {
     nestedError?.code ??
     nestedError?.error_code ??
     (payload && "error_code" in payload ? payload.error_code : undefined);
-  const details =
-    nestedError?.details ?? (payload && "details" in payload ? payload.details : undefined);
+  const details = nestedError?.details ?? (payload && "details" in payload ? payload.details : undefined);
 
   return new ApiError(message, status, errorCode, details);
 }
@@ -94,8 +92,8 @@ export const apiClient: AxiosInstance = axios.create({
   timeout: API_TIMEOUT_MS,
   headers: {
     "Content-Type": "application/json",
-    Accept: "application/json",
-  },
+    Accept: "application/json"
+  }
 });
 
 apiClient.interceptors.request.use((config: InternalAxiosRequestConfig) => {
@@ -118,7 +116,7 @@ apiClient.interceptors.response.use(
     }
 
     return Promise.reject(normalizedError);
-  },
+  }
 );
 
 export function setAccessToken(token: string): void {
@@ -150,9 +148,9 @@ export function notifyToast(payload: Omit<ToastPayload, "id">): void {
     new CustomEvent<ToastPayload>("commercehub:toast", {
       detail: {
         ...payload,
-        id: crypto.randomUUID(),
-      },
-    }),
+        id: crypto.randomUUID()
+      }
+    })
   );
 }
 
@@ -160,7 +158,7 @@ export function notifyApiFailure(error: unknown, title = "Request failed"): void
   notifyToast({
     title,
     message: getApiErrorMessage(error),
-    variant: "error",
+    variant: "error"
   });
 }
 
@@ -180,7 +178,7 @@ function wait(milliseconds: number): Promise<void> {
 
 export async function requestWithRetry<T>(
   request: () => Promise<AxiosResponse<T>>,
-  options: { retries?: number; retryDelayMs?: number } = {},
+  options: { retries?: number; retryDelayMs?: number } = {}
 ): Promise<AxiosResponse<T>> {
   const retries = options.retries ?? 1;
   const retryDelayMs = options.retryDelayMs ?? 350;
@@ -205,10 +203,6 @@ export function get<T>(url: string, config?: AxiosRequestConfig): Promise<AxiosR
   return requestWithRetry(() => apiClient.get<T>(url, config));
 }
 
-export function post<T, D = unknown>(
-  url: string,
-  data?: D,
-  config?: AxiosRequestConfig,
-): Promise<AxiosResponse<T>> {
+export function post<T, D = unknown>(url: string, data?: D, config?: AxiosRequestConfig): Promise<AxiosResponse<T>> {
   return requestWithRetry(() => apiClient.post<T>(url, data, config));
 }

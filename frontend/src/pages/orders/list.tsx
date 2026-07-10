@@ -1,21 +1,21 @@
-import { useEffect, useMemo, useState } from 'react';
-import { ClipboardList, Ban, ArrowRight } from 'lucide-react';
+import { useEffect, useMemo, useState } from "react";
+import { ClipboardList, Ban, ArrowRight } from "lucide-react";
 
-import { cancelOrder, listOrders } from '../../api/order';
-import { getApiErrorMessage } from '../../api/error';
-import { Button, ButtonLink, Card, EmptyState, LoadingScreen, SectionHeader, Alert, Badge } from '../../components/ui';
-import { formatCurrency, formatDateTime, shortId } from '../../utils/format';
-import { getOrderStatusLabel, getOrderStatusTone } from '../../utils/status';
-import type { Order, OrderStatus } from '../../types/domain';
+import { cancelOrder, listOrders } from "../../api/order";
+import { getApiErrorMessage } from "../../api/error";
+import { Button, ButtonLink, Card, EmptyState, LoadingScreen, SectionHeader, Alert, Badge } from "../../components/ui";
+import { formatCurrency, formatDateTime, shortId } from "../../utils/format";
+import { getOrderStatusLabel, getOrderStatusTone } from "../../utils/status";
+import type { Order, OrderStatus } from "../../types/domain";
 
-type Filter = 'all' | OrderStatus;
+type Filter = "all" | OrderStatus;
 
-const cancellableStatuses: OrderStatus[] = ['placed', 'confirmed', 'packed'];
+const cancellableStatuses: OrderStatus[] = ["placed", "confirmed", "packed"];
 
 export function OrdersPage(): React.ReactElement {
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
-  const [filter, setFilter] = useState<Filter>('all');
+  const [filter, setFilter] = useState<Filter>("all");
   const [busyOrderId, setBusyOrderId] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -27,7 +27,7 @@ export function OrdersPage(): React.ReactElement {
     try {
       setOrders(await listOrders());
     } catch (requestError) {
-      setError(getApiErrorMessage(requestError, 'Unable to load your orders right now.'));
+      setError(getApiErrorMessage(requestError, "Unable to load your orders right now."));
     } finally {
       setLoading(false);
     }
@@ -38,12 +38,12 @@ export function OrdersPage(): React.ReactElement {
   }, []);
 
   const filteredOrders = useMemo(
-    () => (filter === 'all' ? orders : orders.filter((order) => order.status === filter)),
-    [filter, orders],
+    () => (filter === "all" ? orders : orders.filter((order) => order.status === filter)),
+    [filter, orders]
   );
 
   const handleCancel = async (orderId: string): Promise<void> => {
-    if (!window.confirm('Cancel this order before it is shipped?')) {
+    if (!window.confirm("Cancel this order before it is shipped?")) {
       return;
     }
 
@@ -54,9 +54,9 @@ export function OrdersPage(): React.ReactElement {
     try {
       const nextOrder = await cancelOrder(orderId);
       setOrders((current) => current.map((order) => (order.id === nextOrder.id ? nextOrder : order)));
-      setMessage('Order cancelled successfully.');
+      setMessage("Order cancelled successfully.");
     } catch (requestError) {
-      setError(getApiErrorMessage(requestError, 'Could not cancel this order.'));
+      setError(getApiErrorMessage(requestError, "Could not cancel this order."));
     } finally {
       setBusyOrderId(null);
     }
@@ -72,29 +72,41 @@ export function OrdersPage(): React.ReactElement {
         eyebrow="Orders"
         title="Your order history"
         description="Track the full lifecycle from placed to delivered, and cancel an order before it leaves the warehouse."
-        action={<ButtonLink to="/products" variant="secondary">Browse products</ButtonLink>}
+        action={
+          <ButtonLink to="/products" variant="secondary">
+            Browse products
+          </ButtonLink>
+        }
       />
 
-      {message ? <Alert tone="success" title="Order update">{message}</Alert> : null}
-      {error ? <Alert tone="danger" title="Order error">{error}</Alert> : null}
+      {message ? (
+        <Alert tone="success" title="Order update">
+          {message}
+        </Alert>
+      ) : null}
+      {error ? (
+        <Alert tone="danger" title="Order error">
+          {error}
+        </Alert>
+      ) : null}
 
       <Card className="flex flex-wrap gap-2 p-4">
-        {(['all', 'placed', 'confirmed', 'packed', 'shipped', 'out_for_delivery', 'delivered', 'cancelled'] as const).map(
-          (item) => (
-            <button
-              key={item}
-              type="button"
-              onClick={() => setFilter(item)}
-              className={
-                filter === item
-                  ? 'rounded-full bg-brand-primary px-4 py-2 text-sm font-semibold text-white'
-                  : 'rounded-full border border-brand-border bg-white px-4 py-2 text-sm font-semibold text-brand-text hover:border-brand-primary/30'
-              }
-            >
-              {item === 'all' ? 'All' : getOrderStatusLabel(item)}
-            </button>
-          ),
-        )}
+        {(
+          ["all", "placed", "confirmed", "packed", "shipped", "out_for_delivery", "delivered", "cancelled"] as const
+        ).map((item) => (
+          <button
+            key={item}
+            type="button"
+            onClick={() => setFilter(item)}
+            className={
+              filter === item
+                ? "rounded-full bg-brand-primary px-4 py-2 text-sm font-semibold text-white"
+                : "rounded-full border border-brand-border bg-white px-4 py-2 text-sm font-semibold text-brand-text hover:border-brand-primary/30"
+            }
+          >
+            {item === "all" ? "All" : getOrderStatusLabel(item)}
+          </button>
+        ))}
       </Card>
 
       {filteredOrders.length === 0 ? (

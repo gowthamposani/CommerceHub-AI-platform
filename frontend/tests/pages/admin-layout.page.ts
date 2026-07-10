@@ -16,9 +16,7 @@ export class AdminLayoutPage {
   }
 
   async expectShellVisible() {
-    await expect(
-      this.page.getByLabel("Admin sidebar navigation").getByText("CommerceHub AI"),
-    ).toBeVisible();
+    await expect(this.page.getByLabel("Admin sidebar navigation").getByText("CommerceHub AI")).toBeVisible();
     await expect(this.page.getByText("Enterprise Workspace")).toBeVisible();
   }
 }

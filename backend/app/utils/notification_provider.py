@@ -3,9 +3,9 @@
 from __future__ import annotations
 
 import logging
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from typing import Protocol
-from uuid import uuid5, NAMESPACE_URL
+from uuid import NAMESPACE_URL, uuid5
 
 from backend.app.schemas.notification_schema import (
     NotificationChannel,
@@ -14,7 +14,6 @@ from backend.app.schemas.notification_schema import (
     NotificationSendRequest,
     NotificationTemplateData,
 )
-
 
 logger = logging.getLogger(__name__)
 
@@ -58,7 +57,7 @@ class MockNotificationProvider:
             channel=payload.channel,
             status="QUEUED",
             provider=self.provider_name,
-            sent_at=datetime.now(timezone.utc),
+            sent_at=datetime.now(UTC),
         )
 
     def get_templates(self) -> list[NotificationTemplateData]:
@@ -94,6 +93,6 @@ class MockNotificationProvider:
                 channel=NotificationChannel.EMAIL,
                 recipient="customer@example.com",
                 status="DELIVERED",
-                created_at=datetime.now(timezone.utc),
+                created_at=datetime.now(UTC),
             )
         ]

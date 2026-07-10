@@ -1,15 +1,15 @@
-import { expect } from '@playwright/test';
+import { expect } from "@playwright/test";
 
-import { CustomerBasePage } from './base.page';
-import { shortId } from '../../utils/customer-format.utility';
+import { CustomerBasePage } from "./base.page";
+import { shortId } from "../../utils/customer-format.utility";
 
 export class CustomerOrdersPage extends CustomerBasePage {
   async open(): Promise<void> {
-    await this.gotoPath('/orders');
+    await this.gotoPath("/orders");
   }
 
   async expectVisible(): Promise<void> {
-    await expect(this.page.getByRole('heading', { name: 'Your order history' })).toBeVisible();
+    await expect(this.page.getByRole("heading", { name: "Your order history" })).toBeVisible();
   }
 
   async expectOrder(orderId: string): Promise<void> {
@@ -17,6 +17,8 @@ export class CustomerOrdersPage extends CustomerBasePage {
   }
 
   async openLatestOrder(): Promise<void> {
-    await this.waitForPath('**/orders/*', async () => this.page.getByRole('link', { name: 'View details' }).first().click());
+    await this.waitForPath("**/orders/*", async () =>
+      this.page.getByRole("link", { name: "View details" }).first().click()
+    );
   }
 }

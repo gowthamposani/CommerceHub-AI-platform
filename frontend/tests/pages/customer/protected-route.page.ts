@@ -1,6 +1,6 @@
-import { expect } from '@playwright/test';
+import { expect } from "@playwright/test";
 
-import { CustomerBasePage } from './base.page';
+import { CustomerBasePage } from "./base.page";
 
 export class CustomerProtectedRoutePage extends CustomerBasePage {
   async open(path: string): Promise<void> {
@@ -9,6 +9,6 @@ export class CustomerProtectedRoutePage extends CustomerBasePage {
 
   async expectRedirectedToLogin(): Promise<void> {
     await expect(this.page).toHaveURL(/\/login$/);
-    await expect(this.page.getByRole('heading', { name: 'Login' })).toBeVisible();
+    await expect(this.page.getByRole("heading", { name: "Login" })).toBeVisible();
   }
 }

@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from datetime import datetime
-from typing import TYPE_CHECKING, Optional
+from typing import TYPE_CHECKING
 from uuid import UUID, uuid4
 
 from sqlalchemy import DateTime, ForeignKey, String, func
@@ -30,14 +30,14 @@ class RefreshToken(Base):
     )
     jti: Mapped[str] = mapped_column(String(36), unique=True, index=True, nullable=False)
     expires_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), index=True, nullable=False)
-    revoked_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), nullable=True, index=True)
+    revoked_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True, index=True)
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),
         server_default=func.now(),
         nullable=False,
     )
 
-    user: Mapped["User"] = relationship(back_populates="refresh_tokens", lazy="joined")
+    user: Mapped[User] = relationship(back_populates="refresh_tokens", lazy="joined")
 
     @property
     def is_active(self) -> bool:

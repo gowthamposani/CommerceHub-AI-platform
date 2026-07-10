@@ -1,23 +1,23 @@
-import { useEffect, useMemo, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { ArrowRight, BadgeCheck } from 'lucide-react';
+import { useEffect, useMemo, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { ArrowRight, BadgeCheck } from "lucide-react";
 
-import { AuthLayout } from '../../components/auth-layout';
-import { Alert, Button, Field, Input, SectionBadge } from '../../components/ui';
-import { useAuth } from '../../auth/use-auth';
-import { getApiErrorMessage } from '../../api/error';
-import { validateEmail, validatePassword, validateRequired } from '../../utils/validators';
-import type { AuthRegistrationPayload } from '../../types/domain';
+import { AuthLayout } from "../../components/auth-layout";
+import { Alert, Button, Field, Input, SectionBadge } from "../../components/ui";
+import { useAuth } from "../../auth/use-auth";
+import { getApiErrorMessage } from "../../api/error";
+import { validateEmail, validatePassword, validateRequired } from "../../utils/validators";
+import type { AuthRegistrationPayload } from "../../types/domain";
 
 export function RegisterPage(): React.ReactElement {
   const { register, login, isAuthenticated, isReady } = useAuth();
   const navigate = useNavigate();
 
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -25,19 +25,18 @@ export function RegisterPage(): React.ReactElement {
 
   const fieldErrors = useMemo(
     () => ({
-      firstName: validateRequired(firstName, 'First name'),
-      lastName: validateRequired(lastName, 'Last name'),
+      firstName: validateRequired(firstName, "First name"),
+      lastName: validateRequired(lastName, "Last name"),
       email: validateEmail(email),
       password: validatePassword(password),
-      confirmPassword:
-        confirmPassword && confirmPassword !== password ? 'Passwords do not match' : null,
+      confirmPassword: confirmPassword && confirmPassword !== password ? "Passwords do not match" : null
     }),
-    [confirmPassword, email, firstName, lastName, password],
+    [confirmPassword, email, firstName, lastName, password]
   );
 
   useEffect(() => {
     if (isReady && isAuthenticated) {
-      navigate('/home', { replace: true });
+      navigate("/home", { replace: true });
     }
   }, [isAuthenticated, isReady, navigate]);
 
@@ -48,11 +47,11 @@ export function RegisterPage(): React.ReactElement {
     setSuccess(null);
 
     const nextError =
-      validateRequired(firstName, 'First name') ??
-      validateRequired(lastName, 'Last name') ??
+      validateRequired(firstName, "First name") ??
+      validateRequired(lastName, "Last name") ??
       validateEmail(email) ??
       validatePassword(password) ??
-      (confirmPassword !== password ? 'Passwords do not match' : null);
+      (confirmPassword !== password ? "Passwords do not match" : null);
 
     if (nextError) {
       setError(nextError);
@@ -64,17 +63,17 @@ export function RegisterPage(): React.ReactElement {
       last_name: lastName.trim(),
       email: email.trim(),
       password,
-      role: 'customer',
+      role: "customer"
     };
 
     try {
       setLoading(true);
       await register(payload);
       await login({ email: payload.email, password: payload.password }, true);
-      setSuccess('Your customer account is ready. Redirecting to home.');
-      navigate('/home', { replace: true });
+      setSuccess("Your customer account is ready. Redirecting to home.");
+      navigate("/home", { replace: true });
     } catch (requestError) {
-      setError(getApiErrorMessage(requestError, 'Unable to create your account right now.'));
+      setError(getApiErrorMessage(requestError, "Unable to create your account right now."));
     } finally {
       setLoading(false);
     }
@@ -86,7 +85,7 @@ export function RegisterPage(): React.ReactElement {
       description="Register once and return to a persistent shopping experience with order history, address management, and wishlist saving."
       footer={
         <p>
-          Already have an account?{' '}
+          Already have an account?{" "}
           <Link to="/login" className="font-semibold text-brand-primaryDark underline-offset-4 hover:underline">
             Login here
           </Link>
@@ -118,7 +117,12 @@ export function RegisterPage(): React.ReactElement {
         ) : null}
 
         <form className="grid gap-4 sm:grid-cols-2" onSubmit={handleSubmit}>
-          <Field label="First name" htmlFor="register-first-name" error={submitted ? fieldErrors.firstName : null} required>
+          <Field
+            label="First name"
+            htmlFor="register-first-name"
+            error={submitted ? fieldErrors.firstName : null}
+            required
+          >
             <Input
               id="register-first-name"
               autoComplete="given-name"
@@ -128,7 +132,12 @@ export function RegisterPage(): React.ReactElement {
             />
           </Field>
 
-          <Field label="Last name" htmlFor="register-last-name" error={submitted ? fieldErrors.lastName : null} required>
+          <Field
+            label="Last name"
+            htmlFor="register-last-name"
+            error={submitted ? fieldErrors.lastName : null}
+            required
+          >
             <Input
               id="register-last-name"
               autoComplete="family-name"
@@ -180,7 +189,7 @@ export function RegisterPage(): React.ReactElement {
 
           <div className="sm:col-span-2">
             <Button type="submit" fullWidth disabled={loading}>
-              {loading ? 'Creating account...' : 'Register customer account'}
+              {loading ? "Creating account..." : "Register customer account"}
               <ArrowRight className="h-4 w-4" />
             </Button>
           </div>
@@ -189,9 +198,7 @@ export function RegisterPage(): React.ReactElement {
         <div className="rounded-2xl bg-brand-secondary/50 px-4 py-3 text-sm text-brand-muted">
           <div className="flex items-start gap-3">
             <BadgeCheck className="mt-0.5 h-4 w-4 text-brand-primaryDark" />
-            <p>
-              Passwords must include at least one letter, one number, and be at least 8 characters long.
-            </p>
+            <p>Passwords must include at least one letter, one number, and be at least 8 characters long.</p>
           </div>
         </div>
       </div>

@@ -1,33 +1,33 @@
-import { appConfig } from '../config';
-import { demoProducts } from '../data/demo-products';
-import { unwrapApiResponse } from './client';
-import { http } from './http';
-import { normalizeProduct, normalizeProductList } from './normalize';
-import type { ApiEnvelope } from '../types/api';
-import type { Product } from '../types/domain';
+import { appConfig } from "../config";
+import { demoProducts } from "../data/demo-products";
+import { unwrapApiResponse } from "./client";
+import { http } from "./http";
+import { normalizeProduct, normalizeProductList } from "./normalize";
+import type { ApiEnvelope } from "../types/api";
+import type { Product } from "../types/domain";
 
 export interface ProductListResult {
   items: Product[];
-  source: 'api' | 'demo';
+  source: "api" | "demo";
 }
 
 export interface ProductDetailResult {
   item: Product | null;
-  source: 'api' | 'demo';
+  source: "api" | "demo";
 }
 
 export async function listProducts(): Promise<ProductListResult> {
   try {
-    const payload = await unwrapApiResponse(http.get<ApiEnvelope<unknown>>('/products'));
+    const payload = await unwrapApiResponse(http.get<ApiEnvelope<unknown>>("/products"));
     const items = normalizeProductList(payload);
     return {
       items,
-      source: 'api',
+      source: "api"
     };
   } catch {
     return {
       items: appConfig.demoCatalogEnabled ? demoProducts : [],
-      source: 'demo',
+      source: "demo"
     };
   }
 }
@@ -39,7 +39,7 @@ export async function getProduct(productId: string): Promise<ProductDetailResult
     if (item) {
       return {
         item,
-        source: 'api',
+        source: "api"
       };
     }
   } catch {
@@ -50,7 +50,6 @@ export async function getProduct(productId: string): Promise<ProductDetailResult
   const demoItem = demoProducts.find((product) => product.id === productId) ?? null;
   return {
     item: demoItem,
-    source: 'demo',
+    source: "demo"
   };
 }
-

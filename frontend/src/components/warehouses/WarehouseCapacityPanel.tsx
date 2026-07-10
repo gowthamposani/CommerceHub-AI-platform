@@ -28,7 +28,9 @@ export function WarehouseCapacityPanel({ capacity }: { capacity?: WarehouseCapac
             <Metric label="Storage Used" value={formatNumber(capacity?.utilized_units ?? 0)} />
             <Metric
               label="Remaining Space"
-              value={capacity?.available_capacity_units == null ? "Dynamic" : formatNumber(capacity.available_capacity_units)}
+              value={
+                capacity?.available_capacity_units == null ? "Dynamic" : formatNumber(capacity.available_capacity_units)
+              }
             />
             <Metric
               label="Total Capacity"

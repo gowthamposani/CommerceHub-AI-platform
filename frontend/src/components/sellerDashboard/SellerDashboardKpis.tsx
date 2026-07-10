@@ -1,13 +1,4 @@
-import {
-  BadgeCheck,
-  Boxes,
-  ClipboardList,
-  IndianRupee,
-  PackageSearch,
-  Store,
-  Users,
-  Warehouse
-} from "lucide-react";
+import { BadgeCheck, Boxes, ClipboardList, IndianRupee, PackageSearch, Store, Users, Warehouse } from "lucide-react";
 
 import { Card, CardContent } from "@/components/ui/Card";
 import { formatCurrency, formatNumber } from "@/utils/formatters";

@@ -14,8 +14,6 @@ export class SettingsPage extends BasePage {
   async expectLoaded() {
     await this.expectHeading("Settings");
     await expect(this.page.getByRole("heading", { name: "Profile", exact: true })).toBeVisible();
-    await expect(
-      this.page.getByRole("heading", { name: "System Information", exact: true }),
-    ).toBeVisible();
+    await expect(this.page.getByRole("heading", { name: "System Information", exact: true })).toBeVisible();
   }
 }

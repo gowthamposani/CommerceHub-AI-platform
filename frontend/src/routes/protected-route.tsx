@@ -1,7 +1,7 @@
-import { Navigate, Outlet, useLocation } from 'react-router-dom';
+import { Navigate, Outlet, useLocation } from "react-router-dom";
 
-import { useAuth } from '../auth/use-auth';
-import { Card, Spinner } from '../components/ui';
+import { useAuth } from "../auth/use-auth";
+import { Card, Spinner } from "../components/ui";
 
 export function ProtectedRoute(): React.ReactElement {
   const { isReady, isAuthenticated } = useAuth();
@@ -14,9 +14,7 @@ export function ProtectedRoute(): React.ReactElement {
           <Spinner />
           <div>
             <h1 className="text-lg font-semibold text-brand-text">Loading your portal</h1>
-            <p className="mt-2 text-sm text-brand-muted">
-              Verifying your session and restoring your shopping state.
-            </p>
+            <p className="mt-2 text-sm text-brand-muted">Verifying your session and restoring your shopping state.</p>
           </div>
         </Card>
       </div>

@@ -11,4 +11,3 @@ async def check_database(session: AsyncSession) -> dict[str, object]:
         return {"healthy": True, "message": "Database connection successful"}
     except Exception as exc:
         return {"healthy": False, "message": str(exc)}
-

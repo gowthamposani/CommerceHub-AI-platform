@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING
 from uuid import UUID
 
 from sqlalchemy import Boolean, CheckConstraint, ForeignKey, Index, Integer, String, Text, UniqueConstraint
-from sqlalchemy.dialects.postgresql import UUID as PostgresUUID
+from sqlalchemy.dialects.postgresql import UUID as POSTGRES_UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.database.base import Base, SoftDeleteMixin, TimestampMixin, UUIDMixin
@@ -29,7 +29,7 @@ class Category(Base, UUIDMixin, TimestampMixin, SoftDeleteMixin):
     )
 
     parent_category_id: Mapped[UUID | None] = mapped_column(
-        PostgresUUID(as_uuid=True),
+        POSTGRES_UUID(as_uuid=True),
         ForeignKey("categories.id", ondelete="SET NULL"),
         nullable=True,
     )
