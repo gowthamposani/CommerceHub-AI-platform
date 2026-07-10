@@ -37,4 +37,3 @@ def test_seller_soft_delete_fields() -> None:
 
     assert "deleted_at" in column_names
     assert "is_deleted" in column_names
-

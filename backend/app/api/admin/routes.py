@@ -18,7 +18,6 @@ from backend.app.schemas.admin_schema import (
 )
 from backend.app.services.admin_service import AdminService, AdminServiceError
 
-
 logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/api/v1/admin", tags=["Admin Dashboard"])
@@ -80,9 +79,7 @@ AdminServiceDependency = Annotated[AdminServiceProtocol, Depends(get_admin_servi
     ),
     responses={
         status.HTTP_200_OK: {"description": "Dashboard retrieved successfully."},
-        status.HTTP_500_INTERNAL_SERVER_ERROR: {
-            "description": "Dashboard summary could not be retrieved."
-        },
+        status.HTTP_500_INTERNAL_SERVER_ERROR: {"description": "Dashboard summary could not be retrieved."},
     },
 )
 def get_admin_dashboard(
@@ -111,9 +108,7 @@ def get_admin_dashboard(
     ),
     responses={
         status.HTTP_200_OK: {"description": "Analytics retrieved successfully."},
-        status.HTTP_500_INTERNAL_SERVER_ERROR: {
-            "description": "Analytics summary could not be retrieved."
-        },
+        status.HTTP_500_INTERNAL_SERVER_ERROR: {"description": "Analytics summary could not be retrieved."},
     },
 )
 def get_admin_analytics(
@@ -136,14 +131,10 @@ def get_admin_analytics(
     response_model=AdminUsersResponse,
     status_code=status.HTTP_200_OK,
     summary="Get Admin users",
-    description=(
-        "Returns placeholder users until Developer 1 User module integration is available."
-    ),
+    description=("Returns placeholder users until Developer 1 User module integration is available."),
     responses={
         status.HTTP_200_OK: {"description": "Users retrieved successfully."},
-        status.HTTP_500_INTERNAL_SERVER_ERROR: {
-            "description": "Users could not be retrieved."
-        },
+        status.HTTP_500_INTERNAL_SERVER_ERROR: {"description": "Users could not be retrieved."},
     },
 )
 def get_admin_users(
@@ -166,10 +157,7 @@ def get_admin_users(
     response_model=AdminUserResponse,
     status_code=status.HTTP_200_OK,
     summary="Get Admin user by ID",
-    description=(
-        "Returns a placeholder user by identifier until Developer 1 User module "
-        "integration is available."
-    ),
+    description=("Returns a placeholder user by identifier until Developer 1 User module " "integration is available."),
     responses={
         status.HTTP_200_OK: {"description": "User retrieved successfully."},
         status.HTTP_422_UNPROCESSABLE_ENTITY: {"description": "Invalid user identifier."},
@@ -197,16 +185,11 @@ def get_admin_user_by_id(
     response_model=AdminUserResponse,
     status_code=status.HTTP_200_OK,
     summary="Update Admin user status",
-    description=(
-        "Updates placeholder user status until Developer 1 User module integration "
-        "is available."
-    ),
+    description=("Updates placeholder user status until Developer 1 User module integration " "is available."),
     responses={
         status.HTTP_200_OK: {"description": "User status updated successfully."},
         status.HTTP_422_UNPROCESSABLE_ENTITY: {"description": "Invalid update request."},
-        status.HTTP_500_INTERNAL_SERVER_ERROR: {
-            "description": "User status could not be updated."
-        },
+        status.HTTP_500_INTERNAL_SERVER_ERROR: {"description": "User status could not be updated."},
     },
 )
 def update_admin_user_status(
@@ -231,16 +214,11 @@ def update_admin_user_status(
     response_model=AdminUserResponse,
     status_code=status.HTTP_200_OK,
     summary="Update Admin user role",
-    description=(
-        "Updates placeholder user role until Developer 1 User module integration "
-        "is available."
-    ),
+    description=("Updates placeholder user role until Developer 1 User module integration " "is available."),
     responses={
         status.HTTP_200_OK: {"description": "User role updated successfully."},
         status.HTTP_422_UNPROCESSABLE_ENTITY: {"description": "Invalid update request."},
-        status.HTTP_500_INTERNAL_SERVER_ERROR: {
-            "description": "User role could not be updated."
-        },
+        status.HTTP_500_INTERNAL_SERVER_ERROR: {"description": "User role could not be updated."},
     },
 )
 def update_admin_user_role(

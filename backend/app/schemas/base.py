@@ -63,4 +63,3 @@ class SuccessSchema(BaseSchema):
 
     success: bool = True
     message: str
-

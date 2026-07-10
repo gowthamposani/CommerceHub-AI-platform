@@ -29,7 +29,9 @@ def build_category(**overrides: object) -> Category:
 async def test_category_repository_rollback_removes_uncommitted_create(db_session: AsyncSession) -> None:
     """Uncommitted category creation can be rolled back safely."""
     repository = CategoryRepository(db_session)
-    category = await repository.create(build_category(category_name="Rollback Category", category_slug="rollback-category"))
+    category = await repository.create(
+        build_category(category_name="Rollback Category", category_slug="rollback-category")
+    )
     category_id = category.id
 
     await db_session.rollback()
@@ -61,7 +63,9 @@ async def test_category_repository_soft_delete_persists_state(db_session: AsyncS
 async def test_category_repository_child_lookup(db_session: AsyncSession) -> None:
     """Repository can retrieve parent and child categories."""
     repository = CategoryRepository(db_session)
-    parent = await repository.create(build_category(category_name="Parent Repository", category_slug="parent-repository"))
+    parent = await repository.create(
+        build_category(category_name="Parent Repository", category_slug="parent-repository")
+    )
     child = await repository.create(
         build_category(
             category_name="Child Repository",

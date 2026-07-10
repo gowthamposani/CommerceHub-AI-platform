@@ -7,13 +7,9 @@ from typing import Annotated, Protocol
 
 from fastapi import APIRouter, Depends, HTTPException, status
 
-from backend.app.schemas.ai_schema import (
-    ProductDescriptionRequest,
-    ProductDescriptionResponse,
-)
+from backend.app.schemas.ai_schema import ProductDescriptionRequest, ProductDescriptionResponse
 from backend.app.services.ai_service import AIService, AIServiceError
 from backend.app.utils.ai_provider import ConfigurableAIProvider
-
 
 logger = logging.getLogger(__name__)
 
@@ -57,9 +53,7 @@ AIServiceDependency = Annotated[AIServiceProtocol, Depends(get_ai_service)]
     responses={
         status.HTTP_200_OK: {"description": "Description generated successfully."},
         status.HTTP_422_UNPROCESSABLE_ENTITY: {"description": "Invalid generation request."},
-        status.HTTP_500_INTERNAL_SERVER_ERROR: {
-            "description": "Product description generation failed."
-        },
+        status.HTTP_500_INTERNAL_SERVER_ERROR: {"description": "Product description generation failed."},
     },
 )
 def generate_product_description(

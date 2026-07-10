@@ -37,4 +37,3 @@ class BaseRepository(Generic[ModelT]):
         """Delete an entity from the current unit of work."""
         await self.session.delete(entity)
         await self.session.flush()
-

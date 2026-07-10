@@ -15,7 +15,7 @@ target-version = ["py312"]
 [tool.isort]
 profile = "black"
 line_length = 120
-known_first_party = ["app"]
+known_first_party = ["alembic", "app", "backend"]
 
 [tool.ruff]
 line-length = 120
@@ -27,7 +27,7 @@ select = ["A", "B", "C4", "E", "F", "I", "N", "UP", "W"]
 ignore = ["B008"]
 
 [tool.ruff.lint.isort]
-known-first-party = ["app"]
+known-first-party = ["alembic", "app", "backend"]
 
 [tool.mypy]
 python_version = "3.12"
@@ -48,4 +48,3 @@ addopts = "-ra --strict-markers --strict-config"
 markers = [
     "anyio: async tests",
 ]
-

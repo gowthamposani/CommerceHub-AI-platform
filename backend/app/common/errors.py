@@ -18,4 +18,4 @@ class ErrorResponse(BaseModel):
     message: str
     errors: list[ErrorDetail] = Field(default_factory=list)
     timestamp: str
-    requestId: str | None = None
+    requestId: str | None = None  # noqa: N815

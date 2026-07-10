@@ -10,13 +10,7 @@ from app.common.pagination import Page, PaginationParams
 from app.exceptions.base import ApplicationError
 from app.models.category import Category
 from app.repositories.category import CategoryRepository
-from app.schemas.category import (
-    CategoryCreate,
-    CategoryFilter,
-    CategoryResponse,
-    CategoryTreeResponse,
-    CategoryUpdate,
-)
+from app.schemas.category import CategoryCreate, CategoryFilter, CategoryResponse, CategoryTreeResponse, CategoryUpdate
 
 SLUG_SANITIZER = re.compile(r"[^a-z0-9]+")
 

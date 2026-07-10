@@ -15,4 +15,3 @@ class PerformanceMiddleware(BaseHTTPMiddleware):
         response = await call_next(request)
         response.headers["X-Process-Time-ms"] = f"{(time.perf_counter() - start) * 1000:.2f}"
         return response
-

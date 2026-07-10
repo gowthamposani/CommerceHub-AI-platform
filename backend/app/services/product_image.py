@@ -62,9 +62,7 @@ class ProductImageService:
             product_id=product_id,
             image_url=image_url,
             display_order=(
-                display_order
-                if display_order is not None
-                else await self.repository.next_display_order(product_id)
+                display_order if display_order is not None else await self.repository.next_display_order(product_id)
             ),
             alt_text=alt_text,
             is_primary=should_be_primary,

@@ -47,4 +47,3 @@ async def api_client(db_session: AsyncSession) -> AsyncGenerator[AsyncClient, No
         yield client
 
     app.dependency_overrides.clear()
-

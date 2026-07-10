@@ -11,4 +11,3 @@ def utc_now() -> datetime:
 def utc_now_iso() -> str:
     """Return the current timezone-aware UTC datetime as ISO text."""
     return utc_now().isoformat()
-

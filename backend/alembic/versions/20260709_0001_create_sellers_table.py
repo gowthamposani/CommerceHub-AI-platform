@@ -7,9 +7,10 @@ Create Date: 2026-07-09
 
 from collections.abc import Sequence
 
-from alembic import op
 import sqlalchemy as sa
 from sqlalchemy.dialects import postgresql
+
+from alembic import op
 
 revision: str = "20260709_0001"
 down_revision: str | None = None
@@ -81,4 +82,3 @@ def downgrade() -> None:
     op.drop_index("ix_sellers_business_name", table_name="sellers")
     op.drop_index("ix_sellers_business_email", table_name="sellers")
     op.drop_table("sellers")
-

@@ -28,7 +28,12 @@ class ProductImageRepository(BaseRepository[ProductImage]):
         )
         return result.scalar_one_or_none()
 
-    async def get_by_hash(self, product_id: UUID, image_hash: str, exclude_id: UUID | None = None) -> ProductImage | None:
+    async def get_by_hash(
+        self,
+        product_id: UUID,
+        image_hash: str,
+        exclude_id: UUID | None = None,
+    ) -> ProductImage | None:
         """Get a non-deleted image by product and hash."""
         statement = select(ProductImage).where(
             ProductImage.product_id == product_id,
@@ -62,7 +67,9 @@ class ProductImageRepository(BaseRepository[ProductImage]):
     async def has_images(self, product_id: UUID) -> bool:
         """Return whether a product has active images."""
         count = await self.session.scalar(
-            select(func.count()).select_from(ProductImage).where(
+            select(func.count())
+            .select_from(ProductImage)
+            .where(
                 ProductImage.product_id == product_id,
                 ProductImage.is_deleted.is_(False),
             )

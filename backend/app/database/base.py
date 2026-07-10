@@ -5,7 +5,7 @@ from typing import Any
 from uuid import UUID, uuid4
 
 from sqlalchemy import DateTime, ForeignKey, func
-from sqlalchemy.dialects.postgresql import UUID as PostgresUUID
+from sqlalchemy.dialects.postgresql import UUID as PostgresUUID  # noqa: N811
 from sqlalchemy.orm import DeclarativeBase, Mapped, declared_attr, mapped_column
 
 
@@ -58,17 +58,17 @@ class AuditMixin:
     """Mixin that adds generic audit user references."""
 
     @declared_attr.directive
-    def created_by_id(cls) -> Mapped[UUID | None]:
+    def created_by_id(cls) -> Mapped[UUID | None]:  # noqa: N805
         """Return creator foreign key column."""
         return mapped_column(PostgresUUID(as_uuid=True), ForeignKey("users.id"), nullable=True)
 
     @declared_attr.directive
-    def updated_by_id(cls) -> Mapped[UUID | None]:
+    def updated_by_id(cls) -> Mapped[UUID | None]:  # noqa: N805
         """Return updater foreign key column."""
         return mapped_column(PostgresUUID(as_uuid=True), ForeignKey("users.id"), nullable=True)
 
     @declared_attr.directive
-    def deleted_by_id(cls) -> Mapped[UUID | None]:
+    def deleted_by_id(cls) -> Mapped[UUID | None]:  # noqa: N805
         """Return deleter foreign key column."""
         return mapped_column(PostgresUUID(as_uuid=True), ForeignKey("users.id"), nullable=True)
 

@@ -185,9 +185,7 @@ class WarehouseRepository(BaseRepository[Warehouse]):
     def _filtered_statement(self, filters: WarehouseFilter, search: str | None) -> Select[tuple[Warehouse]]:
         """Build warehouse list query."""
         statement = (
-            select(Warehouse)
-            .join(Seller, Warehouse.seller_id == Seller.id)
-            .where(Warehouse.is_deleted.is_(False))
+            select(Warehouse).join(Seller, Warehouse.seller_id == Seller.id).where(Warehouse.is_deleted.is_(False))
         )
         if filters.seller_id:
             statement = statement.where(Warehouse.seller_id == filters.seller_id)

@@ -18,7 +18,7 @@ class StandardResponse(BaseModel, Generic[T]):
     message: str
     data: T | None = None
     timestamp: str = Field(default_factory=utc_now_iso)
-    requestId: str | None = None
+    requestId: str | None = None  # noqa: N815
 
     @classmethod
     def success_response(

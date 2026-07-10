@@ -25,9 +25,7 @@ class SellerRepository(BaseRepository[Seller]):
 
     async def get_active_by_id(self, seller_id: UUID) -> Seller | None:
         """Get a non-deleted seller by ID."""
-        result = await self.session.execute(
-            select(Seller).where(Seller.id == seller_id, Seller.is_deleted.is_(False))
-        )
+        result = await self.session.execute(select(Seller).where(Seller.id == seller_id, Seller.is_deleted.is_(False)))
         return result.scalar_one_or_none()
 
     async def get_by_user_id(self, user_id: UUID) -> Seller | None:

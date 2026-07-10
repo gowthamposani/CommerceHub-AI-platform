@@ -13,12 +13,8 @@ from backend.app.schemas.notification_schema import (
     NotificationSendResponse,
     NotificationTemplatesResponse,
 )
-from backend.app.services.notification_service import (
-    NotificationService,
-    NotificationServiceError,
-)
+from backend.app.services.notification_service import NotificationService, NotificationServiceError
 from backend.app.utils.notification_provider import MockNotificationProvider
-
 
 logger = logging.getLogger(__name__)
 

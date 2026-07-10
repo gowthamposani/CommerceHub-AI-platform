@@ -8,8 +8,9 @@ Create Date: 2026-07-09 14:30:00.000000
 from collections.abc import Sequence
 
 import sqlalchemy as sa
-from alembic import op
 from sqlalchemy.dialects import postgresql
+
+from alembic import op
 
 revision: str = "20260709_0006"
 down_revision: str | None = "20260709_0005"
@@ -56,7 +57,10 @@ def upgrade() -> None:
         sa.UniqueConstraint("barcode", name="uq_product_variants_barcode"),
         sa.UniqueConstraint("product_id", "variant_signature", name="uq_product_variants_signature"),
         sa.CheckConstraint("price >= 0", name="ck_product_variants_price_non_negative"),
-        sa.CheckConstraint("discount_price IS NULL OR discount_price >= 0", name="ck_product_variants_discount_non_negative"),
+        sa.CheckConstraint(
+            "discount_price IS NULL OR discount_price >= 0",
+            name="ck_product_variants_discount_non_negative",
+        ),
         sa.CheckConstraint("cost_price IS NULL OR cost_price >= 0", name="ck_product_variants_cost_non_negative"),
         sa.CheckConstraint(
             "discount_price IS NULL OR discount_price <= price",

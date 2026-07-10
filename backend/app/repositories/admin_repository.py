@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import logging
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from decimal import Decimal
 
 from backend.app.schemas.admin_schema import (
@@ -13,7 +13,6 @@ from backend.app.schemas.admin_schema import (
     AdminUserRole,
     AdminUserStatus,
 )
-
 
 logger = logging.getLogger(__name__)
 
@@ -46,7 +45,7 @@ class AdminRepository:
                 total_orders=0,
                 pending_seller_requests=0,
                 revenue=Decimal("0"),
-                generated_at=datetime.now(timezone.utc),
+                generated_at=datetime.now(UTC),
             )
         except Exception as exc:
             logger.exception("Failed to load placeholder Admin dashboard summary.")
@@ -68,7 +67,7 @@ class AdminRepository:
                 active_sellers=0,
                 best_selling_category="N/A",
                 low_stock_products=0,
-                generated_at=datetime.now(timezone.utc),
+                generated_at=datetime.now(UTC),
             )
         except Exception as exc:
             logger.exception("Failed to load placeholder Admin analytics summary.")
@@ -151,5 +150,5 @@ class AdminRepository:
             email=f"user{user_id}@commercehub.local",
             role=role,
             status=status,
-            created_at=datetime.now(timezone.utc),
+            created_at=datetime.now(UTC),
         )
