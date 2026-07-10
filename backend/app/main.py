@@ -7,6 +7,9 @@ from pathlib import Path
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 
+from app.api.admin.routes import router as admin_router
+from app.api.ai.routes import router as ai_router
+from app.api.notifications.routes import router as notification_router
 from app.api.v1.endpoints.health import router as health_router
 from app.api.v1.router import api_router
 from app.config.settings import get_settings
@@ -42,6 +45,9 @@ def create_app() -> FastAPI:
     register_exception_handlers(app)
     app.include_router(health_router, tags=["health"])
     app.include_router(api_router)
+    app.include_router(admin_router)
+    app.include_router(ai_router)
+    app.include_router(notification_router)
     Path(settings.media_storage_path).mkdir(parents=True, exist_ok=True)
     app.mount(settings.media_url_prefix, StaticFiles(directory=settings.media_storage_path), name="media")
 

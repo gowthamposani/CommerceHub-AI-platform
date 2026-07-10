@@ -1,7 +1,8 @@
 import { lazy, Suspense } from "react";
-import { createBrowserRouter } from "react-router-dom";
+import { createBrowserRouter, Navigate } from "react-router-dom";
 
 import { PageLoader } from "@/components/common/PageLoader";
+import { AdminLayout } from "@/layouts/AdminLayout";
 import { AppLayout } from "@/layouts/AppLayout";
 import { PublicLayout } from "@/layouts/PublicLayout";
 import { ROUTES } from "@/constants/app";
@@ -12,6 +13,12 @@ const RegisterPage = lazy(() => import("@/pages/auth/RegisterPage"));
 const FoundationPage = lazy(() => import("@/pages/shared/FoundationPage"));
 const ModuleSlotsPage = lazy(() => import("@/pages/shared/ModuleSlotsPage"));
 const StatusPage = lazy(() => import("@/pages/shared/StatusPage"));
+const AIProductGenerator = lazy(() => import("@/pages/admin/AIProductGenerator"));
+const AdminAnalytics = lazy(() => import("@/pages/admin/Analytics"));
+const AdminDashboard = lazy(() => import("@/pages/admin/Dashboard"));
+const AdminNotifications = lazy(() => import("@/pages/admin/Notifications"));
+const AdminSettings = lazy(() => import("@/pages/admin/Settings"));
+const AdminUsers = lazy(() => import("@/pages/admin/Users"));
 const SellerDashboardPage = lazy(() => import("@/pages/sellerDashboard/SellerDashboardPage"));
 const SellerListPage = lazy(() => import("@/pages/sellers/SellerListPage"));
 const SellerCreatePage = lazy(() => import("@/pages/sellers/SellerCreatePage"));
@@ -53,6 +60,10 @@ function sellerProtectedElement(element: JSX.Element) {
   return lazyElement(<ProtectedRoute allowedRoles={["seller", "admin"]}>{element}</ProtectedRoute>);
 }
 
+function adminProtectedElement(element: JSX.Element) {
+  return lazyElement(<ProtectedRoute allowedRoles={["admin"]}>{element}</ProtectedRoute>);
+}
+
 export const router = createBrowserRouter([
   {
     path: "/auth",
@@ -69,6 +80,20 @@ export const router = createBrowserRouter([
     errorElement: <ServerErrorPage />,
     children: [
       { index: true, element: lazyElement(<FoundationPage />) },
+      {
+        path: "admin",
+        element: <AdminLayout />,
+        children: [
+          { index: true, element: <Navigate to="/admin/dashboard" replace /> },
+          { path: "dashboard", element: adminProtectedElement(<AdminDashboard />) },
+          { path: "users", element: adminProtectedElement(<AdminUsers />) },
+          { path: "analytics", element: adminProtectedElement(<AdminAnalytics />) },
+          { path: "notifications", element: adminProtectedElement(<AdminNotifications />) },
+          { path: "ai-tools", element: adminProtectedElement(<AIProductGenerator />) },
+          { path: "ai-product-generator", element: <Navigate to="/admin/ai-tools" replace /> },
+          { path: "settings", element: adminProtectedElement(<AdminSettings />) }
+        ]
+      },
       { path: "seller/dashboard", element: sellerProtectedElement(<SellerDashboardPage />) },
       { path: "seller-dashboard", element: sellerProtectedElement(<SellerDashboardPage />) },
       { path: "sellers", element: sellerProtectedElement(<SellerListPage />) },
