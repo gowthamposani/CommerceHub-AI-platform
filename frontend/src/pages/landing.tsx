@@ -13,7 +13,6 @@ import {
 import { listProducts } from '../api/catalog';
 import { ButtonLink, Card, SectionBadge, SectionHeader } from '../components/ui';
 import { ProductCard } from '../components/product-card';
-import { appConfig } from '../config';
 import type { Product } from '../types/domain';
 import { getApiErrorMessage } from '../api/error';
 import { Alert, LoadingScreen, EmptyState } from '../components/ui';
@@ -234,4 +233,3 @@ export function LandingPage(): React.ReactElement {
     </div>
   );
 }
-

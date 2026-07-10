@@ -41,7 +41,6 @@ test.describe('Customer portal journey', () => {
     });
 
     let selectedProductTitle = customerJourneyData.preferredProductTitle;
-    let selectedProductId = customerJourneyData.preferredProductId;
     let selectedPriceText = '';
 
     await test.step('Browse the catalog and view a product', async () => {
@@ -50,7 +49,6 @@ test.describe('Customer portal journey', () => {
 
       const product = await productsPage.openPreferredProduct(customerJourneyData.preferredProductTitle);
       selectedProductTitle = product.title;
-      selectedProductId = product.id;
 
       await productDetailsPage.expectVisible(product);
       selectedPriceText = await productDetailsPage.readPriceText();

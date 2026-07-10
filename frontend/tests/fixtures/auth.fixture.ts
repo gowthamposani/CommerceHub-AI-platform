@@ -17,7 +17,7 @@ type AuthFixtures = {
 };
 
 export const test = base.extend<AuthFixtures>({
-  authTestData: async ({}, use) => {
+  authTestData: async (_fixtures, use) => {
     await use(AuthTestDataFactory.create());
   },
   registerPage: async ({ request }, use) => {

@@ -26,7 +26,7 @@ const buttonVariants: Record<ButtonVariant, string> = {
     'bg-brand-danger text-white hover:bg-brand-danger/90 focus-visible:ring-brand-danger',
 };
 
-export function buttonClassName(variant: ButtonVariant = 'primary', fullWidth = false): string {
+function buttonClassName(variant: ButtonVariant = 'primary', fullWidth = false): string {
   return cn(
     'inline-flex items-center justify-center gap-2 rounded-2xl px-4 py-3 text-sm font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60',
     buttonVariants[variant],

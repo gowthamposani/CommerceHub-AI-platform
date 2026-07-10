@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { ArrowRight, Home, SearchX } from 'lucide-react';
 
-import { ButtonLink, Card, EmptyState } from '../components/ui';
+import { ButtonLink, EmptyState } from '../components/ui';
 
 export function NotFoundPage(): React.ReactElement {
   return (
@@ -31,4 +31,3 @@ export function NotFoundPage(): React.ReactElement {
     </div>
   );
 }
-

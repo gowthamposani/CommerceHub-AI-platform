@@ -34,7 +34,7 @@ type CustomerFixtures = {
 };
 
 export const test = base.extend<CustomerFixtures>({
-  customerJourneyData: async ({}, use) => {
+  customerJourneyData: async (_fixtures, use) => {
     await use(CustomerJourneyTestDataFactory.create());
   },
   landingPage: async ({ page }, use) => {

@@ -1,5 +1,7 @@
 """Pytest fixtures for backend API tests."""
 
+# ruff: noqa: E402
+
 from __future__ import annotations
 
 import os

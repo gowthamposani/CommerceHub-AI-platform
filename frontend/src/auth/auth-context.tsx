@@ -159,7 +159,7 @@ export function AuthProvider({ children }: { children: ReactNode }): React.React
       updateUser,
       replaceSession,
     }),
-    [login, logout, rememberMe, register, replaceSession, session, status],
+    [login, logout, rememberMe, register, replaceSession, session, status, updateUser],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

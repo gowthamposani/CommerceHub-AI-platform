@@ -6,7 +6,7 @@ import { getProduct } from '../api/catalog';
 import { getApiErrorMessage } from '../api/error';
 import { getWishlist, moveWishlistItemToCart, removeWishlistItem } from '../api/wishlist';
 import type { Product, WishlistItem } from '../types/domain';
-import { Button, ButtonLink, Card, EmptyState, LoadingScreen, SectionHeader, Alert } from '../components/ui';
+import { Button, ButtonLink, EmptyState, LoadingScreen, SectionHeader, Alert } from '../components/ui';
 import { ProductCard } from '../components/product-card';
 import { shortId } from '../utils/format';
 

@@ -1,6 +1,5 @@
 import { Link, NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import {
-  ArrowRight,
   ClipboardList,
   Heart,
   Home,
