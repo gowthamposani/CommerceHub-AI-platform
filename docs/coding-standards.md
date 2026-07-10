@@ -1,13 +1,92 @@
 # Coding Standards
 
-## Developer 3 Standards
+## Branch Strategy
 
-- Keep routes thin.
-- Put business orchestration in services.
-- Keep database access in repositories only.
-- Keep external AI/notification integrations behind provider interfaces.
-- Do not put transaction ownership in repositories.
-- Use Pydantic v2 schemas for request and response contracts.
-- Use typed React hooks and service classes for API integration.
-- Use semantic locators and Page Object Model in Playwright.
-- Do not commit generated artifacts, secrets, `node_modules`, build output, coverage output, or reports.
+main
+
+↓
+
+develop
+
+↓
+
+feature/*
+
+---
+
+## Commit Messages
+
+- feat:
+- fix:
+- refactor:
+- docs:
+- test:
+- chore:
+
+---
+
+## Folder Ownership
+
+### Developer 1
+
+- Authentication
+- Customer
+- Cart
+- Orders
+
+### Developer 2
+
+- Products
+- Seller
+- Categories
+
+### Developer 3
+
+- Admin
+- AI
+- Deployment
+
+---
+
+## API Rules
+
+- Never rename endpoints.
+- Always use REST naming.
+
+---
+
+## Database Rules
+
+- Never rename columns.
+- Never change relationships without discussion.
+
+---
+
+## Response Format
+
+```json
+{
+  "success": true,
+  "message": "",
+  "data": {}
+}
+```
+
+---
+
+## Code Style
+
+- Repository Pattern
+- Service Layer
+- Dependency Injection
+- Environment Variables
+- Logging
+- Exception Handling
+
+---
+
+## Pull Requests
+
+- One feature
+- One PR
+- Review required before merge

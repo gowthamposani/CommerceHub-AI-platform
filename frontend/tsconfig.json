@@ -10,17 +10,31 @@
     "strict": true,
     "forceConsistentCasingInFileNames": true,
     "module": "ESNext",
-    "moduleResolution": "Node",
-    "baseUrl": ".",
-    "paths": {
-      "@/*": ["src/*"]
-    },
+    "moduleResolution": "Bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
-    "types": ["vite/client"]
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"],
+      "@/api/*": ["src/api/*"],
+      "@/assets/*": ["src/assets/*"],
+      "@/components/*": ["src/components/*"],
+      "@/constants/*": ["src/constants/*"],
+      "@/context/*": ["src/context/*"],
+      "@/hooks/*": ["src/hooks/*"],
+      "@/layouts/*": ["src/layouts/*"],
+      "@/lib/*": ["src/lib/*"],
+      "@/pages/*": ["src/pages/*"],
+      "@/providers/*": ["src/providers/*"],
+      "@/routes/*": ["src/routes/*"],
+      "@/services/*": ["src/services/*"],
+      "@/styles/*": ["src/styles/*"],
+      "@/types/*": ["src/types/*"],
+      "@/utils/*": ["src/utils/*"]
+    }
   },
   "include": ["src"],
-  "references": [{ "path": "./tsconfig.node.json" }]
+  "references": []
 }

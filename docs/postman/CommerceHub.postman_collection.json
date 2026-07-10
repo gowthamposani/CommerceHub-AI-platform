@@ -1,0 +1,1889 @@
+{
+  "info": {
+    "name": "CommerceHub AI",
+    "description": "CommerceHub AI integration foundation collection with health, seller management, category management, and brand management APIs.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8000"
+    },
+    {
+      "key": "apiBaseUrl",
+      "value": "http://localhost:8000/api/v1"
+    },
+    {
+      "key": "sellerId",
+      "value": "00000000-0000-0000-0000-000000000000"
+    },
+    {
+      "key": "categoryId",
+      "value": "00000000-0000-0000-0000-000000000000"
+    },
+    {
+      "key": "brandId",
+      "value": "00000000-0000-0000-0000-000000000000"
+    },
+    {
+      "key": "productId",
+      "value": "00000000-0000-0000-0000-000000000000"
+    },
+    {
+      "key": "productImageId",
+      "value": "00000000-0000-0000-0000-000000000000"
+    },
+    {
+      "key": "variantId",
+      "value": ""
+    },
+    {
+      "key": "attributeId",
+      "value": ""
+    },
+    {
+      "key": "tagId",
+      "value": ""
+    },
+    {
+      "key": "specificationId",
+      "value": ""
+    },
+    {
+      "key": "inventoryId",
+      "value": ""
+    },
+    {
+      "key": "warehouseId",
+      "value": ""
+    },
+    {
+      "key": "warehouseCode",
+      "value": ""
+    }
+  ],
+  "item": [
+    {
+      "name": "Health",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "X-Request-ID",
+            "value": "postman-health"
+          }
+        ],
+        "url": "{{baseUrl}}/health"
+      },
+      "response": [
+        {
+          "name": "Healthy",
+          "status": "OK",
+          "code": 200,
+          "body": "{\n  \"success\": true,\n  \"message\": \"Application is healthy\",\n  \"data\": {\n    \"status\": \"healthy\"\n  },\n  \"timestamp\": \"2026-07-09T00:00:00Z\",\n  \"requestId\": \"postman-health\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Liveness",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/health/live"
+      }
+    },
+    {
+      "name": "Readiness",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/health/ready"
+      }
+    },
+    {
+      "name": "Versioned Health",
+      "request": {
+        "method": "GET",
+        "url": "{{apiBaseUrl}}/health"
+      }
+    },
+    {
+      "name": "Create Seller",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "X-Request-ID",
+            "value": "postman-create-seller"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"user_id\": \"{{$guid}}\",\n  \"business_name\": \"Acme Retail\",\n  \"legal_business_name\": \"Acme Retail Private Limited\",\n  \"business_type\": \"private_limited\",\n  \"business_email\": \"seller@example.com\",\n  \"business_phone\": \"+91 9876543210\",\n  \"gst_number\": \"27ABCDE1234F1Z5\",\n  \"pan_number\": \"ABCDE1234F\",\n  \"tax_identification_number\": \"TIN12345\",\n  \"website\": \"https://example.com\",\n  \"description\": \"Enterprise seller profile\",\n  \"address_line_1\": \"123 Market Street\",\n  \"address_line_2\": \"Suite 5\",\n  \"city\": \"Mumbai\",\n  \"state\": \"Maharashtra\",\n  \"country\": \"India\",\n  \"postal_code\": \"400001\",\n  \"account_holder_name\": \"Acme Retail\",\n  \"bank_name\": \"Commerce Bank\",\n  \"account_number\": \"123456789012\",\n  \"ifsc_code\": \"ABCD0123456\",\n  \"branch_name\": \"Mumbai Main\"\n}"
+        },
+        "url": "{{apiBaseUrl}}/sellers"
+      },
+      "response": [
+        {
+          "name": "Created",
+          "status": "Created",
+          "code": 201,
+          "body": "{\n  \"success\": true,\n  \"message\": \"Seller created successfully\",\n  \"data\": {\n    \"id\": \"{{sellerId}}\",\n    \"business_name\": \"Acme Retail\",\n    \"business_email\": \"seller@example.com\",\n    \"gst_number\": \"27ABCDE1234F1Z5\",\n    \"pan_number\": \"ABCDE1234F\",\n    \"status\": \"pending\",\n    \"is_active\": true\n  },\n  \"timestamp\": \"2026-07-09T00:00:00Z\",\n  \"requestId\": \"postman-create-seller\"\n}"
+        },
+        {
+          "name": "Duplicate Conflict",
+          "status": "Conflict",
+          "code": 409,
+          "body": "{\n  \"success\": false,\n  \"message\": \"Seller with this GST number already exists\",\n  \"errors\": [],\n  \"timestamp\": \"2026-07-09T00:00:00Z\",\n  \"requestId\": \"postman-create-seller\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "List Sellers",
+      "request": {
+        "method": "GET",
+        "url": "{{apiBaseUrl}}/sellers?page=1&page_size=20&sort_by=created_at&sort_direction=desc"
+      },
+      "response": [
+        {
+          "name": "List",
+          "status": "OK",
+          "code": 200,
+          "body": "{\n  \"success\": true,\n  \"message\": \"Sellers retrieved successfully\",\n  \"data\": {\n    \"items\": [],\n    \"meta\": {\n      \"page\": 1,\n      \"page_size\": 20,\n      \"total_items\": 0,\n      \"total_pages\": 0,\n      \"has_next\": false,\n      \"has_previous\": false\n    }\n  },\n  \"timestamp\": \"2026-07-09T00:00:00Z\",\n  \"requestId\": \"postman-list-sellers\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Get Seller",
+      "request": {
+        "method": "GET",
+        "url": "{{apiBaseUrl}}/sellers/{{sellerId}}"
+      },
+      "response": [
+        {
+          "name": "Found",
+          "status": "OK",
+          "code": 200,
+          "body": "{\n  \"success\": true,\n  \"message\": \"Seller retrieved successfully\",\n  \"data\": {\n    \"id\": \"{{sellerId}}\",\n    \"business_name\": \"Acme Retail\",\n    \"status\": \"pending\"\n  },\n  \"timestamp\": \"2026-07-09T00:00:00Z\",\n  \"requestId\": \"postman-get-seller\"\n}"
+        },
+        {
+          "name": "Not Found",
+          "status": "Not Found",
+          "code": 404,
+          "body": "{\n  \"success\": false,\n  \"message\": \"Seller not found\",\n  \"errors\": [],\n  \"timestamp\": \"2026-07-09T00:00:00Z\",\n  \"requestId\": \"postman-get-seller\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Update Seller",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"business_name\": \"Acme Retail Updated\"\n}"
+        },
+        "url": "{{apiBaseUrl}}/sellers/{{sellerId}}"
+      },
+      "response": [
+        {
+          "name": "Updated",
+          "status": "OK",
+          "code": 200,
+          "body": "{\n  \"success\": true,\n  \"message\": \"Seller updated successfully\",\n  \"data\": {\n    \"id\": \"{{sellerId}}\",\n    \"business_name\": \"Acme Retail Updated\"\n  },\n  \"timestamp\": \"2026-07-09T00:00:00Z\",\n  \"requestId\": \"postman-update-seller\"\n}"
+        },
+        {
+          "name": "Validation Error",
+          "status": "Unprocessable Entity",
+          "code": 422,
+          "body": "{\n  \"success\": false,\n  \"message\": \"Validation error\",\n  \"errors\": [\n    {\n      \"field\": \"business_email\",\n      \"message\": \"value is not a valid email address\"\n    }\n  ],\n  \"timestamp\": \"2026-07-09T00:00:00Z\",\n  \"requestId\": \"postman-update-seller\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Activate Seller",
+      "request": {
+        "method": "PATCH",
+        "url": "{{apiBaseUrl}}/sellers/{{sellerId}}/activate"
+      },
+      "response": [
+        {
+          "name": "Activated",
+          "status": "OK",
+          "code": 200,
+          "body": "{\n  \"success\": true,\n  \"message\": \"Seller activated successfully\",\n  \"data\": {\n    \"id\": \"{{sellerId}}\",\n    \"status\": \"active\",\n    \"is_active\": true\n  },\n  \"timestamp\": \"2026-07-09T00:00:00Z\",\n  \"requestId\": \"postman-activate-seller\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Deactivate Seller",
+      "request": {
+        "method": "PATCH",
+        "url": "{{apiBaseUrl}}/sellers/{{sellerId}}/deactivate"
+      },
+      "response": [
+        {
+          "name": "Deactivated",
+          "status": "OK",
+          "code": 200,
+          "body": "{\n  \"success\": true,\n  \"message\": \"Seller deactivated successfully\",\n  \"data\": {\n    \"id\": \"{{sellerId}}\",\n    \"status\": \"inactive\",\n    \"is_active\": false\n  },\n  \"timestamp\": \"2026-07-09T00:00:00Z\",\n  \"requestId\": \"postman-deactivate-seller\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Delete Seller",
+      "request": {
+        "method": "DELETE",
+        "url": "{{apiBaseUrl}}/sellers/{{sellerId}}"
+      },
+      "response": [
+        {
+          "name": "Soft Deleted",
+          "status": "OK",
+          "code": 200,
+          "body": "{\n  \"success\": true,\n  \"message\": \"Seller deleted successfully\",\n  \"data\": {\n    \"id\": \"{{sellerId}}\",\n    \"status\": \"deleted\",\n    \"is_active\": false,\n    \"is_deleted\": true\n  },\n  \"timestamp\": \"2026-07-09T00:00:00Z\",\n  \"requestId\": \"postman-delete-seller\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Create Category",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "X-Request-ID",
+            "value": "postman-create-category"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"category_name\": \"Electronics\",\n  \"category_slug\": \"electronics\",\n  \"description\": \"Electronic devices and accessories\",\n  \"image_url\": \"https://example.com/categories/electronics.png\",\n  \"display_order\": 1\n}"
+        },
+        "url": "{{apiBaseUrl}}/categories"
+      },
+      "response": [
+        {
+          "name": "Created",
+          "status": "Created",
+          "code": 201,
+          "body": "{\n  \"success\": true,\n  \"message\": \"Category created successfully\",\n  \"data\": {\n    \"id\": \"{{categoryId}}\",\n    \"parent_category_id\": null,\n    \"category_name\": \"Electronics\",\n    \"category_slug\": \"electronics\",\n    \"status\": \"active\",\n    \"is_active\": true\n  },\n  \"timestamp\": \"2026-07-09T00:00:00Z\",\n  \"requestId\": \"postman-create-category\"\n}"
+        },
+        {
+          "name": "Duplicate Conflict",
+          "status": "Conflict",
+          "code": 409,
+          "body": "{\n  \"success\": false,\n  \"message\": \"Category name already exists\",\n  \"errors\": [],\n  \"timestamp\": \"2026-07-09T00:00:00Z\",\n  \"requestId\": \"postman-create-category\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "List Categories",
+      "request": {
+        "method": "GET",
+        "url": "{{apiBaseUrl}}/categories?page=1&page_size=20&sort_by=display_order&sort_direction=asc"
+      },
+      "response": [
+        {
+          "name": "List",
+          "status": "OK",
+          "code": 200,
+          "body": "{\n  \"success\": true,\n  \"message\": \"Categories retrieved successfully\",\n  \"data\": {\n    \"items\": [],\n    \"meta\": {\n      \"page\": 1,\n      \"page_size\": 20,\n      \"total_items\": 0,\n      \"total_pages\": 0,\n      \"has_next\": false,\n      \"has_previous\": false\n    }\n  },\n  \"timestamp\": \"2026-07-09T00:00:00Z\",\n  \"requestId\": \"postman-list-categories\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Get Category Tree",
+      "request": {
+        "method": "GET",
+        "url": "{{apiBaseUrl}}/categories/tree"
+      },
+      "response": [
+        {
+          "name": "Tree",
+          "status": "OK",
+          "code": 200,
+          "body": "{\n  \"success\": true,\n  \"message\": \"Category tree retrieved successfully\",\n  \"data\": [],\n  \"timestamp\": \"2026-07-09T00:00:00Z\",\n  \"requestId\": \"postman-category-tree\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Get Category",
+      "request": {
+        "method": "GET",
+        "url": "{{apiBaseUrl}}/categories/{{categoryId}}"
+      },
+      "response": [
+        {
+          "name": "Found",
+          "status": "OK",
+          "code": 200,
+          "body": "{\n  \"success\": true,\n  \"message\": \"Category retrieved successfully\",\n  \"data\": {\n    \"id\": \"{{categoryId}}\",\n    \"category_name\": \"Electronics\",\n    \"category_slug\": \"electronics\",\n    \"status\": \"active\"\n  },\n  \"timestamp\": \"2026-07-09T00:00:00Z\",\n  \"requestId\": \"postman-get-category\"\n}"
+        },
+        {
+          "name": "Not Found",
+          "status": "Not Found",
+          "code": 404,
+          "body": "{\n  \"success\": false,\n  \"message\": \"Category not found\",\n  \"errors\": [],\n  \"timestamp\": \"2026-07-09T00:00:00Z\",\n  \"requestId\": \"postman-get-category\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Update Category",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"category_name\": \"Electronics Updated\",\n  \"category_slug\": \"electronics-updated\"\n}"
+        },
+        "url": "{{apiBaseUrl}}/categories/{{categoryId}}"
+      },
+      "response": [
+        {
+          "name": "Updated",
+          "status": "OK",
+          "code": 200,
+          "body": "{\n  \"success\": true,\n  \"message\": \"Category updated successfully\",\n  \"data\": {\n    \"id\": \"{{categoryId}}\",\n    \"category_name\": \"Electronics Updated\",\n    \"category_slug\": \"electronics-updated\"\n  },\n  \"timestamp\": \"2026-07-09T00:00:00Z\",\n  \"requestId\": \"postman-update-category\"\n}"
+        },
+        {
+          "name": "Validation Error",
+          "status": "Unprocessable Entity",
+          "code": 422,
+          "body": "{\n  \"success\": false,\n  \"message\": \"Validation error\",\n  \"errors\": [\n    {\n      \"field\": \"category_slug\",\n      \"message\": \"Category slug must contain lowercase letters, numbers, and single hyphens\"\n    }\n  ],\n  \"timestamp\": \"2026-07-09T00:00:00Z\",\n  \"requestId\": \"postman-update-category\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Activate Category",
+      "request": {
+        "method": "PATCH",
+        "url": "{{apiBaseUrl}}/categories/{{categoryId}}/activate"
+      },
+      "response": [
+        {
+          "name": "Activated",
+          "status": "OK",
+          "code": 200,
+          "body": "{\n  \"success\": true,\n  \"message\": \"Category activated successfully\",\n  \"data\": {\n    \"id\": \"{{categoryId}}\",\n    \"status\": \"active\",\n    \"is_active\": true\n  },\n  \"timestamp\": \"2026-07-09T00:00:00Z\",\n  \"requestId\": \"postman-activate-category\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Deactivate Category",
+      "request": {
+        "method": "PATCH",
+        "url": "{{apiBaseUrl}}/categories/{{categoryId}}/deactivate"
+      },
+      "response": [
+        {
+          "name": "Deactivated",
+          "status": "OK",
+          "code": 200,
+          "body": "{\n  \"success\": true,\n  \"message\": \"Category deactivated successfully\",\n  \"data\": {\n    \"id\": \"{{categoryId}}\",\n    \"status\": \"inactive\",\n    \"is_active\": false\n  },\n  \"timestamp\": \"2026-07-09T00:00:00Z\",\n  \"requestId\": \"postman-deactivate-category\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Delete Category",
+      "request": {
+        "method": "DELETE",
+        "url": "{{apiBaseUrl}}/categories/{{categoryId}}"
+      },
+      "response": [
+        {
+          "name": "Soft Deleted",
+          "status": "OK",
+          "code": 200,
+          "body": "{\n  \"success\": true,\n  \"message\": \"Category deleted successfully\",\n  \"data\": {\n    \"id\": \"{{categoryId}}\",\n    \"status\": \"deleted\",\n    \"is_active\": false,\n    \"is_deleted\": true\n  },\n  \"timestamp\": \"2026-07-09T00:00:00Z\",\n  \"requestId\": \"postman-delete-category\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Create Brand",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "X-Request-ID",
+            "value": "postman-create-brand"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"brand_name\": \"Acme Brand\",\n  \"brand_slug\": \"acme-brand\",\n  \"description\": \"Enterprise product brand\",\n  \"logo_url\": \"https://example.com/brands/acme.png\",\n  \"website\": \"https://example.com\",\n  \"country_of_origin\": \"India\",\n  \"founded_year\": 2020\n}"
+        },
+        "url": "{{apiBaseUrl}}/brands"
+      },
+      "response": [
+        {
+          "name": "Created",
+          "status": "Created",
+          "code": 201,
+          "body": "{\n  \"success\": true,\n  \"message\": \"Brand created successfully\",\n  \"data\": {\n    \"id\": \"{{brandId}}\",\n    \"brand_name\": \"Acme Brand\",\n    \"brand_slug\": \"acme-brand\",\n    \"status\": \"active\",\n    \"is_active\": true\n  },\n  \"timestamp\": \"2026-07-09T00:00:00Z\",\n  \"requestId\": \"postman-create-brand\"\n}"
+        },
+        {
+          "name": "Duplicate Conflict",
+          "status": "Conflict",
+          "code": 409,
+          "body": "{\n  \"success\": false,\n  \"message\": \"Brand name already exists\",\n  \"errors\": [],\n  \"timestamp\": \"2026-07-09T00:00:00Z\",\n  \"requestId\": \"postman-create-brand\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "List Brands",
+      "request": {
+        "method": "GET",
+        "url": "{{apiBaseUrl}}/brands?page=1&page_size=20&sort_by=created_at&sort_direction=desc"
+      },
+      "response": [
+        {
+          "name": "List",
+          "status": "OK",
+          "code": 200,
+          "body": "{\n  \"success\": true,\n  \"message\": \"Brands retrieved successfully\",\n  \"data\": {\n    \"items\": [],\n    \"meta\": {\n      \"page\": 1,\n      \"page_size\": 20,\n      \"total_items\": 0,\n      \"total_pages\": 0,\n      \"has_next\": false,\n      \"has_previous\": false\n    }\n  },\n  \"timestamp\": \"2026-07-09T00:00:00Z\",\n  \"requestId\": \"postman-list-brands\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Get Brand",
+      "request": {
+        "method": "GET",
+        "url": "{{apiBaseUrl}}/brands/{{brandId}}"
+      },
+      "response": [
+        {
+          "name": "Found",
+          "status": "OK",
+          "code": 200,
+          "body": "{\n  \"success\": true,\n  \"message\": \"Brand retrieved successfully\",\n  \"data\": {\n    \"id\": \"{{brandId}}\",\n    \"brand_name\": \"Acme Brand\",\n    \"brand_slug\": \"acme-brand\",\n    \"status\": \"active\"\n  },\n  \"timestamp\": \"2026-07-09T00:00:00Z\",\n  \"requestId\": \"postman-get-brand\"\n}"
+        },
+        {
+          "name": "Not Found",
+          "status": "Not Found",
+          "code": 404,
+          "body": "{\n  \"success\": false,\n  \"message\": \"Brand not found\",\n  \"errors\": [],\n  \"timestamp\": \"2026-07-09T00:00:00Z\",\n  \"requestId\": \"postman-get-brand\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Update Brand",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"brand_name\": \"Acme Brand Updated\",\n  \"brand_slug\": \"acme-brand-updated\"\n}"
+        },
+        "url": "{{apiBaseUrl}}/brands/{{brandId}}"
+      },
+      "response": [
+        {
+          "name": "Updated",
+          "status": "OK",
+          "code": 200,
+          "body": "{\n  \"success\": true,\n  \"message\": \"Brand updated successfully\",\n  \"data\": {\n    \"id\": \"{{brandId}}\",\n    \"brand_name\": \"Acme Brand Updated\",\n    \"brand_slug\": \"acme-brand-updated\"\n  },\n  \"timestamp\": \"2026-07-09T00:00:00Z\",\n  \"requestId\": \"postman-update-brand\"\n}"
+        },
+        {
+          "name": "Validation Error",
+          "status": "Unprocessable Entity",
+          "code": 422,
+          "body": "{\n  \"success\": false,\n  \"message\": \"Validation error\",\n  \"errors\": [\n    {\n      \"field\": \"brand_slug\",\n      \"message\": \"Brand slug must contain lowercase letters, numbers, and single hyphens\"\n    }\n  ],\n  \"timestamp\": \"2026-07-09T00:00:00Z\",\n  \"requestId\": \"postman-update-brand\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Activate Brand",
+      "request": {
+        "method": "PATCH",
+        "url": "{{apiBaseUrl}}/brands/{{brandId}}/activate"
+      },
+      "response": [
+        {
+          "name": "Activated",
+          "status": "OK",
+          "code": 200,
+          "body": "{\n  \"success\": true,\n  \"message\": \"Brand activated successfully\",\n  \"data\": {\n    \"id\": \"{{brandId}}\",\n    \"status\": \"active\",\n    \"is_active\": true\n  },\n  \"timestamp\": \"2026-07-09T00:00:00Z\",\n  \"requestId\": \"postman-activate-brand\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Deactivate Brand",
+      "request": {
+        "method": "PATCH",
+        "url": "{{apiBaseUrl}}/brands/{{brandId}}/deactivate"
+      },
+      "response": [
+        {
+          "name": "Deactivated",
+          "status": "OK",
+          "code": 200,
+          "body": "{\n  \"success\": true,\n  \"message\": \"Brand deactivated successfully\",\n  \"data\": {\n    \"id\": \"{{brandId}}\",\n    \"status\": \"inactive\",\n    \"is_active\": false\n  },\n  \"timestamp\": \"2026-07-09T00:00:00Z\",\n  \"requestId\": \"postman-deactivate-brand\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Delete Brand",
+      "request": {
+        "method": "DELETE",
+        "url": "{{apiBaseUrl}}/brands/{{brandId}}"
+      },
+      "response": [
+        {
+          "name": "Soft Deleted",
+          "status": "OK",
+          "code": 200,
+          "body": "{\n  \"success\": true,\n  \"message\": \"Brand deleted successfully\",\n  \"data\": {\n    \"id\": \"{{brandId}}\",\n    \"status\": \"deleted\",\n    \"is_active\": false,\n    \"is_deleted\": true\n  },\n  \"timestamp\": \"2026-07-09T00:00:00Z\",\n  \"requestId\": \"postman-delete-brand\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Create Product",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "X-Request-ID",
+            "value": "postman-create-product"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"seller_id\": \"{{sellerId}}\",\n  \"category_id\": \"{{categoryId}}\",\n  \"brand_id\": \"{{brandId}}\",\n  \"product_name\": \"Wireless Headphones\",\n  \"product_slug\": \"wireless-headphones\",\n  \"short_description\": \"Enterprise product listing\",\n  \"long_description\": \"Detailed enterprise product description\",\n  \"sku\": \"WH-1000XM\",\n  \"barcode\": \"BAR-WH-1000XM\",\n  \"price\": \"1999.00\",\n  \"discount_price\": \"1499.00\",\n  \"cost_price\": \"999.00\",\n  \"currency\": \"INR\",\n  \"tax_percentage\": \"18.00\",\n  \"weight\": \"1.250\",\n  \"length\": \"10.000\",\n  \"width\": \"8.000\",\n  \"height\": \"4.000\",\n  \"visibility\": \"private\",\n  \"is_featured\": false\n}"
+        },
+        "url": "{{apiBaseUrl}}/products"
+      },
+      "response": [
+        {
+          "name": "Created",
+          "status": "Created",
+          "code": 201,
+          "body": "{\n  \"success\": true,\n  \"message\": \"Product created successfully\",\n  \"data\": {\n    \"id\": \"{{productId}}\",\n    \"seller_id\": \"{{sellerId}}\",\n    \"category_id\": \"{{categoryId}}\",\n    \"brand_id\": \"{{brandId}}\",\n    \"product_name\": \"Wireless Headphones\",\n    \"product_slug\": \"wireless-headphones\",\n    \"sku\": \"WH-1000XM\",\n    \"status\": \"draft\",\n    \"visibility\": \"private\",\n    \"is_active\": true\n  },\n  \"timestamp\": \"2026-07-09T00:00:00Z\",\n  \"requestId\": \"postman-create-product\"\n}"
+        },
+        {
+          "name": "Duplicate Conflict",
+          "status": "Conflict",
+          "code": 409,
+          "body": "{\n  \"success\": false,\n  \"message\": \"Product SKU already exists\",\n  \"errors\": [],\n  \"timestamp\": \"2026-07-09T00:00:00Z\",\n  \"requestId\": \"postman-create-product\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "List Products",
+      "request": {
+        "method": "GET",
+        "url": "{{apiBaseUrl}}/products?page=1&page_size=20&search=Wireless&sort_by=newest&sort_direction=desc"
+      },
+      "response": [
+        {
+          "name": "List",
+          "status": "OK",
+          "code": 200,
+          "body": "{\n  \"success\": true,\n  \"message\": \"Products retrieved successfully\",\n  \"data\": {\n    \"items\": [],\n    \"meta\": {\n      \"page\": 1,\n      \"page_size\": 20,\n      \"total_items\": 0,\n      \"total_pages\": 0,\n      \"has_next\": false,\n      \"has_previous\": false\n    }\n  },\n  \"timestamp\": \"2026-07-09T00:00:00Z\",\n  \"requestId\": \"postman-list-products\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Get Product",
+      "request": {
+        "method": "GET",
+        "url": "{{apiBaseUrl}}/products/{{productId}}"
+      },
+      "response": [
+        {
+          "name": "Found",
+          "status": "OK",
+          "code": 200,
+          "body": "{\n  \"success\": true,\n  \"message\": \"Product retrieved successfully\",\n  \"data\": {\n    \"id\": \"{{productId}}\",\n    \"product_name\": \"Wireless Headphones\",\n    \"sku\": \"WH-1000XM\",\n    \"status\": \"draft\"\n  },\n  \"timestamp\": \"2026-07-09T00:00:00Z\",\n  \"requestId\": \"postman-get-product\"\n}"
+        },
+        {
+          "name": "Not Found",
+          "status": "Not Found",
+          "code": 404,
+          "body": "{\n  \"success\": false,\n  \"message\": \"Product not found\",\n  \"errors\": [],\n  \"timestamp\": \"2026-07-09T00:00:00Z\",\n  \"requestId\": \"postman-get-product\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Preview Product",
+      "request": {
+        "method": "GET",
+        "url": "{{apiBaseUrl}}/products/{{productId}}/preview"
+      }
+    },
+    {
+      "name": "Update Product",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"product_name\": \"Wireless Headphones Updated\",\n  \"price\": \"2499.00\"\n}"
+        },
+        "url": "{{apiBaseUrl}}/products/{{productId}}"
+      },
+      "response": [
+        {
+          "name": "Updated",
+          "status": "OK",
+          "code": 200,
+          "body": "{\n  \"success\": true,\n  \"message\": \"Product updated successfully\",\n  \"data\": {\n    \"id\": \"{{productId}}\",\n    \"product_name\": \"Wireless Headphones Updated\",\n    \"price\": \"2499.00\"\n  },\n  \"timestamp\": \"2026-07-09T00:00:00Z\",\n  \"requestId\": \"postman-update-product\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Publish Product",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"visibility\": \"public\"\n}"
+        },
+        "url": "{{apiBaseUrl}}/products/{{productId}}/publish"
+      }
+    },
+    {
+      "name": "Unpublish Product",
+      "request": {
+        "method": "PATCH",
+        "url": "{{apiBaseUrl}}/products/{{productId}}/unpublish"
+      }
+    },
+    {
+      "name": "Archive Product",
+      "request": {
+        "method": "PATCH",
+        "url": "{{apiBaseUrl}}/products/{{productId}}/archive"
+      }
+    },
+    {
+      "name": "Duplicate Product",
+      "request": {
+        "method": "POST",
+        "url": "{{apiBaseUrl}}/products/{{productId}}/duplicate"
+      }
+    },
+    {
+      "name": "Delete Product",
+      "request": {
+        "method": "DELETE",
+        "url": "{{apiBaseUrl}}/products/{{productId}}"
+      },
+      "response": [
+        {
+          "name": "Soft Deleted",
+          "status": "OK",
+          "code": 200,
+          "body": "{\n  \"success\": true,\n  \"message\": \"Product deleted successfully\",\n  \"data\": {\n    \"id\": \"{{productId}}\",\n    \"status\": \"deleted\",\n    \"is_active\": false,\n    \"is_deleted\": true\n  },\n  \"timestamp\": \"2026-07-09T00:00:00Z\",\n  \"requestId\": \"postman-delete-product\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Upload Product Image",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "X-Request-ID",
+            "value": "postman-upload-product-image"
+          }
+        ],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "file",
+              "type": "file",
+              "src": []
+            },
+            {
+              "key": "alt_text",
+              "value": "Product gallery image",
+              "type": "text"
+            },
+            {
+              "key": "is_primary",
+              "value": "false",
+              "type": "text"
+            }
+          ]
+        },
+        "url": "{{apiBaseUrl}}/products/{{productId}}/images"
+      },
+      "response": [
+        {
+          "name": "Uploaded",
+          "status": "Created",
+          "code": 201,
+          "body": "{\n  \"success\": true,\n  \"message\": \"Product image uploaded successfully\",\n  \"data\": {\n    \"id\": \"{{productImageId}}\",\n    \"product_id\": \"{{productId}}\",\n    \"image_url\": \"/media/products/{{productId}}/image.webp\",\n    \"display_order\": 1,\n    \"alt_text\": \"Product gallery image\",\n    \"is_primary\": true\n  },\n  \"timestamp\": \"2026-07-09T00:00:00Z\",\n  \"requestId\": \"postman-upload-product-image\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "List Product Images",
+      "request": {
+        "method": "GET",
+        "url": "{{apiBaseUrl}}/products/{{productId}}/images"
+      },
+      "response": [
+        {
+          "name": "List",
+          "status": "OK",
+          "code": 200,
+          "body": "{\n  \"success\": true,\n  \"message\": \"Product images retrieved successfully\",\n  \"data\": {\n    \"items\": []\n  },\n  \"timestamp\": \"2026-07-09T00:00:00Z\",\n  \"requestId\": \"postman-list-product-images\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Update Product Image",
+      "request": {
+        "method": "PUT",
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "file",
+              "type": "file",
+              "src": []
+            },
+            {
+              "key": "alt_text",
+              "value": "Updated product image",
+              "type": "text"
+            },
+            {
+              "key": "display_order",
+              "value": "2",
+              "type": "text"
+            }
+          ]
+        },
+        "url": "{{apiBaseUrl}}/products/images/{{productImageId}}"
+      }
+    },
+    {
+      "name": "Mark Product Image Primary",
+      "request": {
+        "method": "PATCH",
+        "url": "{{apiBaseUrl}}/products/images/{{productImageId}}/primary"
+      }
+    },
+    {
+      "name": "Delete Product Image",
+      "request": {
+        "method": "DELETE",
+        "url": "{{apiBaseUrl}}/products/images/{{productImageId}}"
+      }
+    },
+    {
+      "name": "Create Product Attribute",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/products/{{productId}}/attributes",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "products",
+            "{{productId}}",
+            "attributes"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"attribute_name\": \"Color\",\n  \"values\": [\n    \"Red\",\n    \"Blue\"\n  ],\n  \"display_order\": 0,\n  \"is_variant_defining\": true\n}"
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "List Product Attributes",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/products/{{productId}}/attributes",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "products",
+            "{{productId}}",
+            "attributes"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Update Product Attribute",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/products/attributes/{{attributeId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "products",
+            "attributes",
+            "{{attributeId}}"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"attribute_name\": \"Color\",\n  \"values\": [\n    \"Red\",\n    \"Blue\",\n    \"Black\"\n  ],\n  \"display_order\": 0,\n  \"is_variant_defining\": true\n}"
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Delete Product Attribute",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/products/attributes/{{attributeId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "products",
+            "attributes",
+            "{{attributeId}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Create Product Variant",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/products/{{productId}}/variants",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "products",
+            "{{productId}}",
+            "variants"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"sku\": \"VARIANT-SKU-001\",\n  \"barcode\": \"VARIANTBAR001\",\n  \"price\": \"1299.00\",\n  \"discount_price\": \"1199.00\",\n  \"cost_price\": \"899.00\",\n  \"weight\": \"1.000\",\n  \"length\": \"10.000\",\n  \"width\": \"8.000\",\n  \"height\": \"3.000\",\n  \"status\": \"active\",\n  \"is_active\": true,\n  \"attributes\": [\n    {\n      \"attribute_id\": \"{{attributeId}}\",\n      \"value\": \"Red\"\n    }\n  ]\n}"
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "List Product Variants",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/products/{{productId}}/variants",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "products",
+            "{{productId}}",
+            "variants"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Update Product Variant",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/products/variants/{{variantId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "products",
+            "variants",
+            "{{variantId}}"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"price\": \"1399.00\",\n  \"status\": \"active\",\n  \"is_active\": true\n}"
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Delete Product Variant",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/products/variants/{{variantId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "products",
+            "variants",
+            "{{variantId}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Create Product Tag",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/products/{{productId}}/tags",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "products",
+            "{{productId}}",
+            "tags"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"tag_name\": \"Premium\"\n}"
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "List Product Tags",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/products/{{productId}}/tags",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "products",
+            "{{productId}}",
+            "tags"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Delete Product Tag",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/products/tags/{{tagId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "products",
+            "tags",
+            "{{tagId}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Create Product Specification",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/products/{{productId}}/specifications",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "products",
+            "{{productId}}",
+            "specifications"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"group_name\": \"Display\",\n  \"specification_name\": \"Screen Size\",\n  \"specification_value\": \"6.7 inch\",\n  \"display_order\": 1\n}"
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "List Product Specifications",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/products/{{productId}}/specifications",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "products",
+            "{{productId}}",
+            "specifications"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Update Product Specification",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/products/specifications/{{specificationId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "products",
+            "specifications",
+            "{{specificationId}}"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"specification_value\": \"6.8 inch\"\n}"
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Delete Product Specification",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/products/specifications/{{specificationId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "products",
+            "specifications",
+            "{{specificationId}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get Product SEO Metadata",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/products/{{productId}}/seo",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "products",
+            "{{productId}}",
+            "seo"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Upsert Product SEO Metadata",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/products/{{productId}}/seo",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "products",
+            "{{productId}}",
+            "seo"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"seo_title\": \"Premium Product\",\n  \"seo_description\": \"Premium product SEO description\",\n  \"seo_keywords\": \"premium,product\",\n  \"meta_robots\": \"index,follow\",\n  \"canonical_url\": \"https://example.com/products/premium-product\",\n  \"friendly_url\": \"premium-product\",\n  \"open_graph_title\": \"Premium Product\",\n  \"open_graph_description\": \"Premium product social description\"\n}"
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Preview Product Extensions",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/products/{{productId}}/extension-preview",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "products",
+            "{{productId}}",
+            "extension-preview"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Create Inventory",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/inventory",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "inventory"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"product_id\": \"{{productId}}\",\n  \"variant_id\": \"{{variantId}}\",\n  \"available_quantity\": 25,\n  \"reserved_quantity\": 0,\n  \"damaged_quantity\": 0,\n  \"minimum_stock\": 2,\n  \"maximum_stock\": 100,\n  \"reorder_level\": 5,\n  \"transfer_ready\": true\n}"
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "List Inventory",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/inventory",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "inventory"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get Inventory",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/inventory/{{inventoryId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "inventory",
+            "{{inventoryId}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Update Inventory",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/inventory/{{inventoryId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "inventory",
+            "{{inventoryId}}"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"minimum_stock\": 3,\n  \"maximum_stock\": 120,\n  \"reorder_level\": 8,\n  \"transfer_ready\": true\n}"
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Delete Inventory",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/inventory/{{inventoryId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "inventory",
+            "{{inventoryId}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Inventory Stock In",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/inventory/{{inventoryId}}/stock-in",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "inventory",
+            "{{inventoryId}}",
+            "stock-in"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"quantity\": 10,\n  \"reference_number\": \"SIN-001\",\n  \"remarks\": \"Supplier receipt\",\n  \"performed_by\": \"developer-2\"\n}"
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Inventory Stock Out",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/inventory/{{inventoryId}}/stock-out",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "inventory",
+            "{{inventoryId}}",
+            "stock-out"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"quantity\": 2,\n  \"reference_number\": \"SOUT-001\",\n  \"remarks\": \"Manual outbound\",\n  \"performed_by\": \"developer-2\"\n}"
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Reserve Inventory Stock",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/inventory/{{inventoryId}}/reserve",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "inventory",
+            "{{inventoryId}}",
+            "reserve"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"quantity\": 3,\n  \"reference_number\": \"RES-001\",\n  \"remarks\": \"Reservation placeholder\",\n  \"performed_by\": \"developer-2\"\n}"
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Release Reserved Inventory Stock",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/inventory/{{inventoryId}}/release",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "inventory",
+            "{{inventoryId}}",
+            "release"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"quantity\": 1,\n  \"reference_number\": \"REL-001\",\n  \"remarks\": \"Release placeholder\",\n  \"performed_by\": \"developer-2\"\n}"
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Adjust Inventory",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/inventory/{{inventoryId}}/adjust",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "inventory",
+            "{{inventoryId}}",
+            "adjust"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"available_quantity\": 20,\n  \"damaged_quantity\": 1,\n  \"reference_number\": \"ADJ-001\",\n  \"remarks\": \"Cycle count\",\n  \"performed_by\": \"developer-2\"\n}"
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Inventory History",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/inventory/{{inventoryId}}/history",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "inventory",
+            "{{inventoryId}}",
+            "history"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Create Warehouse",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/warehouses",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "warehouses"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"seller_id\": \"{{sellerId}}\",\n  \"warehouse_code\": \"WH-MUM-001\",\n  \"warehouse_name\": \"Mumbai Fulfillment Center\",\n  \"contact_person\": \"Warehouse Manager\",\n  \"phone_number\": \"+91 9876543210\",\n  \"email\": \"warehouse@example.com\",\n  \"address_line_1\": \"123 Logistics Park\",\n  \"address_line_2\": \"Dock 4\",\n  \"city\": \"Mumbai\",\n  \"state\": \"Maharashtra\",\n  \"country\": \"India\",\n  \"postal_code\": \"400001\",\n  \"latitude\": \"19.076000\",\n  \"longitude\": \"72.877700\",\n  \"warehouse_type\": \"fulfillment\",\n  \"status\": \"active\",\n  \"is_default\": true\n}"
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "List Warehouses",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/warehouses",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "warehouses"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Warehouse Statistics",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/warehouses/statistics",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "warehouses",
+            "statistics"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get Warehouse",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/warehouses/{{warehouseId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "warehouses",
+            "{{warehouseId}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Update Warehouse",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/warehouses/{{warehouseId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "warehouses",
+            "{{warehouseId}}"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"warehouse_name\": \"Updated Fulfillment Center\",\n  \"city\": \"Pune\"\n}"
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Delete Warehouse",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/warehouses/{{warehouseId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "warehouses",
+            "{{warehouseId}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Set Default Warehouse",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/warehouses/{{warehouseId}}/default",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "warehouses",
+            "{{warehouseId}}",
+            "default"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Update Warehouse Status",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/warehouses/{{warehouseId}}/status",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "warehouses",
+            "{{warehouseId}}",
+            "status"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"status\": \"inactive\"\n}"
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Warehouse Capacity",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/warehouses/{{warehouseId}}/capacity",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "warehouses",
+            "{{warehouseId}}",
+            "capacity"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Warehouse Inventory Summary",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/warehouses/{{warehouseId}}/inventory-summary",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "warehouses",
+            "{{warehouseId}}",
+            "inventory-summary"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}

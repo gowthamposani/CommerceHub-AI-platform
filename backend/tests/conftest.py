@@ -1,36 +1,50 @@
-"""Shared backend pytest configuration."""
+"""Pytest fixtures for the backend foundation."""
 
-from __future__ import annotations
+from collections.abc import AsyncGenerator
 
-import httpx
 import pytest
+from httpx import ASGITransport, AsyncClient
+from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 
-from backend.tests.fixtures import api_client, app_instance, dependency_overrides, mock_db_session
-
-
-__all__ = [
-    "api_client",
-    "app_instance",
-    "dependency_overrides",
-    "mock_db_session",
-]
+from app.config.settings import get_settings
+from app.database.base import Base
+from app.dependencies.database import get_db_session
+from app.main import create_app
 
 
-@pytest.fixture(autouse=True, scope="session")
-def patch_httpx_testclient_compatibility() -> None:
-    """Allow Starlette TestClient to run with newer httpx versions."""
-    if getattr(httpx.Client.__init__, "_commercehub_patched", False):
-        return
+@pytest.fixture(scope="session")
+def anyio_backend() -> str:
+    """Use asyncio for async test execution."""
+    return "asyncio"
 
-    original_init = httpx.Client.__init__
 
-    def patched_init(
-        self: httpx.Client,
-        *args: object,
-        app: object = None,
-        **kwargs: object,
-    ) -> None:
-        original_init(self, *args, **kwargs)
+@pytest.fixture
+async def db_session() -> AsyncGenerator[AsyncSession, None]:
+    """Create an isolated in-memory async database session."""
+    engine = create_async_engine("sqlite+aiosqlite:///:memory:", future=True)
+    async with engine.begin() as connection:
+        await connection.run_sync(Base.metadata.create_all)
 
-    patched_init._commercehub_patched = True  # type: ignore[attr-defined]
-    httpx.Client.__init__ = patched_init  # type: ignore[method-assign]
+    session_factory = async_sessionmaker(engine, expire_on_commit=False)
+    async with session_factory() as session:
+        yield session
+
+    await engine.dispose()
+
+
+@pytest.fixture
+async def api_client(db_session: AsyncSession) -> AsyncGenerator[AsyncClient, None]:
+    """Create an async API client with test database overrides."""
+    get_settings.cache_clear()
+    app = create_app()
+
+    async def override_db_session() -> AsyncGenerator[AsyncSession, None]:
+        yield db_session
+
+    app.dependency_overrides[get_db_session] = override_db_session
+    transport = ASGITransport(app=app)
+    async with AsyncClient(transport=transport, base_url="http://testserver") as client:
+        yield client
+
+    app.dependency_overrides.clear()
+
