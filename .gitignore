@@ -1,0 +1,6 @@
+# TODO: Ignore generated files.
+.venv/
+venv/
+env/
+__pycache__/
+*.py[cod]
