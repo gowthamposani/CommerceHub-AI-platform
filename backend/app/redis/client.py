@@ -1,8 +1,7 @@
 """Redis client factory."""
 
-from redis.asyncio import Redis
-
 from app.config.settings import get_settings
+from redis.asyncio import Redis
 
 
 def get_redis_client(url: str | None = None) -> Redis:
